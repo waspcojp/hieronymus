@@ -1,0 +1,169 @@
+<div class="modal" id="voucher-modal" tabindex="-1" data-bs-backdrop="static">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalLabel">証票情報</h5>
+				<button type="button" class="btn-close"
+					on:click={close_}
+					id="close-button" area-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<VoucherInfo
+					bind:init={init}
+					bind:voucher={voucher}
+					bind:files={files}></VoucherInfo>
+			</div>
+			<div class="modal-footer">
+				{#if ( voucher && voucher.id && voucher.id > 0 )}
+					<button type="button" class="btn btn-danger"
+							on:click={delete_}
+									id="delete-button">Delete</button>
+				{/if}
+				<button type="button" class="btn btn-primary"
+						on:click={save}
+						id="save-button">Save</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+/*
+	voucherに関する処理をここで行い、voucher_fileに関する処理をVoucherInfoで行うのは、なんか変である。
+	voucher_fileに関する処理もここに移した方が良いかも知れない。
+*/
+import axios from 'axios';
+import {numeric, formatDate} from '../../javascripts/cross-slip';
+import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
+const dispatch = createEventDispatcher();
+import VoucherInfo from './voucher-info.svelte';
+
+
+export	let	voucher;
+export	let	modal;
+export	let init;
+
+let	files;
+let update;
+
+const create_voucher = async (_voucher) => {
+	let result = await axios.post('/api/voucher', _voucher);
+	console.log(result);
+	return	(result);
+}
+const update_voucher = async (_voucher) => {
+	console.log('save_voucher', _voucher);
+	let result = await axios.put('/api/voucher', _voucher);
+		 
+	console.log(result);
+	return	(result);
+}
+const delete_voucher = async (voucher) => {
+	console.log('delete_voucher', voucher);
+	let result = await axios.delete('/api/voucher', {
+		data: {
+			id: voucher.id
+		}
+	});
+	console.log(result);
+}
+const bind_file = async(file) => {
+	console.log('bind_file', file.id, file.voucherId);
+	let	result = await axios.put('/api/voucher/bind', {
+		id: file.id,
+		voucherId: file.voucherId
+	});
+	return	(result);
+}
+
+const save = (event) => {
+	console.log('voucher', voucher);
+	if	( voucher.type )	{
+		voucher.type = parseInt(voucher.type);
+	}
+	if	( voucher.customerId )	{
+		voucher.customerId = parseInt(voucher.customerId);
+	}
+	if	( voucher.amount )	{
+		voucher.amount = numeric(voucher.amount);
+	}
+	if	( voucher.tax )	{
+		voucher.tax = numeric(voucher.tax);
+	}
+	voucher.taxClass = parseInt(voucher.taxClass);
+	console.log('input', voucher);
+	try {
+		let	pr;
+		if ( voucher.id  ) {
+			voucher.id = parseInt(voucher.id);
+			pr = update_voucher(voucher);
+		} else {
+			pr = create_voucher(voucher);
+		}
+		pr.then((result) => {
+			update = true;
+			console.log('result', result);
+			console.log('files', files.length);
+			for	( let i = 0; i < files.length ; i += 1 )	{
+				console.log('voucherId', files[i].voucherId);
+				if	( !files[i].voucherId )	{
+					files[i].voucherId = result.data.id;
+					bind_file(files[i]);
+				}
+			}
+			close_();
+		});
+	}
+	catch(e) {
+		console.log(e);
+		// can't save
+		//	TODO alert
+	}
+};
+
+
+const clean_popup = () => {
+	voucher = null;
+	files = [];
+	modal.hide();
+}
+
+const	close_ = (event) => {
+	clean_popup();
+	dispatch('close', update);
+}
+
+beforeUpdate(() => {
+	console.log('voucher-modal beforeUpdate', voucher, init);
+	update = false;
+	init = init;
+	if	( !voucher )	{
+		voucher = {
+			issueDate: formatDate(new Date()),
+			paymentDate: null,
+			amount: "0",
+			taxClass: "-1",
+			tax: "0",
+			type: "-1"
+		};
+	} else {
+		if	( voucher.type )	{
+			voucher.type = voucher.type.toString();
+		}
+		voucher.taxClass = voucher.taxClass.toString();
+	}
+});
+
+const	delete_ = (event) => {
+	try {
+		console.log('delete');
+		delete_voucher(voucher).then(() => {
+			clean_popup();
+		});
+	}
+	catch(e) {
+		console.log(e);
+		// can't delete
+		//	TODO alert
+	}
+}
+</script>

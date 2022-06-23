@@ -1,0 +1,90 @@
+const models = require('../models');
+const Op = models.Sequelize.Op;
+const Accounts = require('./accounts.js');
+const {numeric, dc} = require('./parse_account_code.js');
+
+module.exports = async (term) => {
+    let lines = [];
+    let index = [];
+
+    let fy = await models.FiscalYear.findOne({
+        where: {
+            term: term
+        }
+    });
+
+    accounts = await Accounts.all3(term);
+    for ( let i = 0; i < accounts.length; i += 1)   {
+        let acc = accounts[i];
+        let balance = numeric(acc.balance);     //  don't forget!!!
+        if  ( acc.SubAccounts > 0 )  {
+            //console.log(acc);
+            for ( let j = 0 ; j < acc.SubAccounts.length; j += 1)   {
+                let sub = acc.SubAccounts[j];
+                balance += sub.balance ? sub.balance : 0;
+            }
+        }
+        lines.push({
+            major_name: acc.major_name,
+            middle_name: acc.middle_name,
+            minor_name: acc.minor_name,
+            acl_code: acc.acl_code,
+            name: acc.name,
+            code: acc.code,
+            pickup: balance,
+            debit: 0,
+            credit: 0,
+            balance: 0
+        });
+        index[acc.code] = i;
+    }
+
+    for ( let mon = new Date(fy.startDate); mon < new Date(fy.endDate); ) {
+        let cross_slips = await models.CrossSlip.findAll({
+            where: {
+                [Op.and]: {
+                    year: mon.getFullYear(),
+                    month: mon.getMonth() + 1
+                }
+            },
+            include: [{
+                model: models.CrossSlipDetail,
+                as: 'lines'
+            }]
+        });
+        for ( let i = 0; i < cross_slips.length; i ++ ) {
+            let cross_slip = cross_slips[i];
+            for ( let j = 0; j < cross_slip.lines.length; j ++ ) {
+                let detail = cross_slip.lines[j];
+                if ( detail.debitAccount ) {
+                    let ix = index[detail.debitAccount];
+                    //console.log('ix', ix, detail);
+                    lines[ix].debit += numeric(detail.debitAmount);
+                    //lines[ix].debit += ( numeric(detail.debitAmount) - numeric(detail.debitTax) );
+                }
+                if ( detail.creditAccount ) {
+                    ix = index[detail.creditAccount];
+                    //console.log('ix', ix, detail);
+                    lines[ix].credit += numeric(detail.creditAmount);
+                    //lines[ix].credit += ( numeric(detail.creditAmount) - numeric(detail.creditTax) );
+                }
+            }
+        }
+        mon.setMonth(mon.getMonth() + 1);
+    }
+    for ( line of lines )   {
+        //console.log({line});
+        if  ( line.code )   {
+            if ( dc(line.code) == 'D' ) {
+                line.balance = line.pickup + line.debit - line.credit;
+            } else {
+                line.balance = line.pickup - line.debit + line.credit;
+            }
+        }
+    }
+    //console.log(JSON.stringify(lines, null, 2))
+    return  ({
+        lines: lines,
+        accounts: accounts
+    });
+}

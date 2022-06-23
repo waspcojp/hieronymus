@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sign Up</title>
+		<link rel="stylesheet" href="/style/style.css">
+		<link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
+		<script defer src="/dist/common.js"></script>
+	</head>
+	<body class="hold-transition login-page">
+		<div class="login-box">
+  			<div class="login-logo">
+    			<a href="../../index2.html"><b>Hieronyms</b></a>
+  			</div>
+  			<div class="card">
+    			<div class="card-body login-card-body">
+      				<p class="login-box-msg">Sign up to start your session</p>
+					<form action="/signup" method="post">
+        				<div class="input-group mb-3">
+          					<input type="text" name="user_name" id="user_input" class="form-control" placeholder="User name">
+        				</div>
+        				<div class="input-group mb-3">
+          					<input type="password" name="password" id"password_input" class="form-control" placeholder="Password">
+        				</div>
+        				<div class="row">
+          					<div class="col-8">
+          					</div>
+          					<div class="col-4 d-grid">
+            					<button type="submit" class="btn btn-primary" id="login_submit">Sign Up</button>
+          					</div>
+        				</div>
+      				</form>
+      				<p class="mb-0">
+        				<a href="/login" class="text-center">Member login</a>
+      				</p>
+    			</div>
+			</div>
+		</div>
+		<script defer src="/dist/login.js"></script>
+	</body>
+</html>
