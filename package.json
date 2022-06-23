@@ -22,10 +22,6 @@
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^6.1.1",
 		"@popperjs/core": "^2.9.2",
-		"@riotjs/compiler": "^5.4.2",
-		"@riotjs/hot-reload": "^5.0.0",
-		"@riotjs/observable": "^4.0.4",
-		"@riotjs/webpack-loader": "^5.0.0",
 		"axios": "^0.21.1",
 		"bcrypt": "^5.0.1",
 		"bootstrap": "^5.0.1",
@@ -43,7 +39,6 @@
 		"passport-local": "^1.0.0",
 		"pg": "^8.6.0",
 		"pg-hstore": "^2.3.3",
-		"riot": "^5.4.1",
 		"sequelize": "^6.6.2",
 		"sequelize-cli": "^6.2.0",
 		"session-file-store": "^1.5.0",
@@ -55,9 +50,6 @@
 		"url-loader": "^4.1.1"
 	},
 	"devDependencies": {
-		"@riotjs/compiler": "^5.0.0",
-		"@riotjs/register": "^5.0.0",
-		"@riotjs/webpack-loader": "^5.0.0",
 		"chai": "^4.2.0",
 		"css-loader": "^5.2.4",
 		"esm": "^3.2.25",
