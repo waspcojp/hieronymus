@@ -23,7 +23,13 @@ $ npx sequelize-cli db:migrate
 $ npx sequelize-cli db:seed:all
 ```
 
-とするだけでインストールされます。
+とするだけでインストールされます。起動するには、
+
+```
+$ npm run start
+```
+
+です。デフォルトでは3010番ポートで動きます。
 
 ## 設定
 
