@@ -35,12 +35,12 @@
                             {/if}
                         </td>
                         <td>
-                            {line.startDate.getFullYear()}年({wareki(line.startDate)[0]}{wareki(line.startDate)[1]}年)
+                            {line.startDate.getFullYear()}年({wareki(line.startDate)})
                             {line.startDate.getMonth()+1}月
                             {line.startDate.getDate()}日
                         </td>
                         <td>
-                            {line.endDate.getFullYear()}年({wareki(line.endDate)[0]}{wareki(line.endDate)[1]}年)
+                            {line.endDate.getFullYear()}年({wareki(line.endDate)})
                             {line.endDate.getMonth()+1}月
                             {line.endDate.getDate()}日
                         </td>

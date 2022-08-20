@@ -8,12 +8,12 @@
 		{#if ( startDate && endDate )}
 		第{term}期
 		({startDate.getFullYear()}年
-		({wareki(startDate)[0]}{wareki(startDate)[1]}年)
+		({wareki(startDate)})
         {startDate.getMonth()+1}月
         {startDate.getDate()}日
 		〜
 		{endDate.getFullYear()}年
-		({wareki(endDate)[0]}{wareki(endDate)[1]}年)
+		({wareki(endDate)})
         {endDate.getMonth()+1}月
         {endDate.getDate()}日)
 		{/if}
