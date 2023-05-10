@@ -1,4 +1,3 @@
-const Fs = require('fs');
 const bcrypt = require('bcrypt');
 const models = require('../models');
 const SALT_ROUNDS = 10;

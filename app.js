@@ -30,10 +30,10 @@ app.use(cors({
 app.use(multipart());
 
 app.use(session({
-	secret: 'hieronyms',
+	secret: 'hieronymus',
 	resave: true,
 	saveUninitialized: false,
-	name: 'hieronyms',					//	ここの名前は起動するnode.js毎にユニークにする
+	name: 'hieronymus',					//	ここの名前は起動するnode.js毎にユニークにする
 	store: new FileStore({
 		ttl: global.env.session_ttl,	//	default 3600(s)
 		reapInterval: global.env.session_ttl,

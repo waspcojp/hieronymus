@@ -36,3 +36,142 @@ th {
 	background-color:#4cd964;
     //background-color: gray;
 }
+
+// compatibility for AdminLTE
+
+.brand-container {
+    font-size: 1.25rem;
+    padding: 0.8125rem 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.brand-container .brand-link,
+.brand-container .pushmenu {
+    color: rgba(255,255,255,.8);
+}
+
+.brand-container .brand-link .brand-image {
+    float: left;
+    line-height: .8;
+    margin-left: 0.8rem;
+    margin-right: 0.5rem;
+    margin-top: -3px;
+    max-height: 33px;
+    width: auto;
+}
+.fw-light {
+    font-weight: 300!important;
+}
+.bg-light {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-light-rgb),var(--bs-bg-opacity))!important;
+}
+.sidebar-bg-dark {
+    background-color: #343a40;
+}
+.sidebar-bg-dark .sidebar a {
+    color: #c2c7d0;
+}
+sidebar-bg-dark .brand-container {
+    border-bottom: 1px solid #495057;
+}
+.brand-container {
+    display: grid;
+    grid-template-areas: "brand-link pushmenu";
+    justify-content: space-between;
+    font-size: 1.25rem;
+    transition: width .3s ease-in-out;
+    padding: 0.8125rem 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.layout-fixed:not(.sidebar-horizontal) .main-sidebar {
+    bottom: 0;
+    float: none;
+    left: 0;
+    position: fixed;
+    top: auto;
+}
+.main-sidebar {
+    bottom: 0;
+    float: none;
+    left: 0;
+    position: fixed;
+    top: 0;
+}
+.main-sidebar {
+	width: 250px;
+    z-index: 1038;
+}
+ .content-wrapper,
+.main-footer,
+.main-header {
+    margin-left: 250px;
+}
+.content-wrapper {
+	height: calc(100vh - 56px - 72px);
+}
+.main-footer {
+    background-color: #fff;
+    border-top: 1px solid #dee2e6;
+    color: #777c81;
+    padding: 1rem;
+    width: inherit;
+}
+.main-sidebar .sidebar {
+    height: calc(100vh - (calc(3.5rem + 1px)));
+}
+.sidebar {
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+}
+ul.nav {
+    --bs-nav-link-padding-x: 1rem;
+    --bs-nav-link-padding-y: 0.5rem;
+    --bs-nav-link-font-weight: ;
+    --bs-nav-link-color: #0d6efd;
+    --bs-nav-link-hover-color: #0a58ca;
+    --bs-nav-link-disabled-color: #6c757d;
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+.mt-2 {
+    margin-top: 0.5rem!important;
+}
+.nav-sidebar .nav-link {
+    position: relative;
+    width: calc(250px - 1rem);
+}
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.nav-link {
+    background: 0 0;
+    border: 0;
+    border-radius: 0.375rem;;
+}
+
+
+.main-sidebar .nav-sidebar>.nav-item>.nav-link.active,
+.main-sidebar .nav-sidebar>.nav-item>.nav-link.active:hover {
+    background-color: #0d6efd;
+    color: #fff;
+}
+.main-sidebar .nav-sidebar>.nav-item> .nav-link:hover {
+    background-color: #212529;
+    color: #fff;
+}
