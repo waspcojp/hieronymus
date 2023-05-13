@@ -1,6 +1,6 @@
 <div class="brand-container">
     <a href="" class="brand-link">
-        <img src="/public/logo.png" alt="Logo" class="brand-image opacity-80 shadow">
+        <img src="/public/logo.png" alt="Logo" class="brand-image">
         <span class="brand-text fw-light">Hieronymus</span>
     </a>
     <a class="pushmenu mx-1" data-lte-toggle="sidebar-mini" href="#" role="button">
