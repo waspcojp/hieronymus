@@ -72,6 +72,13 @@ export  let term;
 let pathname;
 let startDate = new Date();
 let endDate;
+let user;
+
+onMount(() => {
+    user = axios.get('/api/user').then((res) => {
+        user = res.data;
+    });
+})
 
 beforeUpdate(() => {
 	if	( !pathname )	{

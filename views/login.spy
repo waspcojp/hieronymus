@@ -6,7 +6,7 @@
 		<link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
 		<script defer src="/dist/common.js"></script>
 	</head>
-	<body class="hold-transition login-page" id="body">
+	<body class="layout-fixed hold-transition login-page" id="body">
     	<div class="login-box">
     		<div class="login-logo">
         		<a href="../../index2.html"><b>Hieronymus</b></a>

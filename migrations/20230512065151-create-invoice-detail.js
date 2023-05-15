@@ -10,7 +10,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       invoiceId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Invoices',
+          field: 'id'
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
       },
       lineNo: {
         type: Sequelize.INTEGER

@@ -109,10 +109,17 @@ router.post('/signup', (req, res, next) => {
 			name: user_name
 		})
 		user.password = password;
-		user.create().then((ret) => {
-			//console.log('created', ret);
-			//console.log(`user ${user_name} created`);
-			res.redirect('/login');
+		models.User.count().then((count) => {
+			if	( count === 0 )	{
+				user.administratable = true;
+				user.approvable = true;
+			} else {
+				user.administratable = false;
+				user.approvable = false;
+			}
+			user.create().then((ret) => {
+				res.redirect('/login');
+			});
 		});
 		//console.log('signup_post fine');
 	} else {
