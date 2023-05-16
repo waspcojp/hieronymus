@@ -48,7 +48,8 @@
 		</ul>
 	</div> 
 </nav>
-<div class="row full-height" style="overflow-y: scroll;">
+<div class="row body-height">
+	<div class="row full-height" style="overflow-y: scroll;">
 	<table class="table table-bordered">
 		<thead>
 			<tr>
@@ -89,8 +90,12 @@
 					{line.otherSubAccount}
 				</td>
 				<td>
-					{line.application1}<br/>
-					{line.application2}<br/>
+					<div class="appication">
+						{line.application1 ? line.application1 : ''}
+					</div>
+					<div class="appication">
+						{line.application2 ? line.application2 : ''}
+					</div>
 				</td>
 				<td class="number">
 					{#if line.showCredit }
@@ -110,6 +115,7 @@
 		</tbody>
 	</table>
 </div>
+</div>
 <CrossSlipModal
 	slip={slip}
 	modal={modal}
@@ -118,6 +124,15 @@
 	on:close={updateList}></CrossSlipModal>
 
 <style>
+.fontsize-12pt {
+	font-size: 12pt;
+}
+.application {
+	padding: 0;
+}
+th {
+	text-align: center;
+}
 </style>
 
 <script>
@@ -225,7 +240,7 @@ const updateList = (forward) => {
 			axios.get(`/api/ledger/${term}/${this_account}/${sub_account}`).then((result) => {
 				let details = result.data;
 				let ret = ledger_lines(this_account, sub_account,
-												remaining.balance, details);
+												remaining, details);
 				lines = ret.lines;
 				console.log('lines', lines);
 			});
