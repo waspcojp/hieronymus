@@ -1,45 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
-const Local = require('passport-local').Strategy;
-const {auth_user, is_authenticated, User} = require('../libs/user');
+const {is_authenticated, User, passport} = require('../libs/user');
 const models = require('../models');
 const Op = models.Sequelize.Op;
 
-passport.use(new Local(
-	{
-		usernameField: 'user_name',
-		passwordField: 'password',
-		passReqToCallback: true,
-		session: true,
-	}, (req, user_name, password, done) => {
-		//console.log('user_name', user_name);
-		//console.log('password', password);
-		//console.log('done', done);
-
-		process.nextTick(() => {
-			auth_user(user_name, password).then(() => {
-				return done(null, {
-					user_name: user_name
-				});
-			}).catch(() => {
-				console.log('login error');
-				return done(null, false, {
-					message: 'fail'
-				});
-			});
-		});
-	}));
-
-passport.serializeUser((user, done) => {
-	//console.log('serialize:', user);
-	done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-	//console.log('deserialize:', user);
-	done(null, user);
-});
 
 /* GET users listing. */
 router.get('/login', (req, res, next) => {
@@ -68,7 +32,7 @@ router.post('/login', (req, res, next) => {
 								});
 		} else {
 			req.login(user, (error, next) => {
-				//console.log('user', user);
+				console.log('/login user', user);
 				//console.log("error", error);
 				if (error) {
 					//console.log("error");
@@ -113,9 +77,11 @@ router.post('/signup', (req, res, next) => {
 			if	( count === 0 )	{
 				user.administratable = true;
 				user.approvable = true;
+				user.inventory = true;
 			} else {
 				user.administratable = false;
 				user.approvable = false;
+				user.inventory = false;
 			}
 			user.create().then((ret) => {
 				res.redirect('/login');
@@ -161,7 +127,7 @@ const home =  async (req, res, next) => {
 							msg_type: '',
 							message: '',
 							term: req.session.term,
-							user: User.current(req)
+							user: User.current(req).user_name
 						});
 	} else {
 		req.session.term = req.params.term;
