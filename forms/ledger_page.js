@@ -439,9 +439,15 @@ module.exports = class {
             this_page.make_header();
             let ret;
             if  ( subAccount )  {
-                ret = ledger_lines(account.code, subAccount.code, this_page.balance, details);
+                ret = ledger_lines(account.code, subAccount.code, {
+                    debit: 0,
+                    credit: 0,
+                    balance: this_page.balance }, details);
             } else {
-                ret = ledger_lines(account.code, null, this_page.balance, details);
+                ret = ledger_lines(account.code, null, {
+                    debit: 0,
+                    credit: 0,
+                    balance: this_page.balance }, details);
             }
             for ( let i = 0; i < ret.lines.length; i ++ ) {
                 this_page.print(ret.lines[i]);
