@@ -5,12 +5,6 @@
 	"main": "index.js",
 	"scripts": {
 		"env": "export NODE_OPTIONS=--openssl-legacy-provider",
-<<<<<<< HEAD
-=======
-		"test": "nyc --require esm --require jsdom-global/register --require @riotjs/register mocha src/**/*.spec.js",
-		"cov": "nyc report --reporter=text-lcov | coveralls",
-		"cov-html": "nyc report --reporter=html",
->>>>>>> main
 		"build-production": "NODE_OPTIONS=--openssl-legacy-provider webpack -c --mode production",
 		"build": "NODE_OPTIONS=--openssl-legacy-provider webpack -c --mode development",
 		"watch": "NODE_OPTIONS=--openssl-legacy-provider webpack --watch",

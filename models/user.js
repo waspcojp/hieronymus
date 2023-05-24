@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
   };
   User.init({
     name: DataTypes.STRING,
-    hash_password: DataTypes.STRING
+    hash_password: DataTypes.STRING,
+    approvable: DataTypes.BOOLEAN,
+    administratable: DataTypes.BOOLEAN,
+    inventory: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User'
