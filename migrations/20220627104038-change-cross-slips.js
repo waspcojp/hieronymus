@@ -6,7 +6,10 @@ module.exports = {
     await queryInterface.addColumn('CrossSlips', 'approvedBy', Sequelize.INTEGER);
     await queryInterface.addColumn('CrossSlips', 'createdBy', Sequelize.INTEGER);
     await queryInterface.addColumn('CrossSlips', 'updatedBy', Sequelize.INTEGER);
-    /**
+    let now = new Date();
+    await queryInterface.sequelize.query(
+      `UPDATE "CrossSlips" set "approvedAt" = DATE'${now.toUTCString()}', "approvedBy" = 1, "createdBy" = 1;`);
+      /**
      * Add altering commands here.
      *
      * Example:
