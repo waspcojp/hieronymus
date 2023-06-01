@@ -9,7 +9,8 @@
 	</head>
 	<body class="layout-fixed" id="body"
 			term={{term}}
-			user={{user}}>
+			user={{user}}
+			administrable={{administrable}}>
 		<div class="wrapper">
     		<nav class="main-header navbar navbar-expand-lg navbar-light bg-light p-3"
 				id="common-nav"></nav>

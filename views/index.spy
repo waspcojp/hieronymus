@@ -9,7 +9,9 @@
 	</head>
 	<body class="layout-fixed" id="body">
 		<div id="home" style="width:100%;"
-			user={{user}}>
+			term={{term}}
+			user={{user}}
+			administrable={{administrable}}>
 		</div>
 		<script src="dist/index.js"></script>
 	</body>

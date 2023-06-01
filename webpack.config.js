@@ -18,6 +18,7 @@ module.exports = {
 		accounts: './accounts.js',
 		trial_balance: './trial-balance.js',
 		customer: './customer.js',
+		users: './users.js',
 		voucher: './voucher.js',
 		'bank-ledger': './bank-ledger.js'
 	},

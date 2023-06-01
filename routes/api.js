@@ -8,6 +8,7 @@ const remaining = require('./api_remaining');
 const trial_balance = require('./api_trial_balance');
 const customer = require('./api_customer');
 const voucher = require('./api_voucher');
+const user = require('./api_user');
 
 //const account_classes = require('./api_account_classes');
 const cross_slip = require('./api_cross_slip');
@@ -15,6 +16,11 @@ const cross_slip_detail = require('./api_cross_slip_detail');
 
 const models = require('../models');
 const Op = models.Sequelize.Op;
+
+router.get('/user', user.get);
+router.get('/user/:id', user.get);
+router.get('/users', user.list);
+
 
 router.get('/journal/:year/:month', journal.get);
 

@@ -73,7 +73,7 @@ app.use('/journal/:year/:month', is_authenticated, (req, res, next) => {
 		year: req.params.year,
 		month: req.params.month,
 		term: req.session.term,
-		user: User.current(req).user_name
+		user: req.session.user.name
 	});
 });
 
@@ -81,40 +81,46 @@ app.use('/ledger/:term/:account', is_authenticated, (req, res, next) => {
 	res.render('ledger.spy', {
 		term: req.session.term,
 		account: req.params.account,
-		user: User.current(req).user_name
+		user: req.session.user.name
 	});
 });
 app.use('/bank-ledger/:term', is_authenticated, (req, res, next) => {
 	res.render('bank-ledger.spy', {
 		term: req.session.term,
 		account: req.params.account,
-		user: User.current(req).user_name
+		user: req.session.user.name
 	});
 });
 app.use('/bank-ledger/:term/:account', is_authenticated, (req, res, next) => {
 	res.render('bank-ledger.spy', {
 		term: req.session.term,
 		account: req.params.account,
-		user: User.current(req).user_name
+		user: req.session.user.name
 	});
 });
 app.use('/bank-ledger/:term/:account/:subaccount', is_authenticated, (req, res, next) => {
 	res.render('bank-ledger.spy', {
 		term: req.session.term,
 		account: req.params.account,
-		user: User.current(req).user_name
+		user: req.session.user.name
 	});
 });
 app.use('/accounts/:term', is_authenticated, (req, res, next) => {
 	res.render('accounts.spy', {
 		term: req.session.term,
-		user: User.current(req).user_name
+		user: req.session.user.name
 	});
 });
 app.use('/trial-balance', is_authenticated,(req, res, next) => {
 	res.render('trial-balance.spy', {
 		term: req.session.term,
-		user: User.current(req).user_name
+		user: req.session.user.name
+	});
+});
+app.use('/users', is_authenticated,(req, res, next) => {
+	res.render('users.spy', {
+		term: req.session.term,
+		user: req.session.user.name
 	});
 });
 

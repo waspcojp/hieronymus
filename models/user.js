@@ -1,4 +1,7 @@
 'use strict';
+const bcrypt = require('bcrypt');
+const SALT_ROUNDS = 10;
+
 const {Model} = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -6,12 +9,26 @@ module.exports = (sequelize, DataTypes) => {
     static  associate(models) {
       // associations can be defined here
     }
-  };
+    set password(p) {
+      this.hash_password = bcrypt.hashSync(p, SALT_ROUNDS);
+    }
+    get password() {
+      return (this.hash_password);
+    }
+    static check(name) {
+      this.findOne({
+        where: {
+          name: name },
+      }).then((user) => {
+        return (user ? true : false);
+      });
+    }
+    };
   User.init({
     name: DataTypes.STRING,
     hash_password: DataTypes.STRING,
     approvable: DataTypes.BOOLEAN,
-    administratable: DataTypes.BOOLEAN,
+    administrable: DataTypes.BOOLEAN,
     inventory: DataTypes.BOOLEAN
   }, {
     sequelize,

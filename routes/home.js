@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {is_authenticated, User, passport} = require('../libs/user');
+const {is_authenticated, passport} = require('../libs/user');
 const models = require('../models');
 const Op = models.Sequelize.Op;
 
@@ -41,7 +41,10 @@ router.post('/login', (req, res, next) => {
 										  message: `user ${user.user_name} not found`
 										});
 				} else {
-					res.redirect('/home');
+					req.session.user = user.user;
+					req.session.save(() => {
+						res.redirect('/home');
+					});
 				}
 			});
 		}
@@ -66,24 +69,26 @@ router.post('/signup', (req, res, next) => {
 	//console.log(req.body.user_name);
 	//console.log(req.body.password);
 
-	user_name = req.body.user_name;
-	password = req.body.password;
-	if ( !User.check(user_name) ) {
-		user = new User(user_name, {
+	let user_name = req.body.user_name;
+	let password = req.body.password;
+	if ( !models.User.check(user_name) ) {
+		let user = new models.User({
 			name: user_name
-		})
+		});
 		user.password = password;
 		models.User.count().then((count) => {
+			console.log('count', count);
 			if	( count === 0 )	{
-				user.administratable = true;
+				user.administrable = true;
 				user.approvable = true;
 				user.inventory = true;
 			} else {
-				user.administratable = false;
+				user.administrable = false;
 				user.approvable = false;
 				user.inventory = false;
 			}
-			user.create().then((ret) => {
+			console.log('user', user);
+			user.save().then((ret) => {
 				res.redirect('/login');
 			});
 		});
@@ -122,12 +127,14 @@ const home =  async (req, res, next) => {
 			}
 		}
 		//console.log('term', req.session.term);
+		console.log('user', req.session.user);
 		res.render('home', {
 							title: 'Home',
 							msg_type: '',
 							message: '',
 							term: req.session.term,
-							user: User.current(req).user_name
+							user: req.session.user.name,
+							administrable: req.session.user.administrable
 						});
 	} else {
 		req.session.term = req.params.term;

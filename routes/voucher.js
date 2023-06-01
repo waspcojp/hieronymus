@@ -10,7 +10,7 @@ const home =  async (req, res, next) => {
 						msg_type: '',
 						message: '',
 						term: req.session.term,
-						user: User.current(req).user_name
+						user: req.session.user.name
 					});
 };
 

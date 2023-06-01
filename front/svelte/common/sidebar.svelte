@@ -1,10 +1,7 @@
 <div class="brand-container">
     <a href="" class="brand-link">
         <img src="/public/logo.png" alt="Logo" class="brand-image">
-        <span class="brand-text fw-light">Hieronymus</span>
-    </a>
-    <a class="pushmenu mx-1" data-lte-toggle="sidebar-mini" href="#" role="button">
-        <i class="fas fa-angle-double-left"></i>
+        <span class="brand-text">Hieronymus(開発版)</span>
     </a>
 </div>
 <div class="sidebar">
@@ -59,6 +56,15 @@
                     勘定科目管理
                 </a>
 			</li>
+            {#if ( user && user.administrable ) }
+			<li class="nav-item">
+				<a class={pathname.match(/\/users\//)  ? 'nav-link active': 'nav-link'}
+                        href="/users/">
+                    <i class="nav-icon fas fa-circle"></i>
+                    ユーザ管理
+                </a>
+			</li>
+            {/if}
         </ul>
     </nav>
 </div>

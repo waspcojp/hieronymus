@@ -28,7 +28,7 @@ const common = new CommonNav({
 const sidebar = new SideBar({
     target: document.getElementById('sidebar'),
     props: {
-        term: parseInt(term),
+        term: parseInt(term)
     }
 });
 const footer = new CommonFooter({
