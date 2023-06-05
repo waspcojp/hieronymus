@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
-import Users from '../svelte/ledger/index.svelte';
+import Users from '../svelte/users/index.svelte';
 
 let target = document.getElementById('body');
 let term = target.getAttribute('term');
