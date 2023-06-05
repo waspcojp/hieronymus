@@ -27,6 +27,9 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     name: DataTypes.STRING,
     hash_password: DataTypes.STRING,
+    deauthorizedAt: DataTypes.DATE,
+    accounting: DataTypes.BOOLEAN,
+    fiscal_browsing: DataTypes.BOOLEAN,
     approvable: DataTypes.BOOLEAN,
     administrable: DataTypes.BOOLEAN,
     inventory: DataTypes.BOOLEAN

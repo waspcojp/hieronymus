@@ -5,27 +5,27 @@
 	<div class="card-body">
     	<ul class="list-group">
 			<li class="list-group-item">
-				<a href="/forms/explanatory_journal/{term}" download="仕訳日記帳.xlsx">
+				<a href="/forms/explanatory_journal/{term}" download="仕訳日記帳-{today}.xlsx">
 					仕訳日記帳ダウンロード
     			</a>
 	    	</li>
 			<li class="list-group-item">
-				<a href="/forms/general_ledger/{term}" download="総勘定元帳.xlsx">
+				<a href="/forms/general_ledger/{term}" download="総勘定元帳-{today}.xlsx">
 					総勘定元帳ダウンロード
     			</a>
 	    	</li>
 			<li class="list-group-item">
-				<a href="/forms/subsidiary_ledger/{term}" download="補助元帳.xlsx">
+				<a href="/forms/subsidiary_ledger/{term}" download="補助元帳-{today}.xlsx">
 					補助元帳ダウンロード
     			</a>
 	    	</li>
 			<li class="list-group-item">
-				<a href="/forms/trial_balance/{term}" download="残高試算表.xlsx">
+				<a href="/forms/trial_balance/{term}" download="残高試算表-{today}.xlsx">
 					残高試算表ダウンロード
     			</a>
 	    	</li>
 			<li class="list-group-item">
-				<a href="/forms/financial_statement/{term}" download="決算報告書.xlsx">
+				<a href="/forms/financial_statement/{term}" download="決算報告書-{today}.xlsx">
 					決算報告書ダウンロード
     			</a>
 	    	</li>
@@ -34,5 +34,13 @@
 </div>
 
 <script>
+import {onMount} from 'svelte';
+
 export	let	term;
+let today;
+
+onMount(() => {
+	let now = new Date();
+	today = `${now.getUTCFullYear()}${("00"+(now.getMonth()+1).toString()).slice(-2)}${("00"+now.getDate().toString()).slice(-2)}`;
+})
 </script>

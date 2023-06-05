@@ -125,7 +125,7 @@
 				<td>
 					{line.description || ''}
 				</td>
-				<td style="height:120px;">
+				<td style="height:25px;">
 					{#each line.files as file}
 					<div class="file-item">
 						<a href="/voucher/file/{file.id}" target="_blank">
@@ -150,14 +150,14 @@ th {
 	text-align: center;
 }
 .file-item {
-	width:100px;
-	height:100px;
-	padding:10px;
+	width:40px;
+	height:40px;
+	padding:5px;
 	float: left;
 }
 .rect-image {
-	width:90px;
-	clip:rect(0,90px,90px,0);
+	width:40px;
+	clip:rect(0,40px,40px,0);
 }
 </style>
 

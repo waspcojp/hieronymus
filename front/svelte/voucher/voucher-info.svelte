@@ -119,16 +119,16 @@
 
 <style>
 .file-item {
-	width:190px;
-	height:220px;
+	width:90px;
+	height:120px;
 	border:1px #8CC solid;
 	margin:10px;
 	padding: 0 10px 10px 10px;
 }
 .rect-image {
-	width:170px;
+	width:70px;
 	position:absolute;
-	clip:rect(0,170px,160px,0);
+	clip:rect(0,70px,70px,0);
 }
 </style>
 

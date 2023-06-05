@@ -14,7 +14,7 @@
 		</ul>
 	</div>
 </nav>
-<div class="row">
+<div class="row body-height">
 	<TrialBalanceList
 		term={term}
 		lines={lines}>

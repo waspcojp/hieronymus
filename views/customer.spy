@@ -1,32 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 	<head>
-		<title>{{year}}/{{month}}::Journal</title>
+		<title>取引先管理::Hieronymus</title>
+		<meta http-equiv="Content-Language" content="ja" />
 		<link rel="stylesheet" href="/style/style.css">
 		<link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
 		<script defer src="/dist/common.js"></script>
 		<base href="/" />
 	</head>
 	<body class="layout-fixed" id="body"
-			term={{term}}
-			user={{user}}
-			administrable={{administrable}}>
-		<div class="wrapper">
-    		<nav class="main-header navbar navbar-expand-lg navbar-light bg-light p-3"
-				id="common-nav"></nav>
-	    	<aside 
-				class="main-sidebar sidebar-bg-dark sidebar-color-primary shadow"
-				id="sidebar"></aside>
-       		<main class="content-wrapper">
-				<div class="content">
-					<div class="container-fluid" id="customer">
-					</div>
-				</div>
-      		</main>
-			<footer
-				class="main-footer"
-				id="common-footer"></footer>
-		</div>
+			term={{term}}>
+		<div class="wrapper" id="customer"></div>
 		<script defer src="/dist/customer.js"></script>
 	</body>
 </html>

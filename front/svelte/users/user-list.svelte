@@ -1,48 +1,87 @@
 <div class="row full-height fontsize-12pt" style="overflow-y: scroll;">
-	<table class="table table-bordered">
-		<thead>
-			<tr>
-				<th scope="col">
-					名前
-				</th>
-				<th scope="col">
-					管理者
-				</th>
-				<th scope="col">
-					承認可能
-				</th>
-				<th scope="col">
-					在庫管理
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#await get then result}
-			{#each result.data as line}
-			<tr class="fontsize-12pt">
-				<td>
-					<a href="#" data-no={line.id}>
+	<div class="col-7">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th scope="col">
+						名前
+					</th>
+					<th scope="col">
+						管理者
+					</th>
+					<th scope="col">
+						会計
+					</th>
+					<th scope="col">
+						会計(閲覧)
+					</th>
+					<th scope="col">
+						承認可能
+					</th>
+					<th scope="col">
+						在庫管理
+					</th>
+					<th scope="col">
+						削除
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#if data}
+				{#each data as line, i}
+				<tr class="fontsize-12pt"
+						data-id={line.id}>
+					<td>
 						{line.name}
-					</a>
-				</td>
-				<td>
-					{line.administrable}
-				</td>
-				<td>
-					{line.approvable}
-				</td>
-				<td>
-					{line.inventory}
-				</td>
-			</tr>
-			{/each}
-			{/await}
-		</tbody>
-	</table>
+					</td>
+					<td class="checkbox">
+						<input type="checkbox" bind:checked={line.administrable}
+							data-index={i}
+							on:change={change}>
+					</td>
+					<td class="checkbox">
+						<input type="checkbox" bind:checked={line.accounting}
+							data-index={i}
+							on:change={change}>
+					</td>
+					<td class="checkbox">
+						<input type="checkbox" bind:checked={line.fiscal_browsing}
+							data-index={i}
+							on:change={change}>
+					</td>
+					<td class="checkbox">
+						<input type="checkbox" bind:checked={line.approvable}
+							data-index={i}
+							on:change={change}>
+					</td>
+					<td class="checkbox">
+						<input type="checkbox" bind:checked={line.inventory}
+							data-index={i}
+							on:change={change}>
+					</td>
+					<td class="checkbox">
+						{#if ( line.id != 1) }
+						<button type="button" class="btn btn-danger btn-sm"
+							data-index={i}
+							on:click={remove}>
+							<i class="fas fa-times"></i>
+						</button>
+						{/if}
+					</td>
+				</tr>
+				{/each}
+				{/if}
+			</tbody>
+		</table>
+	</div>
 </div>
 
 <style>
 th {
+	text-align: center;
+}
+td.checkbox {
+	width: 100px;
 	text-align: center;
 }
 </style>
@@ -51,14 +90,47 @@ th {
 import axios from 'axios';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 
-export	let	update;
+let	data;
 
-let	get;
+const change = (event) => {
+	let index = parseInt(event.currentTarget.dataset.index);
+	let id = parseInt(event.currentTarget.parentNode.parentNode.dataset.id);
+	//console.log('value', index, id, data[index]);
+	axios.put(`/api/user/${id}`, data[index]).then((result) => {
+		console.log('status', result.data.status);
+		if	( result.data.code == 0 ) {
+			axios.get(`/api/users/`).then((result) => {
+				data = result.data;
+			});
+		} else {
+
+		}
+	})
+}
+
+const remove = (event) => {
+	let index = parseInt(event.currentTarget.dataset.index);
+	let id = parseInt(event.currentTarget.parentNode.parentNode.dataset.id);
+	//console.log('value', index, id, data[index]);
+	axios.delete(`/api/user/${id}`).then((result) => {
+		console.log('status', result.data.status);
+		if	( result.data.code == 0 ) {
+			axios.get(`/api/users/`).then((result) => {
+				data = result.data;
+			});
+		} else {
+
+		}
+	})
+}
 
 onMount(() => {
-
 });
 beforeUpdate(() => {
-	get = axios.get(`/api/users/`);
+	if	( !data )	{
+		axios.get(`/api/users/`).then((result) => {
+			data = result.data;
+		});
+	}
 });
 </script>

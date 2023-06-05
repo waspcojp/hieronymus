@@ -45,9 +45,11 @@
                             {line.endDate.getDate()}日
                         </td>
                         <td>
+                            {#if ( user && user.administrable )}
                             <a class="btn btn-danger closing" href="/forms/closing/{line.term}">
                                 繰越
                             </a>
+                            {/if}
                         </td>
                     </tr>
                     {/each}
@@ -62,13 +64,17 @@ th {
 	text-align: center;
 	font-weight: bold;
 }
-    </style>
-    <script>
+td {
+    vertical-align: middle;
+}
+</style>
+<script>
 import axios from 'axios';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import {wareki} from '../../../libs/utils';
 
 export  let term;
+export  let user;
 
 let lines;
 

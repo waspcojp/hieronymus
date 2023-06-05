@@ -7,7 +7,7 @@
 		</ul>
 	</div>
 </nav>
-<div class="row">
+<div class="row body-height">
 	<AccountsList
 		term={term}
 		lines={lines}

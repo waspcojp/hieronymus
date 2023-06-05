@@ -19,6 +19,9 @@ const Op = models.Sequelize.Op;
 
 router.get('/user', user.get);
 router.get('/user/:id', user.get);
+router.put('/user/password', user.password);
+router.put('/user/:id', user.update);
+router.delete('/user/:id', user.delete);
 router.get('/users', user.list);
 
 
@@ -91,14 +94,16 @@ router.get('/term/:year/:month', async (req, res, next) => {
 });
 
 router.get('/term/:term', async (req, res, next) => {
-	let term = req.params.term;
-	//console.log(term);
-	fy = await models.FiscalYear.findOne({
-		where: {
-			term: term
-		}
-	});
-	res.json(fy);
+	let term = parseInt(req.params.term);
+	console.log({term});
+	if	( term > 0 )	{
+		fy = await models.FiscalYear.findOne({
+			where: {
+				term: term
+			}
+		});
+		res.json(fy);
+	}
 });
 router.get('/term', async (req, res, next) => {
 	models.FiscalYear.findAll().then((lines) => {

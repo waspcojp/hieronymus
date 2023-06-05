@@ -1,8 +1,5 @@
 <div class="container-fluid">
 	<ul class="navbar-nav">
-		<li class="nav-item">
-			<a href="/home/" class="nav-link">Home</a>
-		</li>
 	</ul>
 	<span class="havbar-text">
 		{#if ( startDate && endDate )}

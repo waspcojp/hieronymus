@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row full-height" style="overflow-y: scroll;">
 	<table class="table table-bordered">
 		<thead>
 			<tr>

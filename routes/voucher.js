@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {is_authenticated, User} = require('../libs/user');
+const {is_authenticated} = require('../libs/user');
 const models = require('../models');
 const Op = models.Sequelize.Op;
 

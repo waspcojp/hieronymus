@@ -7,6 +7,7 @@
 <div class="sidebar">
 	<nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column">
+            {#if ( user && ( user.accounting || user.fiscal_browsing ) ) }
 			<li class="nav-item">
 				<a class={pathname.match(/\/journal\//)  ? 'nav-link active': 'nav-link'}
                         href="/journal/{startDate.getFullYear()}/{startDate.getMonth()+1}">
@@ -56,6 +57,7 @@
                     勘定科目管理
                 </a>
 			</li>
+            {/if}
             {#if ( user && user.administrable ) }
 			<li class="nav-item">
 				<a class={pathname.match(/\/users\//)  ? 'nav-link active': 'nav-link'}
@@ -74,26 +76,24 @@ import axios from 'axios';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 
 export  let term;
+export  let user;
 
 let pathname;
 let startDate = new Date();
 let endDate;
-let user;
-
-onMount(() => {
-    user = axios.get('/api/user').then((res) => {
-        user = res.data;
-    });
-})
 
 beforeUpdate(() => {
 	if	( !pathname )	{
     	pathname = location.pathname;
+        console.log('term', term);
     	axios.get(`/api/term/${term}`).then((res) => {
         	let fy = res.data;
         	startDate = new Date(fy.startDate);
         	endDate = new Date(fy.endDate);
     	});
 	}
+})
+
+beforeUpdate(() => {
 });
 </script>

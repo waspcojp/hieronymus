@@ -13,7 +13,7 @@
 </nav>
 <div class="row body-height">
 	<UserList
-			update={list_update}></UserList>
+			></UserList>
 </div>
 
 <style>

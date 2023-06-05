@@ -74,9 +74,25 @@ const	auth_user = (name, password) => {
 		});
 	});
 }
+const   passwd = (name, old_pass, new_pass) => {
+    //console.log('passwd', user.name, old_pass, new_pass);
+    return new Promise((done, fail) => {
+        auth_user(name, old_pass).then((user) => {
+            user.hash_password = bcrypt.hashSync(new_pass, SALT_ROUNDS);
+            user.save().then(() => {
+                done(true);
+            }).catch(() => {
+                done(false);
+            });
+        }).catch (() => {
+            done(false);
+        });
+    });
+}
 
 module.exports = {
 	is_authenticated: is_authenticated,
 	auth_user: auth_user,
+	passwd: passwd,
 	passport: passport
 };
