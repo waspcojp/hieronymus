@@ -37,13 +37,6 @@
                 </a>
 			</li>
     		<li class="nav-item">
-				<a class={pathname.match(/\/customer/)  ? 'nav-link active': 'nav-link'}
-                    href="/customer/">
-                    <i class="nav-icon fas fa-circle"></i>
-                    取引先管理
-                </a>
-			</li>
-    		<li class="nav-item">
 				<a class={pathname.match(/\/voucher/)  ? 'nav-link active': 'nav-link'}
                         href="/voucher/{term}">
                     <i class="nav-icon fas fa-circle"></i>
@@ -55,6 +48,15 @@
                         href="/accounts/{term}">
                     <i class="nav-icon fas fa-circle"></i>
                     勘定科目管理
+                </a>
+			</li>
+            {/if}
+            {#if ( user && user.customer_management ) }
+    		<li class="nav-item">
+				<a class={pathname.match(/\/customer/)  ? 'nav-link active': 'nav-link'}
+                    href="/customer/">
+                    <i class="nav-icon fas fa-circle"></i>
+                    取引先管理
                 </a>
 			</li>
             {/if}

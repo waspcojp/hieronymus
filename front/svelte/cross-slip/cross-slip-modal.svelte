@@ -55,15 +55,34 @@
 				{/if}
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary"
+				{#if (( !slip ) ||
+					  (( !slip.approvedAt ) &&
+					   (( user.accounting ) ||
+					    ( slip.createdBy == user.id )))) }
+			  	<button type="button" class="btn btn-secondary"
 					on:click={openVouchers}>証票</button>
-				{#if ( slip && slip.no > 0) }
-					<button type="button" class="btn btn-danger" id="delete-button"
-						on:click={delete_}>Delete</button>
+			  	{/if}
+		  		{#if ( slip && slip.no > 0) }
+					{#if ( user.approvable )}
+						{#if ( slip.approvedAt )}
+						<button type="button" class="btn btn-warning" id="disapprove-button"
+							on:click={disapprove}>不承認</button>
+						{:else}
+						<button type="button" class="btn btn-warning" id="approve-button"
+							on:click={approve}>承認</button>
+						<button type="button" class="btn btn-danger" id="delete-button"
+							on:click={delete_}>削除</button>
+						{/if}
+					{/if}
 				{/if}
-				<button type="button" class="btn btn-primary" id="save-button"
-						on:click={save}>Save</button>
-			</div>
+				{#if (( !slip ) || 
+					  (( !slip.approvedAt ) &&
+					   (( user.accounting ) ||
+					    ( slip.createdBy == user.id ))))}
+					<button type="button" class="btn btn-primary" id="save-button"
+							on:click={save}>Save</button>
+				{/if}
+				</div>
 		</div>
 	</div>
 </div>
@@ -80,6 +99,7 @@ export let modal;
 export let accounts;
 export let slip;
 export let term;
+export let user;
 
 export	let init;
 let vouchers;
@@ -178,6 +198,31 @@ const delete_ = (event) => {
 		// can't delete
 		//	TODO alert
 	}
+}
+
+const disapprove = (event) => {
+	slip.approvedAt = null;
+	axios.put('/api/cross_slip/approve', {
+		year: slip.year,
+		month: slip.month,
+		no: slip.no,
+		approvedAt: slip.approvedAt
+	}).then(() => {
+		slip.approverName = undefined;
+		//close_();
+	})
+}
+const approve = (event) => {
+	slip.approvedAt = new Date();
+	axios.put('/api/cross_slip/approve', {
+		year: slip.year,
+		month: slip.month,
+		no: slip.no,
+		approvedAt: slip.approvedAt
+	}).then(() => {
+		slip.approverName = user.name;
+		close_();
+	})
 }
 
 const openVouchers = (event) => {

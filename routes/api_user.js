@@ -1,6 +1,6 @@
 const models = require('../models');
 const Op = models.Sequelize.Op;
-const {passwd, is_authenticated} = require('../libs/user');
+const {passwd, passport, is_authenticated} = require('../libs/user');
 
 module.exports = {
     list: (req, res, next) => {
@@ -19,6 +19,7 @@ module.exports = {
                 res.json(user);
             });
         } else {
+            console.log(req.session.user);
             res.json(req.session.user);
         }
 
@@ -42,8 +43,14 @@ module.exports = {
                 if  ( req.body.approvable !== undefined )   {
                     user.approvable = req.body.approvable;
                 }
-                if  ( req.body.inventory !== undefined )    {
-                    user.inventory = req.body.inventory;
+                if  ( req.body.inventory_management !== undefined )    {
+                    user.inventory_management = req.body.inventory_management;
+                }
+                if  ( req.body.customer_management !== undefined )    {
+                    user.customer_management = req.body.customer_management;
+                }
+                if  ( req.body.deauthorizedAt !== undefined )    {
+                    user.deauthorizedAt = req.body.deauthorizedAt;
                 }
                 user.save().then(()=> {
                     res.json({ code: 0 });
@@ -82,5 +89,82 @@ module.exports = {
             });
         })
     
+    },
+    signup: (req, res, next) => {
+        let user_name = req.body.user_name;
+        let password = req.body.password;
+        console.log('signup', user_name, password);
+        models.User.check(user_name, password).then((_user) => {
+            if  ( _user) {
+                res.json({
+                    result: 'NG',
+                    message: `user ${user_name} duplicated`
+                });
+            } else {
+                let user = new models.User({
+                    name: user_name
+                });
+                user.password = password;
+                models.User.count().then((count) => {
+                    console.log('count', count);
+                    if	( count === 0 )	{
+                        user.administrable = true;
+                        user.approvable = true;
+                        user.inventory = true;
+                    } else {
+                        user.administrable = false;
+                        user.approvable = false;
+                        user.inventory = false;
+                    }
+                    //console.log('user--', user);
+                    user.save().then((ret) => {
+                        res.json({
+                            result: 'OK'
+                        })
+                    });
+                });
+            }
+        }).catch((err) => {
+            res.json({
+                result: 'NG',
+                message: err
+            });
+        });
+    },
+    login:  (req, res, next) => {
+        passport.authenticate('local', (error, user, info) => {
+            //console.log('error', error);
+            console.log('login user', user);
+            //console.log('info', info);
+            if (error) {
+                return next(error);
+            }
+            if (( !user ) ||
+                (( user.user.deauthorizedAt !== null ) &&
+                 ( user.user.deauthorizedAt < new Date() )) ) {
+                //console.log('user not found');
+                res.json({
+                    result: 'NG',
+                    message: `user ${user.user_name} not found`
+                });
+            } else {
+                req.login(user, (error, next) => {
+                    console.log('/login user', user);
+                    //console.log("error", error);
+                    if (error) {
+                        //console.log("error");
+                        res.json({
+                            result: 'NG',
+                            message: `user ${user.user_name} not found`
+                        });
+                    } else {
+                        req.session.user = user.user;
+                        res.json({
+                            result: 'OK'
+                        });
+                    }
+                });
+            }
+        })(req, res, next);
     }
 }

@@ -20,7 +20,8 @@ module.exports = {
 		customer: './customer.js',
 		users: './users.js',
 		voucher: './voucher.js',
-		'bank-ledger': './bank-ledger.js'
+		'bank-ledger': './bank-ledger.js',
+		index: './index.js'
 	},
     output: {
         path: path.resolve(__dirname, 'dist'),

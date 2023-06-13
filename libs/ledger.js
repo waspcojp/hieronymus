@@ -178,6 +178,7 @@ const   ledger_lines = (account_code, sub_account_code, remaining, details) => {
             year: detail.CrossSlip.year,
             month: detail.CrossSlip.month,
             day: detail.CrossSlip.day,
+            approvedAt: detail.CrossSlip.approvedAt,
             no: detail.CrossSlip.no,
 
             accountCode: account_code,

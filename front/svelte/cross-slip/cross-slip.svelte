@@ -1,6 +1,6 @@
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-5">
+		<div class="col">
 			<div class="input-group">
 				<span class="input-group-text">{slip.year}年{slip.month}月</span>
 				<input type="text" class="number" name="day" id="slip-day" size="2" maxlength="3"
@@ -11,7 +11,24 @@
 				{/if}
 			</div>
 		</div>
-	</div>
+		<div class="col">
+			<div class="row">
+				<div class="col-4 input-group-text">
+					入力:
+					{slip.createrName || ''}
+				</div>
+				<div class="col-8 input-group-text">
+					承認:
+					{slip.approverName || ''}
+					{#if (slip.approvedAt)}
+					({slip.approvedAt.getFullYear()}年
+					{slip.approvedAt.getMonth()+1}月
+					{slip.approvedAt.getDate()}日)
+					{/if}
+				</div>
+			</div>
+		</div>
+</div>
 	<div class="row">
 		<table class="table table-striped table-bordered">
 			<thead>

@@ -79,7 +79,7 @@
 				<td style="width:50px;text-align:center;">
 					{line.month} / {line.day}
 				</td>
-				<td class="number" style="width:50px;">
+				<td style="width:50px;" class={'number ' + ( line.approvedAt ? 'bg-body' : 'bg-warning' )}>
 					<a href="#" data-no={line.no} data-year={line.year} data-month={line.month}
 							on:click={openSlip}>
 						{line.no}
@@ -118,9 +118,11 @@
 </div>
 <CrossSlipModal
 	slip={slip}
-	modal={modal}
+	bind:modal={modal}
 	term={term}
+	user={user}
 	accounts={accounts}
+	bind:init={init}
 	on:close={updateList}></CrossSlipModal>
 
 <style>
@@ -143,14 +145,17 @@ import {ledger_lines} from '../../../libs/ledger';
 import {set_accounts} from '../../javascripts/cross-slip';
 import CrossSlipModal from '../cross-slip/cross-slip-modal.svelte';
 
+export let term;
+export let user;
+
 let	bank_list;
-let	term;
 let	this_account;
 let	sub_account;
 let	slip;
 let	lines;
 let	modal;
 let	accounts;
+let init;
 
 const BANK_ACCOUNTS = [
 	[ '1010000',	'当座預金' ],
@@ -193,13 +198,12 @@ beforeUpdate(()	=> {
 				bank_list = undefined;
 			}
 		}
-		if	( !accounts )	{
-			axios.get('/api/accounts').then((result) => {
-				accounts = result.data;
-				set_accounts(accounts);
-			});
-		}
-		console.log('beforeUpdate');
+	}
+	if	( !accounts )	{
+		axios.get('/api/accounts').then((result) => {
+			accounts = result.data;
+			set_accounts(accounts);
+		});
 	}
 	if	( !bank_list )	{
 		updateAccount();
@@ -263,6 +267,7 @@ afterUpdate(() => {
 		console.log('modal new')
 	}
 	if	( openModal )	{
+		console.log('accounts', accounts);
 		modal.show();
 		openModal = false;
 	}
@@ -279,9 +284,14 @@ const	openSlip = (event) => {
 				month: data.month,
 				day: data.day,
 				no: data.no,
+				createdBy: data.createdBy,
+				approvedAt: data.approvedAt ? new Date(data.approvedAt): null,
+				createrName: data.creater ? data.creater.name: '',
+				approverName: data.approver ? data.approver.name : '',
 				lines: data.lines
 		};
 		openModal = true;
+		init = true;
 		console.log('slip', slip);
 	});
 }

@@ -14,8 +14,6 @@
         <div class="container-fluid">
             <Alert bind:alert={alert} {alert_level}></Alert>
             <Users
-                user={user}
-                term ={term}
                 bind:alert={alert}
                 bind:alert_level={alert_level}></Users>
         </div>

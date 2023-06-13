@@ -18,10 +18,6 @@
                     <input type="password" bind:value={confirmPassword}
                         class="form-control" placeholder="Confirm Password">
                 </div>
-                <div class="input-group mb-3">
-                    <input type="text" bind:value={mail}
-                        class="form-control" placeholder="Mail address">
-                </div>
                 <div class="row">
                     <div class="col-8">
                     </div>
@@ -33,7 +29,7 @@
                     </div>
                 </div>
                 <p class="mb-0">
-                    <a on:click|preventDefault={() => { current = 'login' }}
+                    <a on:click|preventDefault={change}
                         href="#" class="text-center">
                         Member login
                     </a>
@@ -50,19 +46,34 @@
     {/if}
 </div>
 <script>
+import axios from 'axios';
+
 export let current;
 
 let user_name;
 let password;
 let confirmPassword;
-let mail;
 let alert;
+
+const change = (event) => {
+    current = 'login';
+    window.history.pushState(null, "", `/login`);
+}
 
 const SignUp = () => {
     try {
         if  ( password == confirmPassword ) {
-            api.signup(user_name, password, mail).then((ret) => {
-                current = 'login';
+            axios.post('/api/user/signup',{
+                user_name: user_name,
+                password: password
+            }).then((ret) => {
+                console.log(ret.data);
+                if  ( ret.data.result == 'OK' ) {
+                    current = 'login';
+                    window.history.pushState(null, "", `/login`);
+                } else {
+                    alert = ret.data.message;
+                }
             }).catch((msg) => {
                 alert = msg;
             });

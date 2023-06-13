@@ -67,8 +67,9 @@
 </div>
 <CrossSlipModal
 	slip={slip}
-	modal={modal}
+	bind:modal={modal}
 	term={term}
+	user={user}
 	accounts={accounts}
 	bind:init={init}
 	on:close={updateList}></CrossSlipModal>
@@ -88,8 +89,9 @@ import LedgerList from './ledger-list.svelte';
 import CrossSlipModal from '../cross-slip/cross-slip-modal.svelte';
 import {ledger_lines} from '../../../libs/ledger';
 
+export let term;
+export let user;
 
-let term;
 let accounts;
 let account_code;
 let account;
@@ -229,11 +231,16 @@ const openSlip = (event) => {
 	let dataset = event.detail;
 	axios.get(`/api/cross_slip/${dataset.year}/${dataset.month}/${dataset.no}`).then((result) => {
 		let data = result.data;
+		console.log('slip', data);
 		slip = {
 				year: data.year,
 				month: data.month,
 				day: data.day,
 				no: data.no,
+				createdBy: data.createdBy,
+				approvedAt: data.approvedAt ? new Date(data.approvedAt): null,
+				createrName: data.creater ? data.creater.name: '',
+				approverName: data.approver ? data.approver.name : '',
 				lines: data.lines
 		};
 		openModal = true;

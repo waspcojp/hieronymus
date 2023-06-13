@@ -1,5 +1,5 @@
 <div class="row full-height fontsize-12pt" style="overflow-y: scroll;">
-	<div class="col-7">
+	<div class="col-9">
 		<table class="table table-bordered">
 			<thead>
 				<tr>
@@ -19,7 +19,13 @@
 						承認可能
 					</th>
 					<th scope="col">
+						顧客管理
+					</th>
+					<th scope="col">
 						在庫管理
+					</th>
+					<th scope="col">
+						停止
 					</th>
 					<th scope="col">
 						削除
@@ -55,9 +61,31 @@
 							on:change={change}>
 					</td>
 					<td class="checkbox">
-						<input type="checkbox" bind:checked={line.inventory}
+						<input type="checkbox" bind:checked={line.customer_management}
 							data-index={i}
 							on:change={change}>
+					</td>
+					<td class="checkbox">
+						<input type="checkbox" bind:checked={line.inventory_management}
+							data-index={i}
+							on:change={change}>
+					</td>
+					<td class="checkbox">
+						{#if ( line.id != 1) }
+						{#if (( line.deauthorizedAt === null ) || line.deauthorize < new Date ())}
+						<button type="button" class="btn btn-danger btn-sm"
+								data-index={i}
+								on:click={deauthorize}>
+							停止
+						</button>
+						{:else}
+						<button type="button" class="btn btn-primary btn-sm"
+								data-index={i}
+								on:click={deauthorize}>
+							再開
+						</button>
+						{/if}
+						{/if}
 					</td>
 					<td class="checkbox">
 						{#if ( line.id != 1) }
@@ -114,6 +142,26 @@ const remove = (event) => {
 	//console.log('value', index, id, data[index]);
 	axios.delete(`/api/user/${id}`).then((result) => {
 		console.log('status', result.data.status);
+		if	( result.data.code == 0 ) {
+			axios.get(`/api/users/`).then((result) => {
+				data = result.data;
+			});
+		} else {
+
+		}
+	})
+}
+
+const deauthorize = (event) => {
+	console.log('deauthorize');
+	let index = parseInt(event.currentTarget.dataset.index);
+	let id = parseInt(event.currentTarget.parentNode.parentNode.dataset.id);
+	let at = ( data[index].deauthorizedAt === null ) ? new Date() : null;
+	console.log('value', index, id, at);
+	axios.put(`/api/user/${id}`, {
+		deauthorizedAt: at
+	}).then((result) => {
+		console.log('status', result.data.code);
 		if	( result.data.code == 0 ) {
 			axios.get(`/api/users/`).then((result) => {
 				data = result.data;

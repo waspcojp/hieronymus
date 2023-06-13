@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <p class="mb-0">
-                    <a on:click|preventDefault={() => { current = 'signup' }} href="#" class="text-center">Register a new membership</a>
+                    <a on:click|preventDefault={change} href="#" class="text-center">Register a new membership</a>
                 </p>
             </div>
         </div>
@@ -38,18 +38,25 @@
 </div>
 <script>
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
-export let user;
+import axios from 'axios';
 export let current;
 
 let user_name;
 let password;
 let alert;
 
+const change = (event) => {
+    current = 'signup';
+    window.history.pushState(null, "", `/signup`);
+}
+
 const Login = () => {
     try {
-        api.login(user_name, password).then((_env) => {
-            user = user_name;
-            current = 'home';
+        axios.post('/api/user/login', {
+            user_name: user_name,
+            password: password
+        }).then((_env) => {
+            window.location = '/home';
         }).catch((msg) => {
             alert = msg;
         });

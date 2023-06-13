@@ -50,7 +50,7 @@
 						{line.month}/{line.day}
 					</a>
 				</td>
-				<td class="number" style="width:50px;">
+				<td style="width:50px;" class={'number ' + ( line.approvedAt ? 'bg-body' : 'bg-warning' )}>
 					<a href="#" data-no={line.no} data-year={line.year} data-month={line.month}
 							on:click={openSlip}>
 						{line.no}

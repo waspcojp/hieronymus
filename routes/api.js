@@ -20,6 +20,8 @@ const Op = models.Sequelize.Op;
 router.get('/user', user.get);
 router.get('/user/:id', user.get);
 router.put('/user/password', user.password);
+router.post('/user/login', user.login);
+router.post('/user/signup', user.signup);
 router.put('/user/:id', user.update);
 router.delete('/user/:id', user.delete);
 router.get('/users', user.list);
@@ -46,6 +48,7 @@ router.post('/sub_account/:term', sub_account.post);
 router.get('/cross_slip/:year/:month/:no', cross_slip.get);
 router.post('/cross_slip', cross_slip.post);
 router.put('/cross_slip', cross_slip.update);
+router.put('/cross_slip/approve', cross_slip.approve);
 router.delete('/cross_slip', cross_slip.delete);
 
 router.get('/cross-slip-detail/:id', cross_slip_detail.get);

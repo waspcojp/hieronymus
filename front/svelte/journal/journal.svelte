@@ -51,6 +51,7 @@
 	slip={slip}
 	bind:modal={modal}
 	term={term}
+	user={user}
 	accounts={accounts}
 	bind:init={init}
 	on:close={close_}></CrossSlipModal>
@@ -65,9 +66,11 @@ import JournalList from './journal-list.svelte';
 import CrossSlipModal from '../cross-slip/cross-slip-modal.svelte';
 import {set_accounts, find_account, find_sub_account_by_code, numeric} from '../../javascripts/cross-slip';
 
+export let user;
+export let term;
+
 let year;
 let month;
-let term;
 let fy;
 let slip;
 let dates;
@@ -115,6 +118,7 @@ const ready = (slips) => {
 	}
 	for ( let i = 0; i < slips.length; i ++ ) {
 		let slip = slips[i];
+		slip.approvedAt = slip.approvedAt ? new Date(slip.approvedAt) : null;
 		for ( let j = 0; j < slip.lines.length; j ++ ) {
 			let line = slip.lines[j];
 
@@ -128,6 +132,7 @@ const ready = (slips) => {
 				month: slip.month,
 				day: slip.day,
 				no: slip.no,
+				approvedAt: slip.approvedAt,
 				lineNo: line.lineNo,
 
 				debitAmount: line.debitAmount != null ? numeric(line.debitAmount).toLocaleString() : '',

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 	<head>
-		<title>{{title}}</title>
+		<title>{{title}}::Hieronymus</title>
+		<meta http-equiv="Content-Language" content="ja" />
 		<base href="/">
 		<link rel="stylesheet" href="public/bootstrap-icons/font/bootstrap-icons.css">
 		<link rel="stylesheet" href="style/style.css">
 		<script src="dist/common.js"></script>
 	</head>
 	<body class="layout-fixed" id="body">
-		<div id="home" style="width:100%;"
-			term={{term}}
-			user={{user}}>
+		<div id="index" style="width:100%;"
+			term={{term}}>
 		</div>
 		<script src="dist/index.js"></script>
 	</body>

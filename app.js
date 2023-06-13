@@ -58,8 +58,6 @@ app.use('/dist', express.static(path.join(__dirname, './dist')));
 app.use('/style', express.static(path.join(__dirname, './front/stylesheets')));
 app.use('/public', express.static(path.join(__dirname, './public')));
 
-app.use('/api', apiRouter);
-
 /*
 app.use('/journal/:term', is_authenticated, (req, res, next) => {
 	res.render('journal.spy', {
@@ -69,65 +67,97 @@ app.use('/journal/:term', is_authenticated, (req, res, next) => {
 });
 */
 app.use('/journal/:year/:month', is_authenticated, (req, res, next) => {
-	res.render('journal.spy', {
-		year: req.params.year,
-		month: req.params.month,
-		term: req.session.term,
-		user: req.session.user.name
-	});
+	if ( req.session.user.accounting )	{
+		res.render('journal.spy', {
+			year: req.params.year,
+			month: req.params.month,
+			term: req.session.term,
+			user: req.session.user.name
+		});
+	} else {
+		res.redirect('/home');
+	}
 });
 
 app.use('/ledger/:term/:account', is_authenticated, (req, res, next) => {
-	res.render('ledger.spy', {
-		term: req.session.term,
-		account: req.params.account,
-		user: req.session.user.name
-	});
+	if ( req.session.user.accounting )	{
+		res.render('ledger.spy', {
+			term: req.session.term,
+			account: req.params.account,
+			user: req.session.user.name
+		});
+	} else {
+		res.redirect('/home');
+	}
 });
 app.use('/bank-ledger/:term', is_authenticated, (req, res, next) => {
-	res.render('bank-ledger.spy', {
-		term: req.session.term,
-		account: req.params.account,
-		user: req.session.user.name
-	});
+	if ( req.session.user.accounting )	{
+		res.render('bank-ledger.spy', {
+			term: req.session.term,
+			account: req.params.account,
+			user: req.session.user.name
+		});
+	} else {
+		res.redirect('/home');
+	}
 });
 app.use('/bank-ledger/:term/:account', is_authenticated, (req, res, next) => {
-	res.render('bank-ledger.spy', {
-		term: req.session.term,
-		account: req.params.account,
-		user: req.session.user.name
-	});
+	if ( req.session.user.accounting )	{
+		res.render('bank-ledger.spy', {
+			term: req.session.term,
+			account: req.params.account,
+			user: req.session.user.name
+		});
+	} else {
+		res.redirect('/home');
+	}
 });
 app.use('/bank-ledger/:term/:account/:subaccount', is_authenticated, (req, res, next) => {
-	res.render('bank-ledger.spy', {
-		term: req.session.term,
-		account: req.params.account,
-		user: req.session.user.name
-	});
+	if ( req.session.user.accounting )	{
+		res.render('bank-ledger.spy', {
+			term: req.session.term,
+			account: req.params.account,
+			user: req.session.user.name
+		});
+	} else {
+		res.redirect('/home');
+	}
 });
 app.use('/accounts/:term', is_authenticated, (req, res, next) => {
-	res.render('accounts.spy', {
-		term: req.session.term,
-		user: req.session.user.name
-	});
+	if ( req.session.user.accounting )	{
+		res.render('accounts.spy', {
+			term: req.session.term,
+			user: req.session.user.name
+		});
+	} else {
+		res.redirect('/home');
+	}
 });
 app.use('/trial-balance', is_authenticated,(req, res, next) => {
-	res.render('trial-balance.spy', {
-		term: req.session.term,
-		user: req.session.user.name
-	});
+	if ( req.session.user.accounting )	{
+		res.render('trial-balance.spy', {
+			term: req.session.term,
+			user: req.session.user.name
+		});
+	} else {
+		res.redirect('/home');
+	}
 });
 app.use('/users', is_authenticated,(req, res, next) => {
-	res.render('users.spy', {
-		term: req.session.term,
-		user: req.session.user.name
-	});
+	if ( req.session.user.administrable)	{
+		res.render('users.spy', {
+			term: req.session.term,
+			user: req.session.user.name
+		});
+	} else {
+		res.redirect('/home');
+	}
 });
 
 app.use('/customer', customerRouter);
 app.use('/voucher', voucherRouter);
 app.use('/forms', formsRouter);
-
 app.use('/', homeRouter);
+app.use('/api', apiRouter);
 
 module.exports = app;

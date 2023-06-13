@@ -19,6 +19,14 @@ module.exports = {
 				{
 					model: models.CrossSlipDetail,
 					as: 'lines'
+				},
+				{
+					model: models.User,
+					as: 'creater'
+				},
+				{
+					model: models.User,
+					as: 'approver'
 				}
 			]
 		});
@@ -57,15 +65,23 @@ module.exports = {
 		//console.log('ml', ml);
 		ml.slipCount += 1;
 
+		let approvedAt;
+		let approvedBy;
+		if	( req.session.user.approvable )	{
+			approvedAt = new Date();
+			approvedBy = req.session.user.id;
+		}
 		slip = await models.CrossSlip.create({
 			year: body.year,
 			month: body.month,
 			day: body.day,
 			no: ml.slipCount,
 			lineCount: body.lines.length,
+			createdBy: req.session.user.id,
+			approvedAt: approvedAt,
+			approvedBy: approvedBy,
 			term: body.term
 		});
-		//console.log(slip);
 		ml.save();
 
 		let lines = [];
@@ -88,72 +104,134 @@ module.exports = {
 	},
 	update: async(req, res, next) => {
 		let body = req.body;
-		//console.log('update body:', body);
 		let slip = await models.CrossSlip.findOne({
-			where: {
-				year: body.year,
-				month: body.month,
-				no: body.no
-			}
-		});
-		if ( slip ) {
-			//console.log(slip);
-
-			slip.lineCount = body.lines.length;
-			slip.day = body.day;
-			slip.save();
-		
-			details = await models.CrossSlipDetail.findAll({
 				where: {
-					crossSlipId: slip.id
+					year: body.year,
+					month: body.month,
+					no: body.no
 				}
 			});
-			for ( let i = 0; i < details.length; i ++ ) {
-				//console.log('delete', details[i]);
-				await details[i].destroy();
+		if ( slip ) {
+			if	( !slip.approvedAt )	{
+				if	(( req.session.user.accounting ) ||
+					 ( req.session.user.id == slip.createdBy )) {
+						slip.lineCount = body.lines.length;
+						slip.day = body.day;
+						slip.updatedBy = req.session.user.id;
+						slip.save();
+		
+						details = await models.CrossSlipDetail.findAll({
+							where: {
+								crossSlipId: slip.id
+							}
+						});
+						for ( let i = 0; i < details.length; i ++ ) {
+							//console.log('delete', details[i]);
+							await details[i].destroy();
+						}
+						for ( let i = 0; i < body.lines.length ; i ++ ) {
+							let line = body.lines[i];
+							line.crossSlipId = slip.id;
+							line.lineNo = i;
+							//console.log(line);
+							await models.CrossSlipDetail.create(line);
+						}
+						res.json({
+							code: 0
+						});
+				} else {
+					res.json({
+						code: -10,
+						message: 'this account can not update'
+					});
+				}
+			} else {
+				res.json({
+					code: -2,
+					message: 'thid slip was approved'
+				});
 			}
-			for ( let i = 0; i < body.lines.length ; i ++ ) {
-				let line = body.lines[i];
-				line.crossSlipId = slip.id;
-				line.lineNo = i;
-				//console.log(line);
-				await models.CrossSlipDetail.create(line);
-			}
-			res.json({
-				code: 0
-			});
 		} else {
 			res.json({
 				code: -1,
 				message: 'record not found'
 			});
 		}
-
 	},
 	delete: async(req, res, next) => {
-		let body = req.body;
-		//console.log('body:', body);
-		let slip = await models.CrossSlip.findOne({
-			where: {
-				year: body.year,
-				month: body.month,
-				day: body.day,
-				no: body.no
+		if	( req.session.user.approvable )	{
+			let body = req.body;
+			//console.log('body:', body);
+			let slip = await models.CrossSlip.findOne({
+				where: {
+					year: body.year,
+					month: body.month,
+					day: body.day,
+					no: body.no
+				}
+			});
+			if	( !slip.approvedAt )	{
+				//console.log('delete', slip);
+				details = await models.CrossSlipDetail.findAll({
+					where: {
+						crossSlipId: slip.id
+					}
+				});
+				for ( let i = 0; i < details.length; i ++ ) {
+					//console.log('delete', details[i]);
+					await details[i].destroy();
+				}
+				await slip.destroy();
+				res.json({
+					code: 0,
+				});
+			} else {
+				res.json({
+					code: -2,
+					message: 'thid slip was approved'
+				});
 			}
-		});
-		//console.log('delete', slip);
-		details = await models.CrossSlipDetail.findAll({
-			where: {
-				crossSlipId: slip.id
-			}
-		});
-		for ( let i = 0; i < details.length; i ++ ) {
-			//console.log('delete', details[i]);
-			await details[i].destroy();
+		} else {
+			res.json({
+				code: -10,
+				message: 'this account can not delete'
+			});
 		}
-		await slip.destroy();
-		res.json({
-			code: 0,
-		});
 	},
+	approve: (req, res, next) => {
+		if	( req.session.user.approvable )	{
+			let body = req.body;
+			//console.log('update body:', body);
+			models.CrossSlip.findOne({
+				where: {
+					year: body.year,
+					month: body.month,
+					no: body.no
+				}
+			}).then((slip) => {
+				slip.approvedAt = body.approvedAt;
+				if	( body.approvedAt )	{
+					slip.approvedBy = req.session.user.id;
+				} else {
+					slip.approvedBy = null;
+				}
+				slip.updatedBy = req.session.user.id;
+				slip.save();
+				res.json({
+					code: 0,
+					id: slip.id
+				});
+			}).catch((e) => {
+				res.json({
+					code: -1,
+					message: 'record not found'
+				});
+			});
+		} else {
+			res.json({
+				code: -10,
+				message: 'this account can not approve'
+			});
+		}
+	}
 }

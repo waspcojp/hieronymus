@@ -69,8 +69,9 @@
 	slip={slip}
 	bind:modal={slipModal}
 	term={term}
-	bind:init={init}
+	user={user}
 	accounts={accounts}
+	bind:init={init}
 	on:close={updateVouchers}></CrossSlipModal>
 
 <style>
@@ -85,8 +86,10 @@ import VoucherList from './voucher-list.svelte';
 import CrossSlipModal from '../cross-slip/cross-slip-modal.svelte';
 import {numeric} from '../../javascripts/cross-slip';
 
+export let term;
+export let user;
+
 let	voucher;
-let	term;
 let	modal;
 let slipModal;
 let init;

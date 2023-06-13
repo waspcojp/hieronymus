@@ -8,7 +8,10 @@ let target = document.getElementById('body');
 let term = target.getAttribute('term');
 
 const journal = new Journal({
-	target: document.getElementById('journal')
+	target: document.getElementById('journal'),
+    props: {
+        term: parseInt(term)
+    }
 });
 
 

@@ -16,6 +16,14 @@ module.exports = {
 					month: month
 				}
 			},
+			include: [{
+					model: models.User,
+					as: 'creater'
+				}, {
+					model: models.User,
+					as: 'approver'
+				}
+			],
 			order: [
 				[ 'year', 'ASC'],
 				[ 'month', 'ASC'],
@@ -88,6 +96,9 @@ module.exports = {
 				day: slip.day,
 				no: slip.no,
 				term: slip.term,
+				createrName: slip.creater ? slip.creater.name : '',
+				approverName: slip.approver ? slip.approver.name : '',
+				approvedAt: slip.approvedAt,
 				lines: lines
 			});
 		}
