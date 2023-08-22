@@ -21,6 +21,12 @@
         <div class="content">
             <div class="container-fluid">
                 <Alert bind:alert={alert} {alert_level}></Alert>
+                {#if ( current == 'users' )}
+                <Users></Users>
+                {:else if ( current == 'invoices' )}
+                <Invoices
+                    term={term}></Invoices>
+                {/if}
             </div>
         </div>
     </main>
@@ -40,12 +46,14 @@ import SideBar from './common/sidebar.svelte';
 import Alert from './components/alert.svelte';
 import Login from './login/login.svelte';
 import SignUp from './login/signup.svelte';
+import Users from './users/users.svelte';
+import Invoices from './invoice/invoice.svelte';
 
 export let term;
 
 let alert;
 let alert_level;
-let user;
+let user ={};
 let current = 'login';
 
 onMount(() => {
@@ -58,13 +66,6 @@ onMount(() => {
 beforeUpdate(() => {
 	let args = location.pathname.split('/');
     current = args[1];
-    if  (( current === 'login ' ) ||
-         ( current === 'signup' ) ||
-         ( current === 'signout')) {
-    } else {
-        if  ( !user )   {
-        }
-    }
 })
 
 </script>

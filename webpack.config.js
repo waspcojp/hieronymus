@@ -10,7 +10,6 @@ module.exports = {
 	mode: MODE,
 	context: path.resolve(__dirname, 'front/javascripts'),
     entry: {
-		login: './login.js',
 		home: './home.js',
 		common: './common.js',
 		journal: './journal.js',
@@ -18,7 +17,6 @@ module.exports = {
 		accounts: './accounts.js',
 		trial_balance: './trial-balance.js',
 		customer: './customer.js',
-		users: './users.js',
 		voucher: './voucher.js',
 		'bank-ledger': './bank-ledger.js',
 		index: './index.js'

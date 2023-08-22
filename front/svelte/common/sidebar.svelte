@@ -59,6 +59,13 @@
                     取引先管理
                 </a>
 			</li>
+    		<li class="nav-item">
+				<a class={pathname.match(/\/invoice/)  ? 'nav-link active': 'nav-link'}
+                    href="/invoices/">
+                    <i class="nav-icon fas fa-circle"></i>
+                    請求管理
+                </a>
+			</li>
             {/if}
             {#if ( user && user.administrable ) }
 			<li class="nav-item">

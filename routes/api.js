@@ -9,6 +9,7 @@ const trial_balance = require('./api_trial_balance');
 const customer = require('./api_customer');
 const voucher = require('./api_voucher');
 const user = require('./api_user');
+const invoice = require('./api_invoice');
 
 //const account_classes = require('./api_account_classes');
 const cross_slip = require('./api_cross_slip');
@@ -26,6 +27,12 @@ router.put('/user/:id', user.update);
 router.delete('/user/:id', user.delete);
 router.get('/users', user.list);
 
+router.get('/invoice', invoice.get);
+router.get('/invoice/:id', invoice.get);
+router.post('/invoice', invoice.post);
+router.put('/invoice', invoice.update);
+router.put('/invoice/:id', invoice.update);
+router.delete('/invoice/:id', invoice.delete);
 
 router.get('/journal/:year/:month', journal.get);
 

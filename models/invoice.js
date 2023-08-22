@@ -10,11 +10,16 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+			this.hasOne(models.Customer, {
+				foreignKey: 'id',
+				sourceKey: 'customerId'
+			});
     }
   }
   Invoice.init({
+    no: DataTypes.STRING,
     status: DataTypes.INTEGER,
+		lineCount: DataTypes.INTEGER,
     term: DataTypes.INTEGER,
     issueDate: DataTypes.DATEONLY,
     paymentDate: DataTypes.DATEONLY,

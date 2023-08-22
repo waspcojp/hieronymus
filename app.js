@@ -145,9 +145,17 @@ app.use('/trial-balance', is_authenticated,(req, res, next) => {
 });
 app.use('/users', is_authenticated,(req, res, next) => {
 	if ( req.session.user.administrable)	{
-		res.render('users.spy', {
-			term: req.session.term,
-			user: req.session.user.name
+		res.render('index.spy', {
+			term: req.session.term
+		});
+	} else {
+		res.redirect('/home');
+	}
+});
+app.use('/invoices', is_authenticated,(req, res, next) => {
+	if ( req.session.user.administrable)	{
+		res.render('index.spy', {
+			term: req.session.term
 		});
 	} else {
 		res.redirect('/home');

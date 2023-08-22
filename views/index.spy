@@ -8,9 +8,8 @@
 		<link rel="stylesheet" href="style/style.css">
 		<script src="dist/common.js"></script>
 	</head>
-	<body class="layout-fixed" id="body">
-		<div id="index" style="width:100%;"
-			term={{term}}>
+	<body class="layout-fixed" id="body" term={{term}}>
+		<div id="index" style="width:100%;">
 		</div>
 		<script src="dist/index.js"></script>
 	</body>

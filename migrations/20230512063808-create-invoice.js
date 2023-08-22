@@ -9,9 +9,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      no: {
+        type: Sequelize.STRING
+      },
       status: {
         type: Sequelize.INTEGER
       },
+			lineCount: {
+				type: Sequelize.INTEGER
+			},
       term: {
         type: Sequelize.INTEGER
       },
@@ -23,6 +29,19 @@ module.exports = {
       },
       customerId: {
         type: Sequelize.INTEGER
+      },
+      zip: {
+        type: Sequelize.STRING
+      },
+      address1: {
+        type: Sequelize.STRING
+      },
+      address2: {
+        type: Sequelize.STRING
+      },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       subject: {
         type: Sequelize.STRING
@@ -46,7 +65,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       description: {
-        type: Sequelize.INTEGER
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
