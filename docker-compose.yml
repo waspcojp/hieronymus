@@ -1,0 +1,35 @@
+version: '3'
+services:
+  db:
+    image: 'postgres:15'
+    environment:
+      - 'POSTGRES_PASSWORD=ogochan'
+      - 'POSTGRES_USER=ogochan'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ogochan -d ogochan"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    ports:
+      - '3010:3010'
+    working_dir: /app/hieronymus
+    volumes:
+      - ./docker-history:/app/docker-history
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+    environment:
+      - HOME=/app/hieronymus
+      - NODE_ENV=production
+    entrypoint: ["./docker-entrypoint.sh"]
+    command: ["node", "./bin/www"]
+    init: true
+volumes:
+  postgres_data:   
