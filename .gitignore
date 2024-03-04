@@ -2,3 +2,5 @@
 /dist
 /sessions
 docker-histoy/
+config/config.json
+accounts.json

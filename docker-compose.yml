@@ -28,8 +28,6 @@ services:
     environment:
       - HOME=/app/hieronymus
       - NODE_ENV=production
-    entrypoint: ["./docker-entrypoint.sh"]
-    command: ["node", "./bin/www"]
     init: true
 volumes:
   postgres_data:   

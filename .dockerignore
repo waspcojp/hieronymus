@@ -6,3 +6,5 @@ node_modules
 /dist
 Dockerfile
 docker-compose.yml
+/config/config.json
+accounts.json
