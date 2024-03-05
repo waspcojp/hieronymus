@@ -35,7 +35,7 @@ $ npm run start
 
 ### DB設定
 
-```config/config.json```を適宜編集します。
+```config/config.json.sample```からコピーして```config/config.json```を作成し、適宜編集します。
 
 ### 「期」の初期設定
 

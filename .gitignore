@@ -1,0 +1,6 @@
+/node_modules
+/dist
+/sessions
+docker-histoy/
+config/config.json
+accounts.json

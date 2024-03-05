@@ -1,0 +1,3 @@
+#!/bin/bash
+node /app/hieronymus/bin/check-db
+node /app/hieronymus/bin/www
