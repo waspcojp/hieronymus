@@ -19,7 +19,8 @@ module.exports = {
 		trial_balance: './trial-balance.js',
 		customer: './customer.js',
 		voucher: './voucher.js',
-		'bank-ledger': './bank-ledger.js'
+		'bank-ledger': './bank-ledger.js',
+    setup: './setup.js'
 	},
     output: {
         path: path.resolve(__dirname, 'dist'),

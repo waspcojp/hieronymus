@@ -19,25 +19,12 @@ const checkDatabase = async () => {
   }
 }
 
-const checkSequelizeMeta = async () => {
-  const [results, metadata]  = await sequelize.query("SELECT * FROM information_schema.tables WHERE table_name = 'SequelizeMeta';");
-  if ( results.length === 0 ){
-    return false;
-  }else{
-    return true;
-  }
-}
-
 const createDatabase = async () => {
   console.log(execSync('npx sequelize-cli db:create').toString());
 }
 
 const applyMigration = async () => {
   console.log(execSync('npx sequelize-cli db:migrate').toString());
-}
-
-const applySeed = async () => {
-  console.log(execSync('npx sequelize-cli db:seed:all').toString());
 }
 
 (async () => {
@@ -47,11 +34,7 @@ const applySeed = async () => {
     if (!databaseExists){
       await createDatabase();
     }
-    let metaDataExists = await checkSequelizeMeta();
     await applyMigration();
-    if ( !metaDataExists ){
-      await applySeed();
-    }
   }catch (e){
     console.log(e.message);
   }finally{

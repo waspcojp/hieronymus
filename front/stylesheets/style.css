@@ -176,7 +176,8 @@ ul.nav {
     color: #fff;
 }
 .login-page,
-.register-page {
+.register-page,
+.setup-page {
     align-items: center;
     background-color: #e9ecef;
     display: flex;
