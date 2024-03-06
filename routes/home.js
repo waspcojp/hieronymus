@@ -52,36 +52,45 @@ router.get('/login', (req, res, next) => {
 router.post('/login', (req, res, next) => {
 	//console.log(req.body.user_name);
 	//console.log(req.body.password);
-
-	passport.authenticate('local', (error, user, info) => {
-		//console.log('error', error);
-		//console.log('user', user);
-		//console.log('info', info);
-		if (error) {
-			return next(error);
-		}
-		if ( !user ) {
-			//console.log('user not found');
-			res.render('login', { title: 'Login',
-								  msg_type: 'danger',
-								  message: `user ${user.user_name} not found`
-								});
-		} else {
-			req.login(user, (error, next) => {
-				//console.log('user', user);
-				//console.log("error", error);
-				if (error) {
-					//console.log("error");
-					res.render('login', { title: 'Login',
-										  msg_type: 'danger',
-										  message: `user ${user.user_name} not found`
-										});
-				} else {
-					res.redirect('/home');
-				}
-			});
-		}
-	})(req, res, next);
+  if ( req.body.user_name.length === 0 || req.body.password.length === 0 ){
+    res.render('login', { title: 'Login',
+                          msg_type: 'danger',
+                          message: `ユーザー名またはパスワードが入力されていません。`
+                        });
+  }else{
+    passport.authenticate('local', (error, user, info) => {
+      console.log('error', error);
+      //console.log('user', user);
+      //console.log('info', info);
+      if (error) {
+        res.render('login', { title: 'Login',
+                              msg_type: 'danger',
+                              message: `エラーが発生しました。`
+                            });
+      }
+      if ( !user ) {
+        //console.log('user not found');
+        res.render('login', { title: 'Login',
+                    msg_type: 'danger',
+                    message: `ユーザー名またはパスワードが違います。`
+                  });
+      } else {
+        req.login(user, (error, next) => {
+          //console.log('user', user);
+          //console.log("error", error);
+          if (error) {
+            //console.log("error");
+            res.render('login', { title: 'Login',
+                        msg_type: 'danger',
+                        message: `ユーザー名またはパスワードが違います。`
+                      });
+          } else {
+            res.redirect('/home');
+          }
+        });
+      }
+    })(req, res, next);
+  }
 });
 
 router.get('/logout', (req, res, next) => {
