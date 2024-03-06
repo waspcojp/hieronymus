@@ -75,13 +75,16 @@ class User {
 	get password() {
 		return (this.hash_password);
 	}
-	static check(name) {
-		models.User.findOne({
+	static async check(name) {
+		const user = await  models.User.findOne({
 			where: {
 				name: name },
-		}).then((user) => {
-			return (user ? true : false);
 		});
+    if ( user ){
+      return true
+    }else {
+      return false;
+    }
 	}
 }
 

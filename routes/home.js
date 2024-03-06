@@ -98,29 +98,37 @@ router.get('/signup', (req, res, next) => {
 						});
 });
 
-router.post('/signup', (req, res, next) => {
+router.post('/signup', async (req, res, next) => {
 	//console.log(req.body.user_name);
 	//console.log(req.body.password);
 
-	user_name = req.body.user_name;
+  user_name = req.body.user_name;
 	password = req.body.password;
-	if ( !User.check(user_name) ) {
-		user = new User(user_name, {
-			name: user_name
-		})
-		user.password = password;
-		user.create().then((ret) => {
-			//console.log('created', ret);
-			//console.log(`user ${user_name} created`);
-			res.redirect('/login');
-		});
-		//console.log('signup_post fine');
-	} else {
-		//console.log('user duplicate', user_name);
-		res.render('signup', { msg_type: 'danger',
-							   message: `user ${user_name} duplicated`
-							 });
-	}
+  if ( user_name.length === 0 || password.length === 0){
+		res.render('signup', {
+                            msg_type: 'danger',
+                            message: `ユーザー名またはパスワードが入力されていません。`
+    });
+  }else{
+    const exists =  await User.check(user_name);
+    if ( !exists ) {
+      user = new User(user_name, {
+        name: user_name
+      })
+      user.password = password;
+      user.create().then((ret) => {
+        //console.log('created', ret);
+        //console.log(`user ${user_name} created`);
+        res.redirect('/login');
+      });
+      //console.log('signup_post fine');
+    } else {
+      //console.log('user duplicate', user_name);
+      res.render('signup', { msg_type: 'danger',
+                   message: `ユーザー名 ${user_name} は既に登録されています。`
+                 });
+    }
+  }
 });
 
 const home =  async (req, res, next) => {

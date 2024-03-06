@@ -15,6 +15,7 @@
     			<div class="card-body login-card-body">
       				<p class="login-box-msg">Sign up to start your session</p>
 					<form action="/signup" method="post">
+          <p class="text-danger">{{ message }}</p>
         				<div class="input-group mb-3">
           					<input type="text" name="user_name" id="user_input" class="form-control" placeholder="User name">
         				</div>
