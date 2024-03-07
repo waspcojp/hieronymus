@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg">
 	<div class="container-fluid">
-		<span class="navbar-brand">証票一覧</span>
+		<span class="navbar-brand fs-3">証票一覧</span>
 		<ul class="navbar-nav me-auto mb-2">
 			<li class="nav-item">
 				<button type="button" class="btn btn-primary"
@@ -46,17 +46,15 @@
 		</ul>
 	</div> 
 </nav>
-<div class="row body-height">
-	<VoucherList
-		term={term}
-		vouchers={vouchers}
-		on:open={openModal}
-		on:openSlip={openSlip}
-		on:selectVoucherType={selectVoucherType}
-		on:selectCustomerId={selectCustomer}
-		on:selectAmount={selectAmount}
-		></VoucherList>
-</div>
+<VoucherList
+  term={term}
+  vouchers={vouchers}
+  on:open={openModal}
+  on:openSlip={openSlip}
+  on:selectVoucherType={selectVoucherType}
+  on:selectCustomerId={selectCustomer}
+  on:selectAmount={selectAmount}
+  ></VoucherList>
 <VoucherModal
 	modal={modal}
 	term={term}

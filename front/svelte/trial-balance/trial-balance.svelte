@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="#">残高試算表</a>
+		<a class="navbar-brand fs-3" href="#">残高試算表</a>
 		<ul class="navbar-nav me-auto mb-2">
 			<li class="nav-item">
 			</li>
@@ -14,13 +14,10 @@
 		</ul>
 	</div>
 </nav>
-<div class="row">
-	<TrialBalanceList
-		term={term}
-		lines={lines}>
-	</TrialBalanceList>
-</div>
-
+<TrialBalanceList
+  term={term}
+  lines={lines}>
+</TrialBalanceList>
 <style>
 </style>
 

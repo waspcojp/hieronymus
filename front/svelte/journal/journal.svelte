@@ -1,6 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="#">仕訳日記帳 {year}年 {month}月</a>
+<nav class="navbar navbar-expand-lg ">
+		<a class="navbar-brand fs-3" href="#">仕訳日記帳 {year}年 {month}月</a>
 		<ul class="navbar-nav me-auto mb-2">
 			<li class="nav-item">
 				<button type="button" class="btn btn-primary" id="open-cross-slip"
@@ -35,18 +34,17 @@
 				</a>
 			</li>
 		</ul>
-	</div> 
+
 </nav>
-<div class="row body-height">
-	<JournalList
-		year={year}
-		month={month}
-		accounts={accounts}
-		slips={slips}
-		lines={lines}
-		sums={sums}
-		on:open={openSlip}></JournalList>
-</div>
+<JournalList
+  year={year}
+  month={month}
+  accounts={accounts}
+  slips={slips}
+  lines={lines}
+  sums={sums}
+  on:open={openSlip}></JournalList>
+
 <CrossSlipModal
 	slip={slip}
 	bind:modal={modal}

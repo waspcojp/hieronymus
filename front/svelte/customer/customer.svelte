@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="#">顧客台帳</a>
+		<a class="navbar-brand fs-3" href="#">顧客台帳</a>
 		<ul class="navbar-nav me-auto mb-2">
 			<li class="nav-item">
 				<button type="button" class="btn btn-primary"
@@ -13,11 +13,10 @@
 		</ul>
 	</div> 
 </nav>
-<div class="row body-height">
-	<CustomerList
-			update={list_update}
-			on:open={openModal}></CustomerList>
-</div>
+<CustomerList
+    update={list_update}
+    on:open={openModal}></CustomerList>
+
 <CustomerModal
 	modal={modal}
 	on:save={update}

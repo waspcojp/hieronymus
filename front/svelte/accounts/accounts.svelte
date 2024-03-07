@@ -1,21 +1,21 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="#">科目管理</a>
+		<a class="navbar-brand fs-3" href="#">科目管理</a>
 		<ul class="navbar-nav me-auto mb-2">
 			<li class="nav-item">
 			</li>
 		</ul>
 	</div>
 </nav>
-<div class="row">
-	<AccountsList
-		modal={modal}
-		term={term}
-		lines={lines}
-		accounts={accounts}
-		on:open={openAccount}>
-	</AccountsList>
-</div>
+
+<AccountsList
+  modal={modal}
+  term={term}
+  lines={lines}
+  accounts={accounts}
+  on:open={openAccount}>
+</AccountsList>
+
 <AccountModal
 	account={account}
 	sub_account={sub_account}

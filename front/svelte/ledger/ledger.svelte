@@ -1,33 +1,30 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="#">元帳</a>
-		<ul class="navbar-nav me-auto mb-2">
-			{#each fields as field, index}
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="field_{index}" rolw="button" data-bs-toggle="dropdown" aria-expanded="false">
-					{field.title}
-				</a>
-				<ul class="dropdown-menu" aria-labelledby="field_{index}">
-					{#each field.accounts as account}
-					<li>
-						<a class="dropdown-item" href="/ledger/{term}/{account.code}">{account.name}</a>
-					</li>
-					{/each}
-				</ul>
-			</li>
-			{/each}
-		</ul>
-		<ul class="navbar-nav ms-auto">
-			<li class="nav-item">
-				<a href="/forms/general_ledger/{term}" download="総勘定元帳.xlsx">
-					総勘定元帳
-				</a>
-			</li>
-		</ul>
-	</div>
+<nav class="navbar navbar-expand-lg">
+  <a class="navbar-brand fs-3" href="#">元帳</a>
+  <ul class="navbar-nav me-auto mb-2">
+    {#each fields as field, index}
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="field_{index}" rolw="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {field.title}
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="field_{index}">
+        {#each field.accounts as account}
+        <li>
+          <a class="dropdown-item" href="/ledger/{term}/{account.code}">{account.name}</a>
+        </li>
+        {/each}
+      </ul>
+    </li>
+    {/each}
+  </ul>
+  <ul class="navbar-nav ms-auto">
+    <li class="nav-item">
+      <a href="/forms/general_ledger/{term}" download="総勘定元帳.xlsx">
+        総勘定元帳
+      </a>
+    </li>
+  </ul>
 </nav>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<div class="container-fluid">
+<nav class="navbar navbar-expand-lg">
 		{#if (account)}
 		<a class="navbar-brand" href="/ledger/{term}/{account.accountCode}">
 			{ account ? account.name : ''}
@@ -52,19 +49,17 @@
 			</li>
 		</ul>
 		{/if}
-	</div>
 </nav>
-<div class="row body-height">
-	<LedgerList
-		modal={modal}
-		account={account}
-		pickup={pickup}
-		sums={sums}
-		lines={lines}
-		accounts={accounts}
-		term={term}
-		on:open={openSlip}></LedgerList>
-</div>
+<LedgerList
+  modal={modal}
+  account={account}
+  pickup={pickup}
+  sums={sums}
+  lines={lines}
+  accounts={accounts}
+  term={term}
+  on:open={openSlip}></LedgerList>
+
 <CrossSlipModal
 	slip={slip}
 	modal={modal}
