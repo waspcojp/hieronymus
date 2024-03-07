@@ -68,7 +68,6 @@ router.get('/voucher/files/:id', voucher.files);
 router.get('/term/:year/:month', async (req, res, next) => {
 	let year = req.params.year;
 	let month = req.params.month;
-console.log(new Date(year, month - 1, 1));
 	fy = await models.FiscalYear.findOne({
 		where: {
 			[Op.and]: {
