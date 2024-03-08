@@ -8,6 +8,16 @@
 					id="close-button" area-label="Close"></button>
 			</div>
 			<div class="modal-body">
+        {#if !ok }
+        <div class="border rounded border-danger mb-3 ms-2 me-2 p-3">
+          <h5 class="fs-5 text-danger"><i class="bi bi-exclamation-triangle-fill"></i>&nbsp;エラー</h5>
+          <ul>
+            {#each errorMessages as errorMessage}
+              <li class="text-danger">{errorMessage}</li>
+            {/each}
+          </ul>
+        </div>
+        {/if}
 				<VoucherInfo
 					bind:init={init}
 					bind:voucher={voucher}
@@ -44,6 +54,8 @@ export	let init;
 
 let	files;
 let update;
+let ok = true;
+let errorMessages = [];
 
 const create_voucher = async (_voucher) => {
 	let result = await axios.post('/api/voucher', _voucher);
@@ -75,8 +87,20 @@ const bind_file = async(file) => {
 	return	(result);
 }
 
+const validateForm = () => {
+  ok = true;
+  errorMessages = [];
+  if ( voucher.customerId === undefined ) {
+    ok = false;
+    errorMessages.push("相手先が未入力もしくは、取引先に存在しない相手先が入力されました。");
+  }
+  return ok;
+}
 const save = (event) => {
 	console.log('voucher', voucher);
+  if ( !validateForm() ){
+    return ;
+  }
 	if	( voucher.type )	{
 		voucher.type = parseInt(voucher.type);
 	}
@@ -124,6 +148,8 @@ const save = (event) => {
 const clean_popup = () => {
 	voucher = null;
 	files = [];
+  ok = true;
+  errorMessages = [];
 	modal.hide();
 }
 
