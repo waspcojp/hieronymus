@@ -72,7 +72,7 @@
 						on:click={delete_}>Delete</button>
 				{/if}
 				<button type="button" class="btn btn-primary" id="save-button"
-						on:click={save}>Save</button>
+						on:click={save}>保存&nbsp;<i class="bi bi-save"></i></button>
 			</div>
 		</div>
 	</div>
