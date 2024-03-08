@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between mb-3 mt-3">
   <h1 class="fs-3">仕訳日記帳</h1>
   <a href="/forms/explanatory_journal/{term}" download="仕訳日記帳.xlsx" class="btn btn-primary">
-    仕訳日記帳.xlsx&nbsp;をダウンロード&nbsp;<i class="bi bi-box-arrow-down"></i>
+    仕訳日記帳.xlsx&nbsp;をダウンロード&nbsp;<i class="bi bi-download"></i>
   </a>
 </div>
 <ul class="nav mb-2">

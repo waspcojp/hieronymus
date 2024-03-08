@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between mb-3 mt-3">
   <h1 class="fs-3">元帳</h1>
   <a href="/forms/general_ledger/{term}" download="総勘定元帳.xlsx" class="btn btn-primary">
-    総勘定元帳.xlsx&nbsp;をダウンロード&nbsp;<i class="bi bi-box-arrow-down"></i>
+    総勘定元帳.xlsx&nbsp;をダウンロード&nbsp;<i class="bi bi-download"></i>
   </a>
 </div>
 <ul class="nav">
@@ -43,7 +43,7 @@
   </div>
   <div>
     <a href="/forms/subsidiary_ledger/{term}" download="補助元帳.xlsx" class="btn btn-primary">
-      補助元帳.xlsx&nbsp;をダウンロード&nbsp;<i class="bi bi-box-arrow-down"></i>
+      補助元帳.xlsx&nbsp;をダウンロード&nbsp;<i class="bi bi-download"></i>
     </a>
   </div>
 </div>
