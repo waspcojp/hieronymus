@@ -1,13 +1,5 @@
-<nav class="navbar navbar-expand-lg">
-	<div class="container-fluid">
-		<a class="navbar-brand fs-3" href="#">顧客台帳</a>
-		<ul class="navbar-nav ms-auto">
-			<li class="nav-item">
-			</li>
-		</ul>
-	</div> 
-</nav>
-<div class="d-flex justify-content-end mb-2">
+<div class="d-flex justify-content-between mb-3 mt-3">
+  <h1 class="fs-3">顧客台帳</h1>
   <button type="button" class="btn btn-primary"
     on:click={openModal}>顧客入力&nbsp;<i class="bi bi-pencil-square"></i></button>
 </div>

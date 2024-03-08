@@ -1,51 +1,43 @@
-<nav class="navbar navbar-expand-lg">
-	<div class="container-fluid">
-		<span class="navbar-brand fs-3">証票一覧</span>
-		<ul class="navbar-nav me-auto mb-2">
-			{#each dates as date}
-				<li class="nav-item">
-					{#if (date.ym == current_month)}
-					<button type="button" class="btn btn-outline-info" style="margin-left:5px;"
-						on:click={openMonth}
-						data-month="{date.year}-{date.month}">
-						{date.month}&nbsp;月
-					</button>
-					{:else}
-					<button type="button" class="btn btn-info" style="margin-left:5px;"
-						on:click={openMonth}
-						data-month="{date.year}-{date.month}">
-						{date.month}&nbsp;月
-					</button>
-					{/if}
-				</li>
-			{/each}
-			<li class="nav-item">
-				{#if ( !current_month  )}
-				<button type="button" class="btn btn-outline-info" style="margin-left:5px;"
-					data-month=""
-					on:click={openMonth}>
-					all
-				</button>
-				{:else}
-				<button type="button" class="btn btn-info" style="margin-left:5px;"
-					data-month=""
-					on:click={openMonth}>
-					all
-				</button>
-				{/if}
-			</li>
-	</ul>
-		<ul class="navbar-nav ms-auto">
-			<li class="nav-item">
-			</li>
-		</ul>
-	</div> 
-</nav>
-<div class="d-flex justify-content-end mb-2">
+<div class="d-flex justify-content-between mb-3 mt-3">
+  <h1 class="fs-3">証票一覧</h1>
   <button type="button" class="btn btn-primary"
     on:click={openModal}
     id="voucher-info">証票入力&nbsp;<i class="bi bi-pencil-square"></i></button>
 </div>
+<ul class="nav me-auto mb-2">
+  {#each dates as date}
+    <li class="nav-item">
+      {#if (date.ym == current_month)}
+      <button type="button" class="btn btn-primary disabled me-2"
+        on:click={openMonth}
+        data-month="{date.year}-{date.month}">
+        {date.month}&nbsp;月
+      </button>
+      {:else}
+      <button type="button" class="btn btn-outline-primary me-2"
+        on:click={openMonth}
+        data-month="{date.year}-{date.month}">
+        {date.month}&nbsp;月
+      </button>
+      {/if}
+    </li>
+  {/each}
+  <li class="nav-item">
+    {#if ( !current_month  )}
+    <button type="button" class="btn btn-primary disabled me-2"
+      data-month=""
+      on:click={openMonth}>
+      ALL
+    </button>
+    {:else}
+    <button type="button" class="btn btn-outline-primary me-2"
+      data-month=""
+      on:click={openMonth}>
+      ALL
+    </button>
+    {/if}
+  </li>
+</ul>
 <VoucherList
   term={term}
   vouchers={vouchers}

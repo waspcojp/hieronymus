@@ -1,53 +1,57 @@
-<nav class="navbar navbar-expand-lg">
-	<div class="container-fluid">
-		<span class="navbar-brand fs-3">銀行勘定帳</span>
-		<ul class="navbar-nav me-auto mb-2">
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#"
-					rolw="button" data-bs-toggle="dropdown" aria-expanded="false">
-					{#if this_account}
-					{BANK_ACCOUNTS.find((el) => el[0] == this_account)[1]}
-					{:else}
-					科目
-					{/if}
-				</a>
-				<ul class="dropdown-menu" aria-labelledby="field">
-					{#each BANK_ACCOUNTS as account}
-					<li>
-						<a class="dropdown-item"
-							on:click={openAccount}
-							href="#"
-							data-account={account[0]}>{account[1]}</a>
-					</li>
-					{/each}
-				</ul>
-			</li>
-		{#if bank_list }
-		{#each bank_list.SubAccounts as bank}
-			<li class="nav-item">
-				{#if ( sub_account == bank.id )}
-				<a class="btn btn-outline-info"
-					on:click={openBank}
-					href="#"
-					data-account={this_account}
-					data-id={bank.id}>
-					{bank.name}
-				</a>
-				{:else}
-				<a class="btn btn-info"
-					on:click={openBank}
-					href="#"
-					data-account={this_account}
-					data-id={bank.id}>
-					{bank.name}
-				</a>
-				{/if}
-			</li>
-		{/each}
-		{/if}
-		</ul>
-	</div> 
-</nav>
+<div class="d-flex justify-content-between mb-3 mt-3">
+  <h1 class="fs-3">銀行勘定帳</h1>
+</div>
+<div>
+  <ul class="navbar-nav me-auto mb-2">
+    <li class="nav-item dropdown">
+      <a class="btn btn-outline-primary dropdown-toggle" href="#"
+        rolw="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {#if this_account}
+        {BANK_ACCOUNTS.find((el) => el[0] == this_account)[1]}
+        {:else}
+        科目
+        {/if}
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="field">
+        {#each BANK_ACCOUNTS as account}
+        <li>
+          <a class="dropdown-item"
+            on:click={openAccount}
+            href="#"
+            data-account={account[0]}>{account[1]}</a>
+        </li>
+        {/each}
+      </ul>
+    </li>
+  </ul>
+</div>
+{#if bank_list }
+  <div class="mb-2">
+    <ul class="nav">
+    {#each bank_list.SubAccounts as bank}
+      <li class="nav-item pe-2">
+        {#if ( sub_account == bank.id )}
+        <a class="btn btn-primary disabled"
+          on:click={openBank}
+          href="#"
+          data-account={this_account}
+          data-id={bank.id}>
+          {bank.name}
+        </a>
+        {:else}
+        <a class="btn btn-outline-primary"
+          on:click={openBank}
+          href="#"
+          data-account={this_account}
+          data-id={bank.id}>
+          {bank.name}
+        </a>
+        {/if}
+      </li>
+    {/each}
+    </ul>
+  </div>
+{/if}
 <table class="table table-bordered">
   <thead class="table-light">
     <tr>
