@@ -7,8 +7,8 @@
 		</ul>
 		<ul class="navbar-nav ms-auto">
 			<li class="nav-item">
-				<a href="/forms/trial_balance/{term}" download="残高試算表.xlsx">
-					残高試算表
+				<a href="/forms/trial_balance/{term}" download="残高試算表.xlsx" class="btn btn-outline-primary">
+					ダウンロード&nbsp; <i class="bi bi-box-arrow-down"></i>
 				</a>
 			</li>
 		</ul>

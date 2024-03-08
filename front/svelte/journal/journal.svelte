@@ -1,10 +1,6 @@
 <nav class="navbar navbar-expand-lg ">
-		<a class="navbar-brand fs-3" href="#">仕訳日記帳 {year}年 {month}月</a>
+		<a class="navbar-brand fs-3" href="#">仕訳日記帳</a>
 		<ul class="navbar-nav me-auto mb-2">
-			<li class="nav-item">
-				<button type="button" class="btn btn-primary" id="open-cross-slip"
-					on:click={openSlip}>伝票入力</button>
-			</li>
 			{#each dates as date}
 				<li class="nav-item">
 					{#if (date.month == month)}
@@ -29,13 +25,19 @@
 		</ul>
 		<ul class="navbar-nav ms-auto">
 			<li class="nav-item">
-				<a href="/forms/explanatory_journal/{term}" download="仕訳日記帳.xlsx">
-					仕訳日記帳ダウンロード
+				<a href="/forms/explanatory_journal/{term}" download="仕訳日記帳.xlsx" class="btn btn-outline-primary">
+					ダウンロード&nbsp;<i class="bi bi-box-arrow-down"></i>
 				</a>
 			</li>
 		</ul>
-
 </nav>
+<div class="d-flex justify-content-between mb-2">
+  <div class="fs-4">{year}年 {month}月</div>
+  <div>
+    <button type="button" class="btn btn-primary" id="open-cross-slip"
+    on:click={openSlip}>伝票入力&nbsp;<i class="bi bi-pencil-square"></i></button>
+  </div>
+</div>
 <JournalList
   year={year}
   month={month}

@@ -1,32 +1,32 @@
 <nav class="navbar navbar-expand-lg">
   <a class="navbar-brand fs-3" href="#">元帳</a>
-  <ul class="navbar-nav me-auto mb-2">
-    {#each fields as field, index}
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="field_{index}" rolw="button" data-bs-toggle="dropdown" aria-expanded="false">
-        {field.title}
-      </a>
-      <ul class="dropdown-menu" aria-labelledby="field_{index}">
-        {#each field.accounts as account}
-        <li>
-          <a class="dropdown-item" href="/ledger/{term}/{account.code}">{account.name}</a>
-        </li>
-        {/each}
-      </ul>
-    </li>
-    {/each}
-  </ul>
   <ul class="navbar-nav ms-auto">
     <li class="nav-item">
-      <a href="/forms/general_ledger/{term}" download="総勘定元帳.xlsx">
-        総勘定元帳
+      <a href="/forms/general_ledger/{term}" download="総勘定元帳.xlsx" class="btn btn-outline-primary">
+        ダウンロード&nbsp;<i class="bi bi-box-arrow-down"></i>
       </a>
     </li>
   </ul>
 </nav>
+<ul class="nav">
+  {#each fields as field, index}
+  <li class="nav-item dropdown pe-2">
+    <a class="btn btn-light dropdown-toggle" href="#" id="field_{index}" rolw="button" data-bs-toggle="dropdown" aria-expanded="false">
+      {field.title}
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="field_{index}">
+      {#each field.accounts as account}
+      <li>
+        <a class="dropdown-item" href="/ledger/{term}/{account.code}">{account.name}</a>
+      </li>
+      {/each}
+    </ul>
+  </li>
+  {/each}
+</ul>
 <nav class="navbar navbar-expand-lg">
 		{#if (account)}
-		<a class="navbar-brand" href="/ledger/{term}/{account.accountCode}">
+		<a class="navbar-brand fs-4" href="/ledger/{term}/{account.accountCode}">
 			{ account ? account.name : ''}
 		</a>
 		{/if}

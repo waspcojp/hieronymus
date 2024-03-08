@@ -2,24 +2,19 @@
 	<div class="container-fluid">
 		<span class="navbar-brand fs-3">証票一覧</span>
 		<ul class="navbar-nav me-auto mb-2">
-			<li class="nav-item">
-				<button type="button" class="btn btn-primary"
-					on:click={openModal}
-					id="voucher-info">証票入力</button>
-			</li>
 			{#each dates as date}
 				<li class="nav-item">
 					{#if (date.ym == current_month)}
 					<button type="button" class="btn btn-outline-info" style="margin-left:5px;"
 						on:click={openMonth}
 						data-month="{date.year}-{date.month}">
-						{date.month}
+						{date.month}&nbsp;月
 					</button>
 					{:else}
 					<button type="button" class="btn btn-info" style="margin-left:5px;"
 						on:click={openMonth}
 						data-month="{date.year}-{date.month}">
-						{date.month}
+						{date.month}&nbsp;月
 					</button>
 					{/if}
 				</li>
@@ -46,6 +41,11 @@
 		</ul>
 	</div> 
 </nav>
+<div class="d-flex justify-content-end mb-2">
+  <button type="button" class="btn btn-primary"
+    on:click={openModal}
+    id="voucher-info">証票入力&nbsp;<i class="bi bi-pencil-square"></i></button>
+</div>
 <VoucherList
   term={term}
   vouchers={vouchers}

@@ -1,18 +1,16 @@
 <nav class="navbar navbar-expand-lg">
 	<div class="container-fluid">
 		<a class="navbar-brand fs-3" href="#">顧客台帳</a>
-		<ul class="navbar-nav me-auto mb-2">
-			<li class="nav-item">
-				<button type="button" class="btn btn-primary"
-					on:click={openModal}>顧客入力</button>
-			</li>
-		</ul>
 		<ul class="navbar-nav ms-auto">
 			<li class="nav-item">
 			</li>
 		</ul>
 	</div> 
 </nav>
+<div class="d-flex justify-content-end mb-2">
+  <button type="button" class="btn btn-primary"
+    on:click={openModal}>顧客入力&nbsp;<i class="bi bi-pencil-square"></i></button>
+</div>
 <CustomerList
     update={list_update}
     on:open={openModal}></CustomerList>
