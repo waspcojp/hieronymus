@@ -8,9 +8,6 @@ body {
 .full-height {
 	height: 100%;
 }
-.body-height {
-    height: calc(100vh - 220px);
-}
 
 .container,
 .content-wrapper {
@@ -109,9 +106,6 @@ sidebar-bg-dark .brand-container {
 .main-header {
     margin-left: 250px;
 }
-.content-wrapper {
-	height: calc(100vh - 56px - 72px);
-}
 .main-footer {
     background-color: #fff;
     border-top: 1px solid #dee2e6;
@@ -176,7 +170,8 @@ ul.nav {
     color: #fff;
 }
 .login-page,
-.register-page {
+.register-page,
+.setup-page {
     align-items: center;
     background-color: #e9ecef;
     display: flex;
@@ -200,4 +195,7 @@ ul.nav {
 .login-box .card,
 .register-box .card {
     margin-bottom: 0;
+}
+.login-logo img {
+  width: 45px;
 }

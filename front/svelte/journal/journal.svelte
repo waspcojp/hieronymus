@@ -1,52 +1,48 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="#">仕訳日記帳 {year}年 {month}月</a>
-		<ul class="navbar-nav me-auto mb-2">
-			<li class="nav-item">
-				<button type="button" class="btn btn-primary" id="open-cross-slip"
-					on:click={openSlip}>伝票入力</button>
-			</li>
-			{#each dates as date}
-				<li class="nav-item">
-					{#if (date.month == month)}
-					<a class="btn btn-outline-info disabled" style="margin-left:5px;"
-							on:click={openMonth}
-							data-year={date.year}
-							data-month={date.month}
-							href="#">
-						{date.month}
-					</a>
-					{:else}
-					<a class="btn btn-info" style="margin-left:5px;"
-							on:click={openMonth}
-							data-year={date.year}
-							data-month={date.month}
-							href="#">
-						{date.month}
-					</a>
-					{/if}
-				</li>
-			{/each}
-		</ul>
-		<ul class="navbar-nav ms-auto">
-			<li class="nav-item">
-				<a href="/forms/explanatory_journal/{term}" download="仕訳日記帳.xlsx">
-					仕訳日記帳ダウンロード
-				</a>
-			</li>
-		</ul>
-	</div> 
-</nav>
-<div class="row body-height">
-	<JournalList
-		year={year}
-		month={month}
-		accounts={accounts}
-		slips={slips}
-		lines={lines}
-		sums={sums}
-		on:open={openSlip}></JournalList>
+<div class="d-flex justify-content-between mb-3 mt-3">
+  <h1 class="fs-3">仕訳日記帳</h1>
+  <a href="/forms/explanatory_journal/{term}" download="仕訳日記帳.xlsx" class="btn btn-primary">
+    仕訳日記帳.xlsx&nbsp;をダウンロード&nbsp;<i class="bi bi-download"></i>
+  </a>
 </div>
+<ul class="nav mb-2">
+  {#each dates as date}
+    <li class="nav-item">
+      {#if (date.month == month)}
+      <a class="btn btn-primary disabled me-2"
+          on:click={openMonth}
+          data-year={date.year}
+          data-month={date.month}
+          href="#">
+        {date.month}月
+      </a>
+      {:else}
+      <a class="btn btn-outline-primary me-2"
+          on:click={openMonth}
+          data-year={date.year}
+          data-month={date.month}
+          href="#">
+        {date.month}月
+      </a>
+      {/if}
+    </li>
+  {/each}
+</ul>
+<div class="d-flex justify-content-between mb-2">
+  <div class="fs-4">{year}年 {month}月</div>
+  <div>
+    <button type="button" class="btn btn-primary" id="open-cross-slip"
+    on:click={openSlip}>伝票入力&nbsp;<i class="bi bi-pencil-square"></i></button>
+  </div>
+</div>
+<JournalList
+  year={year}
+  month={month}
+  accounts={accounts}
+  slips={slips}
+  lines={lines}
+  sums={sums}
+  on:open={openSlip}></JournalList>
+
 <CrossSlipModal
 	slip={slip}
 	bind:modal={modal}

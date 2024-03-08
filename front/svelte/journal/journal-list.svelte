@@ -1,6 +1,6 @@
-<div class="row full-height" style="overflow-y: scroll;">
+<div class="table-responsive">
 	<table class="table table-bordered">
-		<thead>
+		<thead class="table-light">
 			<tr>
 				<th scope="col" colspan="2">
 					日付 / 伝番

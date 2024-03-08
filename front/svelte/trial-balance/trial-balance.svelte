@@ -1,26 +1,13 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="#">残高試算表</a>
-		<ul class="navbar-nav me-auto mb-2">
-			<li class="nav-item">
-			</li>
-		</ul>
-		<ul class="navbar-nav ms-auto">
-			<li class="nav-item">
-				<a href="/forms/trial_balance/{term}" download="残高試算表.xlsx">
-					残高試算表
-				</a>
-			</li>
-		</ul>
-	</div>
-</nav>
-<div class="row">
-	<TrialBalanceList
-		term={term}
-		lines={lines}>
-	</TrialBalanceList>
+<div class="d-flex justify-content-between mb-3 mt-3">
+  <h1 class="fs-3">残高試算表</h1>
+  <a href="/forms/trial_balance/{term}" download="残高試算表.xlsx" class="btn btn-primary">
+    残高試算表.xlsx&nbsp;をダウンロード&nbsp; <i class="bi bi-download"></i>
+  </a>
 </div>
-
+<TrialBalanceList
+  term={term}
+  lines={lines}>
+</TrialBalanceList>
 <style>
 </style>
 

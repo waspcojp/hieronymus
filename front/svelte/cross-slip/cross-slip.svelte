@@ -1,5 +1,5 @@
 <div class="container-fluid">
-	<div class="row">
+	<div class="row mb-2">
 		<div class="col-5">
 			<div class="input-group">
 				<span class="input-group-text">{slip.year}年{slip.month}月</span>

@@ -1,9 +1,4 @@
 <div class="container-fluid">
-	<ul class="navbar-nav">
-		<li class="nav-item">
-			<a href="/home/" class="nav-link">Home</a>
-		</li>
-	</ul>
 	<span class="havbar-text">
 		{#if ( startDate && endDate )}
 		第{term}期
@@ -30,11 +25,6 @@
 					<a href="/logout" class="dropdown-item">Sign out</a>
 				</li>
 			</ul>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" data-lte-toggle="sidebar-full" href="#" role="button">
-				<i class="fas fa-expand-arrows-alt"></i>
-			</a>
 		</li>
 	</ul>
 </div>

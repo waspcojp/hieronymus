@@ -1,121 +1,121 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<div class="container-fluid">
-		<span class="navbar-brand">銀行勘定帳</span>
-		<ul class="navbar-nav me-auto mb-2">
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#"
-					rolw="button" data-bs-toggle="dropdown" aria-expanded="false">
-					{#if this_account}
-					{BANK_ACCOUNTS.find((el) => el[0] == this_account)[1]}
-					{:else}
-					科目
-					{/if}
-				</a>
-				<ul class="dropdown-menu" aria-labelledby="field">
-					{#each BANK_ACCOUNTS as account}
-					<li>
-						<a class="dropdown-item"
-							on:click={openAccount}
-							href="#"
-							data-account={account[0]}>{account[1]}</a>
-					</li>
-					{/each}
-				</ul>
-			</li>
-		{#if bank_list }
-		{#each bank_list.SubAccounts as bank}
-			<li class="nav-item">
-				{#if ( sub_account == bank.id )}
-				<a class="btn btn-outline-info"
-					on:click={openBank}
-					href="#"
-					data-account={this_account}
-					data-id={bank.id}>
-					{bank.name}
-				</a>
-				{:else}
-				<a class="btn btn-info"
-					on:click={openBank}
-					href="#"
-					data-account={this_account}
-					data-id={bank.id}>
-					{bank.name}
-				</a>
-				{/if}
-			</li>
-		{/each}
-		{/if}
-		</ul>
-	</div> 
-</nav>
-<div class="row body-height">
-	<div class="row full-height" style="overflow-y: scroll;">
-	<table class="table table-bordered">
-		<thead>
-			<tr>
-				<th scope="col" colspan="2">
-					日付 / 伝番
-				</th>
-				<th scope="col" style="width: 150px;">
-					相手勘定科目<br/>相手補助科目
-				</th>
-				<th scope="col" style="width: 300px;">
-					適用<br/>補助科目
-				</th>
-				<th scope="col" style="width: 100px;">
-					支払金額
-				</th>
-				<th scope="col" style="width: 100px;">
-					預り金額
-				</th>
-				<th scope="col" style="width: 100px;">
-					残高
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-		{#each lines as line}
-			<tr>
-				<td style="width:50px;text-align:center;">
-					{line.month} / {line.day}
-				</td>
-				<td class="number" style="width:50px;">
-					<a href="#" data-no={line.no} data-year={line.year} data-month={line.month}
-							on:click={openSlip}>
-						{line.no}
-					</a>
-				</td>
-				<td>
-					{line.otherAccount}<br/>
-					{line.otherSubAccount}
-				</td>
-				<td>
-					<div class="appication">
-						{line.application1 ? line.application1 : ''}
-					</div>
-					<div class="appication">
-						{line.application2 ? line.application2 : ''}
-					</div>
-				</td>
-				<td class="number">
-					{#if line.showCredit }
-					{line.pureCreditAmount ? line.pureCreditAmount.toLocaleString(): ''}
-					{/if}
-				</td>
-				<td class="number">
-					{#if line.showDebit }
-					{line.pureDebitAmount ? line.pureDebitAmount.toLocaleString(): ''}
-					{/if}
-				</td>
-				<td class="number">
-					{line.pureBalance.toLocaleString()}
-				</td>
-			</tr>
-		{/each}
-		</tbody>
-	</table>
+<div class="d-flex justify-content-between mb-3 mt-3">
+  <h1 class="fs-3">銀行勘定帳</h1>
 </div>
+<div>
+  <ul class="navbar-nav me-auto mb-2">
+    <li class="nav-item dropdown">
+      <a class="btn btn-outline-primary dropdown-toggle" href="#"
+        rolw="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {#if this_account}
+        {BANK_ACCOUNTS.find((el) => el[0] == this_account)[1]}
+        {:else}
+        科目
+        {/if}
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="field">
+        {#each BANK_ACCOUNTS as account}
+        <li>
+          <a class="dropdown-item"
+            on:click={openAccount}
+            href="#"
+            data-account={account[0]}>{account[1]}</a>
+        </li>
+        {/each}
+      </ul>
+    </li>
+  </ul>
 </div>
+{#if bank_list }
+  <div class="mb-2">
+    <ul class="nav">
+    {#each bank_list.SubAccounts as bank}
+      <li class="nav-item pe-2">
+        {#if ( sub_account == bank.id )}
+        <a class="btn btn-primary disabled"
+          on:click={openBank}
+          href="#"
+          data-account={this_account}
+          data-id={bank.id}>
+          {bank.name}
+        </a>
+        {:else}
+        <a class="btn btn-outline-primary"
+          on:click={openBank}
+          href="#"
+          data-account={this_account}
+          data-id={bank.id}>
+          {bank.name}
+        </a>
+        {/if}
+      </li>
+    {/each}
+    </ul>
+  </div>
+{/if}
+<table class="table table-bordered">
+  <thead class="table-light">
+    <tr>
+      <th scope="col" colspan="2">
+        日付 / 伝番
+      </th>
+      <th scope="col" style="width: 150px;">
+        相手勘定科目<br/>相手補助科目
+      </th>
+      <th scope="col" style="width: 300px;">
+        適用<br/>補助科目
+      </th>
+      <th scope="col" style="width: 100px;">
+        支払金額
+      </th>
+      <th scope="col" style="width: 100px;">
+        預り金額
+      </th>
+      <th scope="col" style="width: 100px;">
+        残高
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+  {#each lines as line}
+    <tr>
+      <td style="width:50px;text-align:center;">
+        {line.month} / {line.day}
+      </td>
+      <td class="number" style="width:50px;">
+        <a href="#" data-no={line.no} data-year={line.year} data-month={line.month}
+            on:click={openSlip}>
+          {line.no}
+        </a>
+      </td>
+      <td>
+        {line.otherAccount}<br/>
+        {line.otherSubAccount}
+      </td>
+      <td>
+        <div class="appication">
+          {line.application1 ? line.application1 : ''}
+        </div>
+        <div class="appication">
+          {line.application2 ? line.application2 : ''}
+        </div>
+      </td>
+      <td class="number">
+        {#if line.showCredit }
+        {line.pureCreditAmount ? line.pureCreditAmount.toLocaleString(): ''}
+        {/if}
+      </td>
+      <td class="number">
+        {#if line.showDebit }
+        {line.pureDebitAmount ? line.pureDebitAmount.toLocaleString(): ''}
+        {/if}
+      </td>
+      <td class="number">
+        {line.pureBalance.toLocaleString()}
+      </td>
+    </tr>
+  {/each}
+  </tbody>
+</table>
 <CrossSlipModal
 	slip={slip}
 	modal={modal}

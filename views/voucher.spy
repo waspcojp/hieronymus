@@ -10,15 +10,15 @@
 	<body class="layout-fixed" id="body"
 			term={{term}}
 			user={{user}}>
-		<div class="wrapper">
+		<div class="wrapper d-flex flex-column h-100">
     		<nav class="main-header navbar navbar-expand-lg navbar-light bg-light p-3"
 				id="common-nav"></nav>
 	    	<aside 
 				class="main-sidebar sidebar-bg-dark sidebar-color-primary shadow"
 				id="sidebar"></aside>
-       		<main class="content-wrapper">
+       		<main class="content-wrapper overflow-y-auto h-100">
 				<div class="content">
-					<div class="container-fluid" id="voucher">
+					<div class="container" id="voucher">
 					</div>
 				</div>
       		</main>

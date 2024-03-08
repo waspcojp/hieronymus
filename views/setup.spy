@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Hieronyms Init Term</title>
+		<link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
+		<link rel="stylesheet" href="/style/style.css">
+		<script defer src="/dist/common.js"></script>
+		<base href="/" />
+	</head>
+	<body class="layout-fixed setup-page" id="setup">
+	</body>
+  <script defer src="/dist/setup.js"></script>
+</html>

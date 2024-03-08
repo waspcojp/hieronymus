@@ -1,21 +1,14 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="#">科目管理</a>
-		<ul class="navbar-nav me-auto mb-2">
-			<li class="nav-item">
-			</li>
-		</ul>
-	</div>
-</nav>
-<div class="row">
-	<AccountsList
-		modal={modal}
-		term={term}
-		lines={lines}
-		accounts={accounts}
-		on:open={openAccount}>
-	</AccountsList>
+<div class="d-flex justify-content-between mb-3 mt-3">
+  <h1 class="fs-3">科目管理</h1>
 </div>
+<AccountsList
+  modal={modal}
+  term={term}
+  lines={lines}
+  accounts={accounts}
+  on:open={openAccount}>
+</AccountsList>
+
 <AccountModal
 	account={account}
 	sub_account={sub_account}
