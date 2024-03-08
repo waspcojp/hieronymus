@@ -6,6 +6,16 @@
 				<button type="button" class="btn-close" on:click={close_} area-label="Close"></button>
 			</div>
 			<div class="modal-body">
+        {#if !ok }
+        <div class="border rounded border-danger mb-3 ms-2 me-2 p-3">
+          <h5 class="fs-5 text-danger"><i class="bi bi-exclamation-triangle-fill"></i>&nbsp;エラー</h5>
+          <ul>
+            {#each errorMessages as errorMessage}
+              <li class="text-danger">{errorMessage}</li>
+            {/each}
+          </ul>
+        </div>
+        {/if}
 				<CustomerInfo bind:customer={customer}></CustomerInfo>
 			</div>
 			<div class="modal-footer">
@@ -29,6 +39,8 @@ import CustomerInfo from './customer-info.svelte';
 
 export	let	customer;
 export	let	modal;
+let ok = true;
+let errorMessages = [];
 
 const create_customer = async (customer) => {
 	console.log('create_customer', customer);
@@ -51,7 +63,44 @@ const delete_customer = async (customer) => {
 	});
 	console.log(result);
 }
+const validateForm = () => {
+  ok = true;
+  errorMessages = [];
+  if ( customer.type === null || customer.type === undefined ){
+    ok = false;
+    errorMessages.push("取引先種別が選択されていません。");
+  }
+  if ( customer.name === undefined ){
+    ok = false;
+    errorMessages.push("名前が未入力です。");
+  }
+  if ( customer.name !== undefined && customer.name.trim().length === 0 ){
+    ok = false;
+    errorMessages.push("名前が未入力です。");
+  }
+  if ( customer.ruby === undefined ){
+    ok = false;
+    errorMessages.push("フリガナが未入力です。");
+  }
+  if ( customer.ruby !== undefined && customer.ruby.trim().length === 0 ){
+    ok = false;
+    errorMessages.push("フリガナが未入力です。");
+  }
+  if ( customer.key === undefined ){
+    ok = false;
+    errorMessages.push("呼び出しキーが未入力です。");
+  }
+  if ( customer.key !== undefined && customer.key.trim().length === 0 ){
+    ok = false;
+    errorMessages.push("呼び出しキーが未入力です。");
+  }
+  errorMessages = errorMessages;
+  return ok;
+}
 const save = (event) => {
+  if ( !validateForm() ){
+    return ;
+  }
 	customer.type = parseInt(customer.type);
 	customer.name = customer.name ? customer.name : '';
 	customer.ruby = customer.ruby || '';
@@ -72,6 +121,7 @@ const save = (event) => {
 	customer.chargeName = customer.chargeName || '';
 	customer.description = customer.description || '';
 	console.log('input', customer);
+
 	try {
 		let	pr;
 		if ( customer.id  ) {
@@ -92,6 +142,9 @@ const save = (event) => {
 }
 
 const clean_popup = () => {
+  customer = undefined;
+  ok = true;
+  errorMessages = [];
 	modal.hide();
 }
 
