@@ -17,10 +17,11 @@ Hieronymusは零細企業用のERPシステムです。
 ```
 $ git clone https://github.com/waspcojp/hieronymus.git
 $ cd hieronymus
+$ export NODE_ENV=production
 $ npm update
+$ npm run build-production
 $ npx sequelize-cli db:create
 $ npx sequelize-cli db:migrate
-$ npx sequelize-cli db:seed:all
 ```
 
 とするだけでインストールされます。起動するには、
@@ -33,24 +34,9 @@ $ npm run start
 
 ## 設定
 
-### DB設定
+### DB(PostgreSQL)の設定
 
 ```config/config.json.sample```からコピーして```config/config.json```を作成し、適宜編集します。
-
-### 「期」の初期設定
-
-```seeders/20210517042724-init-fiscal-years.js```と
-```seeders/20210517053327-init-monthly-logs.js```を編集して下さい
-
-### 勘定科目の設定
-
-```accounts.csv```に勘定科目の一覧があります。
-このファイルを編集することで、初期状態の勘定科目が設定できます。
-
-ただし、必要そうな勘定科目は定義済みなので、あまりここをいじらないで、オンライン画面の
-**勘定科目管理**で修正することをお勧めします。
-
-seed(```npx sequelize-cli db:seed:all```)は一度しか動かせませんから、よく確認して行って下さい。
 
 ## 使い方
 
