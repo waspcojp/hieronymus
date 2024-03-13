@@ -11,6 +11,8 @@
 		({wareki(endDate)})
         {endDate.getMonth()+1}月
         {endDate.getDate()}日)
+    {:else}
+      <span class="text-danger fw-bold"><i class="bi bi-exclamation-diamond-fill"></i>&nbsp; 会計年度を選択してください</span>
 		{/if}
 	</span>
 	<ul class="navbar-nav ms-auto">
