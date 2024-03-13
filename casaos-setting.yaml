@@ -1,0 +1,82 @@
+name: hieronymus
+services:
+  db:
+    cpu_shares: 90
+    command: []
+    container_name: db
+    deploy:
+      resources:
+        limits:
+          memory: 7811M
+    environment:
+      - POSTGRES_PASSWORD=ogochan
+      - POSTGRES_USER=ogochan
+    hostname: db
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U ogochan -d ogochan
+      timeout: 5s
+      interval: 5s
+      retries: 5
+    image: postgres:15
+    ports:
+      - target: 5432
+        published: "5432"
+        protocol: tcp
+    restart: always
+    volumes:
+      - type: bind
+        source: /DATA/AppData/Hieronymus/data
+        target: /var/lib/postgresql/data
+    devices: []
+    cap_add: []
+    networks:
+      - hieronymus
+    privileged: false
+  web:
+    cpu_shares: 90
+    command: []
+    container_name: web
+    depends_on:
+      db:
+        condition: service_healthy
+        required: true
+    deploy:
+      resources:
+        limits:
+          memory: 7811M
+    environment:
+      - HOME=/app/hieronymus
+      - NODE_ENV=production
+    hostname: web
+    image: ghcr.io/waspcojp/hieronymus/hieronymus-web:latest
+    init: true
+    ports:
+      - target: 3010
+        published: "3010"
+        protocol: tcp
+    restart: always
+    working_dir: /app/hieronymus
+    volumes: []
+    devices: []
+    cap_add: []
+    networks:
+      - hieronymus
+    privileged: false
+networks:
+  hieronymus:
+    name: hieronymus
+x-casaos:
+  author: self
+  category: self
+  hostname: ""
+  icon: ""
+  index: /
+  main: web
+  port_map: "3010"
+  scheme: http
+  store_app_id: Hieronymus
+  title:
+    custom: ""
+    en_us: Hieronymus
