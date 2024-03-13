@@ -1,4 +1,5 @@
 # Hieronymus
+![Hieronymuslogo](documents/images/github-logo.png)
 
 Hieronymusは零細企業用のERPシステムです。
 
