@@ -4,6 +4,7 @@
 		<title>Hieronyms Home</title>
 		<link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
 		<link rel="stylesheet" href="/style/style.css">
+    <link rel="icon" href="/public/favicon.ico" sizes="any">
 		<script defer src="/dist/common.js"></script>
 		<base href="/" />
 	</head>
