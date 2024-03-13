@@ -19,8 +19,6 @@ services:
     ports:
       - '3010:3010'
     working_dir: /app/hieronymus
-    volumes:
-      - ./docker-history:/app/docker-history
     depends_on:
       db:
         condition: service_healthy
