@@ -148,7 +148,7 @@ const home =  async (req, res, next) => {
   }else{
     if	( !req.params.term )	{
       if	( !req.session.term )	{
-        let now = new Date('2020-10-10');	//	dummy
+        let now = new Date();
         //console.log(now);
         let fy = await models.FiscalYear.findOne({
           where: {
@@ -166,7 +166,14 @@ const home =  async (req, res, next) => {
         if	( fy )	{
           req.session.term = fy.term;
         } else {
-          req.session.term = 15;
+          fy = await models.FiscalYear.findOne({
+                                                order: [ 'term', 'DESC']
+          });
+          if ( fy ){
+            req.session.term = fy.term;
+          }else{
+            req.session.term = null;
+          }
         }
       }
       //console.log('term', req.session.term);
