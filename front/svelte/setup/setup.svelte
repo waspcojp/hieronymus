@@ -63,6 +63,7 @@
     </form>
   </div>
 </div>
+<div class="text-center text-light-emphasis">version {version}</div>
 <script>
   import axios from 'axios';
   import {onMount} from 'svelte';
@@ -72,8 +73,9 @@
   let message = {};
   let serverError = "";
   let loding = false;
+  let version = "";
 
-  onMount(() => {
+  onMount(async () => {
       form.term = 1;
       form.year = new Date().getFullYear() - 1;
       form.startDate = `${form.year}-04-01`;
@@ -82,6 +84,10 @@
       invalid.year = false;
       invalid.startDate = false;
       invalid.endDate = false;
+      const result = await axios.get('/api/version');
+      if ( result.data ){
+        version = result.data.version;
+      }
   })
   const isYearValid = () => {
     invalid.year = false;

@@ -37,6 +37,7 @@
       				</p>
     			</div>
 			</div>
+      <div class="text-center text-light-emphasis">version {{version}}</div>
 		</div>
 		<script defer src="/dist/login.js"></script>
 	</body>
