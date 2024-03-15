@@ -15,6 +15,8 @@ const cross_slip_detail = require('./api_cross_slip_detail');
 
 const models = require('../models');
 const Op = models.Sequelize.Op;
+const pkg = require('../package.json');
+const VERSION = pkg.version;
 
 router.get('/journal/:year/:month', journal.get);
 
@@ -199,4 +201,7 @@ router.post('/setup', async (req, res, next) => {
     res.json({code: -1});
   }
 })
+router.get('/version', async (req, res, next) => {
+	res.json({version: VERSION});
+});
 module.exports = router;

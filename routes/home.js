@@ -5,6 +5,8 @@ const Local = require('passport-local').Strategy;
 const {auth_user, is_authenticated, User} = require('../libs/user');
 const models = require('../models');
 const Op = models.Sequelize.Op;
+const pkg = require('../package.json');
+const VERSION = pkg.version;
 
 passport.use(new Local(
 	{
@@ -46,6 +48,7 @@ router.get('/login', (req, res, next) => {
 	res.render('login', { title: 'Login',
 						  msg_type: '',
 						  message: '',
+              version: VERSION
 						});
 });
 
@@ -55,7 +58,8 @@ router.post('/login', (req, res, next) => {
   if ( req.body.user_name.length === 0 || req.body.password.length === 0 ){
     res.render('login', { title: 'Login',
                           msg_type: 'danger',
-                          message: `ユーザー名またはパスワードが入力されていません。`
+                          message: `ユーザー名またはパスワードが入力されていません。`,
+                          version: VERSION
                         });
   }else{
     passport.authenticate('local', (error, user, info) => {
@@ -65,14 +69,16 @@ router.post('/login', (req, res, next) => {
       if (error) {
         res.render('login', { title: 'Login',
                               msg_type: 'danger',
-                              message: `エラーが発生しました。`
+                              message: `エラーが発生しました。`,
+                              version: VERSION
                             });
       }
       if ( !user ) {
         //console.log('user not found');
         res.render('login', { title: 'Login',
                     msg_type: 'danger',
-                    message: `ユーザー名またはパスワードが違います。`
+                    message: `ユーザー名またはパスワードが違います。`,
+                    version: VERSION
                   });
       } else {
         req.login(user, (error, next) => {
@@ -82,7 +88,8 @@ router.post('/login', (req, res, next) => {
             //console.log("error");
             res.render('login', { title: 'Login',
                         msg_type: 'danger',
-                        message: `ユーザー名またはパスワードが違います。`
+                        message: `ユーザー名またはパスワードが違います。`,
+                        version: VERSION
                       });
           } else {
             res.redirect('/home');
@@ -103,7 +110,8 @@ router.get('/logout', (req, res, next) => {
 router.get('/signup', (req, res, next) => {
 	res.render('signup', { title: 'Signup',
 						   msg_type: '',
-						   message: ''
+						   message: '',
+               version: VERSION
 						});
 });
 
@@ -116,7 +124,8 @@ router.post('/signup', async (req, res, next) => {
   if ( user_name.length === 0 || password.length === 0){
 		res.render('signup', {
                             msg_type: 'danger',
-                            message: `ユーザー名またはパスワードが入力されていません。`
+                            message: `ユーザー名またはパスワードが入力されていません。`,
+                            version: VERSION
     });
   }else{
     const exists =  await User.check(user_name);
@@ -134,7 +143,8 @@ router.post('/signup', async (req, res, next) => {
     } else {
       //console.log('user duplicate', user_name);
       res.render('signup', { msg_type: 'danger',
-                   message: `ユーザー名 ${user_name} は既に登録されています。`
+                   message: `ユーザー名 ${user_name} は既に登録されています。`,
+                   version: VERSION
                  });
     }
   }
