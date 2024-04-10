@@ -19,7 +19,11 @@ module.exports = {
 		customer: './customer.js',
 		voucher: './voucher.js',
 		'bank-ledger': './bank-ledger.js',
+<<<<<<< HEAD
 		index: './index.js'
+=======
+    setup: './setup.js'
+>>>>>>> main
 	},
     output: {
         path: path.resolve(__dirname, 'dist'),

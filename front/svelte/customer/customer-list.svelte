@@ -1,6 +1,6 @@
-<div class="row full-height fontsize-12pt" style="overflow-y: scroll;">
+<div class="fontsize-12pt">
 	<table class="table table-bordered">
-		<thead>
+		<thead class="table-light">
 			<tr>
 				<th scope="col">
 					名前

@@ -9,6 +9,16 @@
 					on:click={close_}></button>
 			</div>
 			<div class="modal-body">
+        {#if !ok }
+        <div class="border rounded border-danger mb-2 ms-2 me-2 p-3">
+          <h5 class="fs-5 text-danger"><i class="bi bi-exclamation-triangle-fill"></i>&nbsp;エラー</h5>
+          <ul>
+            {#each errorMessages as errorMessage}
+              <li class="text-danger">{errorMessage}</li>
+            {/each}
+          </ul>
+        </div>
+        {/if}
 				<CrossSlip
 					bind:slip={slip}
 					init={init}
@@ -75,6 +85,7 @@
 						{/if}
 					{/if}
 				{/if}
+<<<<<<< HEAD
 				{#if (( !slip ) || 
 					  (( !slip.approvedAt ) &&
 					   (( user.accounting ) ||
@@ -83,6 +94,11 @@
 							on:click={save}>Save</button>
 				{/if}
 				</div>
+=======
+				<button type="button" class="btn btn-primary" id="save-button"
+						on:click={save}>保存&nbsp;<i class="bi bi-save"></i></button>
+			</div>
+>>>>>>> main
 		</div>
 	</div>
 </div>
@@ -103,11 +119,14 @@ export let user;
 
 export	let init;
 let vouchers;
-
+let ok = true;
+let errorMessages = [];
 const clean_popup = () => {
 	dispatch('close');
 	modal.hide();
 	vouchers = undefined;
+  errorMessages = [];
+  ok = true;
 }
 const onDragStart = (event) => {
 	event.dataTransfer.dropEffect = 'link';
@@ -125,12 +144,13 @@ afterUpdate(() => {
 });
 
 const save = (event) => {
-	let ok;
+  errorMessages = [];
+  ok = true;
+  let tempDay = slip.day;
 	slip.day = parseInt(slip.day);
 	if	(	( slip.day )
 		&&	( slip.day > 0 )
 		&&	( slip.day <= 31 ) )	{
-		ok = true;
 		slip.term = parseInt(term);
 		let sums = {
 			debit: 0,
@@ -147,12 +167,33 @@ const save = (event) => {
 			slip.lines[i].creditVoucher = undefined;
 			sums.debit += slip.lines[i].debitAmount;
 			sums.credit += slip.lines[i].creditAmount;
+      if ( slip.lines[i].debitAccount === undefined ){
+        ok = false;
+        errorMessages.push(`${i+1}行目 : 借方科目に未登録の勘定科目が入力されています。`);
+      }
+      if( slip.lines[i].debitAccount !== undefined  &&
+          slip.lines[i].debitAccount.trim().length === 0 ){
+        ok = false;
+        errorMessages.push(`${i+1}行目 : 借方科目が未入力です。`);
+      }
+      if ( slip.lines[i].creditAccount === undefined ) {
+        ok = false;
+        errorMessages.push(`${i+1}行目 : 貸方科目に未登録の勘定科目が入力されています。`);
+      }
+      if ( slip.lines[i].creditAccount !== undefined && 
+           slip.lines[i].creditAccount.trim().length === 0 ){
+        ok = false;
+        errorMessages.push(`${i+1}行目 : 貸方科目が未入力です。`);
+      }
 		}
 		if	( sums.debit != sums.credit )	{
 			ok = false;
+      errorMessages.push("借方の金額と貸方の合計金額が不一致です。");
 		}
 	} else {
 		ok = false;
+    slip.day = tempDay;
+    errorMessages.push("日付が正しくありません。");
 	}
 	console.log("save", ok, slip);
 	if	( ok )	{
@@ -172,7 +213,7 @@ const save = (event) => {
 			//	TODO alert
 		}
 	} else {
-
+    errorMessages = errorMessages;
 	}
 };
 

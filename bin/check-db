@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+const Sequelize = require('sequelize');
+const env = process.env.NODE_ENV || 'development';
+const config = require('../config/config.json')[env];
+const { execSync } = require('child_process');
+
+let sequelize;
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
+const checkDatabase = async () => {
+  try {
+    const [results, metadata]  = await sequelize.query(`SELECT 1 FROM pg_database WHERE datname = '${config.database}';`);
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+const createDatabase = async () => {
+  console.log(execSync('npx sequelize-cli db:create').toString());
+}
+
+const applyMigration = async () => {
+  console.log(execSync('npx sequelize-cli db:migrate').toString());
+}
+
+(async () => {
+  try {
+    //
+    let databaseExists = await checkDatabase();
+    if (!databaseExists){
+      await createDatabase();
+    }
+    await applyMigration();
+  }catch (e){
+    console.log(e.message);
+  }finally{
+    await sequelize.close();
+  }
+})();

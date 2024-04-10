@@ -1,70 +1,63 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="#">元帳</a>
-		<ul class="navbar-nav me-auto mb-2">
-			{#each fields as field, index}
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="field_{index}" rolw="button" data-bs-toggle="dropdown" aria-expanded="false">
-					{field.title}
-				</a>
-				<ul class="dropdown-menu" aria-labelledby="field_{index}">
-					{#each field.accounts as account}
-					<li>
-						<a class="dropdown-item" href="/ledger/{term}/{account.code}">{account.name}</a>
-					</li>
-					{/each}
-				</ul>
-			</li>
-			{/each}
-		</ul>
-		<ul class="navbar-nav ms-auto">
-			<li class="nav-item">
-				<a href="/forms/general_ledger/{term}" download="総勘定元帳.xlsx">
-					総勘定元帳
-				</a>
-			</li>
-		</ul>
-	</div>
-</nav>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<div class="container-fluid">
-		{#if (account)}
-		<a class="navbar-brand" href="/ledger/{term}/{account.accountCode}">
-			{ account ? account.name : ''}
-		</a>
-		{/if}
-		{#if (account && (account.SubAccounts.length > 0))}
-		<ul class="navbar-nav me-auto">
-			{#each account.SubAccounts as sub}
-			<li class="nav-item">
-				<a class="nav-link{sub.SubAccountCode == sub_account_code ? ' active' : ''}"
-						href="/ledger/{term}/{account.accountCode}/{sub.subAccountCode}">
-					{sub.name}
-				</a>
-			</li>
-			{/each}
-		</ul>
-		<ul class="navbar-nav ms-auto">
-			<li class="nav-item">
-				<a href="/forms/subsidiary_ledger/{term}" download="補助元帳.xlsx">
-					補助元帳
-				</a>
-			</li>
-		</ul>
-		{/if}
-	</div>
-</nav>
-<div class="row body-height">
-	<LedgerList
-		modal={modal}
-		account={account}
-		pickup={pickup}
-		sums={sums}
-		lines={lines}
-		accounts={accounts}
-		term={term}
-		on:open={openSlip}></LedgerList>
+<div class="d-flex justify-content-between mb-3 mt-3">
+  <h1 class="fs-3">元帳</h1>
+  <a href="/forms/general_ledger/{term}" download="総勘定元帳.xlsx" class="btn btn-primary">
+    総勘定元帳.xlsx&nbsp;をダウンロード&nbsp;<i class="bi bi-download"></i>
+  </a>
 </div>
+<ul class="nav">
+  {#each fields as field, index}
+  <li class="nav-item dropdown pe-2">
+    <a class="btn btn-outline-primary dropdown-toggle" href="#" id="field_{index}" rolw="button" data-bs-toggle="dropdown" aria-expanded="false">
+      {field.title}
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="field_{index}">
+      {#each field.accounts as account}
+      <li>
+        <a class="dropdown-item" href="/ledger/{term}/{account.code}">{account.name}</a>
+      </li>
+      {/each}
+    </ul>
+  </li>
+  {/each}
+</ul>
+<nav class="navbar navbar-expand-lg">
+  {#if (account)}
+  <a class="navbar-brand fs-4" href="/ledger/{term}/{account.accountCode}">
+    { account ? account.name : ''}
+  </a>
+  {/if}
+</nav>
+{#if (account && (account.SubAccounts.length > 0))}
+<div class="d-flex justify-content-between mb-2">
+  <div>
+    <ul class="nav">
+      {#each account.SubAccounts as sub}
+        <li class="nav-item pe-2">
+          <a class="btn {sub.subAccountCode == sub_account_code ? ' btn-primary disabled' : 'btn-outline-primary'}"
+              href="/ledger/{term}/{account.accountCode}/{sub.subAccountCode}">
+            {sub.name}
+          </a>
+        </li>
+      {/each}
+  </ul>
+  </div>
+  <div>
+    <a href="/forms/subsidiary_ledger/{term}" download="補助元帳.xlsx" class="btn btn-primary">
+      補助元帳.xlsx&nbsp;をダウンロード&nbsp;<i class="bi bi-download"></i>
+    </a>
+  </div>
+</div>
+{/if}
+<LedgerList
+  modal={modal}
+  account={account}
+  pickup={pickup}
+  sums={sums}
+  lines={lines}
+  accounts={accounts}
+  term={term}
+  on:open={openSlip}></LedgerList>
+
 <CrossSlipModal
 	slip={slip}
 	bind:modal={modal}

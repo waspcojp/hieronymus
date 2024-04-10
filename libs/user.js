@@ -74,6 +74,7 @@ const	auth_user = (name, password) => {
 		});
 	});
 }
+<<<<<<< HEAD
 const   passwd = (name, old_pass, new_pass) => {
     //console.log('passwd', user.name, old_pass, new_pass);
     return new Promise((done, fail) => {
@@ -88,6 +89,60 @@ const   passwd = (name, old_pass, new_pass) => {
             done(false);
         });
     });
+=======
+
+class User {
+	constructor (name, user_info) {
+		if ( !user_info ) {
+			user_info = {
+				name: name
+			}
+		}
+		Object.keys(user_info).forEach((key) => {
+			this[key] = user_info[key];
+		});
+	}
+	static current(req) {
+		let user;
+		if (( req.session ) &&
+			( req.session.passport )) {
+			user = req.session.passport.user.user_name;
+		} else {
+			user = null;
+		}
+		return (user);
+	}
+	create() {
+		return new Promise((done, fail) => {
+			models.User.create({
+				name: this.name,
+				hash_password: this.hash_password
+			}).then((user) => {
+				console.log(user);
+				done(user);
+			}).catch((err) => {
+				console.log(err);
+			});
+		});
+	}
+	set password(p) {
+		this.hash_password = bcrypt.hashSync(p, SALT_ROUNDS);
+	}
+	get password() {
+		return (this.hash_password);
+	}
+	static async check(name) {
+		const user = await  models.User.findOne({
+			where: {
+				name: name },
+		});
+    if ( user ){
+      return true
+    }else {
+      return false;
+    }
+	}
+>>>>>>> main
 }
 
 module.exports = {

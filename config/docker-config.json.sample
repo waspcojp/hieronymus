@@ -1,0 +1,24 @@
+{
+	"development": {
+		"username": "ogochan",
+		"password": "ogochan",
+		"dialect": "postgres",
+		"host": "db",
+		"database": "sample_development",
+		"logging": false
+	},
+	"test": {
+		"username": "ogochan",
+		"password": "ogochan",
+		"dialect": "postgres",
+		"host": "db",
+		"database": "sample_test"
+	},
+	"production": {
+		"username": "ogochan",
+		"password": "ogochan",
+		"dialect": "postgres",
+		"host": "db",
+		"database": "sample_production"
+	}
+}

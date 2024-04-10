@@ -40,10 +40,10 @@ module.exports = {
 		fy = await models.FiscalYear.findOne({
 			where: {
 				startDate: {
-					[Op.lte]: new Date(body.year, body.month - 1, body.day)
+					[Op.lte]: new Date(body.year, body.month - 1, 2)
 				},
 				endDate: {
-					[Op.gte]: new Date(body.year, body.month - 1, body.day)
+					[Op.gte]: new Date(body.year, body.month - 1, 2)
 				}
 			}
 		});

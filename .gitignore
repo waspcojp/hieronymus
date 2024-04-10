@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # backup
 *~
 *.dump
@@ -65,3 +66,11 @@ typings/
 
 # next.js build output
 .next
+=======
+/node_modules
+/dist
+/sessions
+docker-histoy/
+config/config.json
+accounts.json
+>>>>>>> main
