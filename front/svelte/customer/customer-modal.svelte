@@ -118,6 +118,7 @@ const save = (event) => {
 	customer.faxNo = customer.faxNo || '';
 	customer.email = customer.email || '';
 	customer.url = customer.url || '';
+	customer.invoiceNo = customer.invoiceNo || '';
 	customer.chargeName = customer.chargeName || '';
 	customer.description = customer.description || '';
 	console.log('input', customer);

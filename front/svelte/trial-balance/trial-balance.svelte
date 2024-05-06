@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="#">残高試算表</a>
@@ -20,18 +19,7 @@
 		term={term}
 		lines={lines}>
 	</TrialBalanceList>
-=======
-<div class="d-flex justify-content-between mb-3 mt-3">
-  <h1 class="fs-3">残高試算表</h1>
-  <a href="/forms/trial_balance/{term}" download="残高試算表.xlsx" class="btn btn-primary">
-    残高試算表.xlsx&nbsp;をダウンロード&nbsp; <i class="bi bi-download"></i>
-  </a>
->>>>>>> main
 </div>
-<TrialBalanceList
-  term={term}
-  lines={lines}>
-</TrialBalanceList>
 <style>
 </style>
 

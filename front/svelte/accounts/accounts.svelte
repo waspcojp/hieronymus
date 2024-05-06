@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="#">科目管理</a>
@@ -15,18 +14,7 @@
 		accounts={accounts}
 		on:open={openAccount}>
 	</AccountsList>
-=======
-<div class="d-flex justify-content-between mb-3 mt-3">
-  <h1 class="fs-3">科目管理</h1>
->>>>>>> main
 </div>
-<AccountsList
-  modal={modal}
-  term={term}
-  lines={lines}
-  accounts={accounts}
-  on:open={openAccount}>
-</AccountsList>
 
 <AccountModal
 	account={account}

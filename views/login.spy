@@ -7,11 +7,7 @@
     <link rel="icon" href="/public/favicon.ico" sizes="any">
 		<script defer src="/dist/common.js"></script>
 	</head>
-<<<<<<< HEAD
-	<body class="layout-fixed hold-transition login-page" id="body">
-=======
-  <body class="layout-fixed hold-transition login-page" id="body">
->>>>>>> main
+  	<body class="layout-fixed hold-transition login-page" id="body">
     	<div class="login-box">
   			<div class="login-logo">
     			<img src="/public/logo.png" alt="Logo" class="pe-1">Hieronyms
@@ -41,7 +37,7 @@
       				</p>
     			</div>
 			</div>
-      <div class="text-center text-light-emphasis">version {{version}}</div>
+      	<div class="text-center text-light-emphasis">version {{version}}</div>
 		</div>
 		<script defer src="/dist/login.js"></script>
 	</body>

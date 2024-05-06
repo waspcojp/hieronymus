@@ -4,34 +4,13 @@
 		<title>Hieronyms Home</title>
 		<link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
 		<link rel="stylesheet" href="/style/style.css">
-    <link rel="icon" href="/public/favicon.ico" sizes="any">
+    	<link rel="icon" href="/public/favicon.ico" sizes="any">
 		<script defer src="/dist/common.js"></script>
 		<base href="/" />
 	</head>
 	<body class="layout-fixed" id="body"
-<<<<<<< HEAD
 			term={{term}}>
 		<div class="wrapper" id="home"></div>
-=======
-			term={{term}}
-			user={{user}}>
-		<div class="wrapper d-flex flex-column h-100">
-    		<nav class="main-header navbar navbar-expand-lg navbar-light bg-light p-3"
-				id="common-nav"></nav>
-	    	<aside 
-				class="main-sidebar sidebar-bg-dark sidebar-color-primary shadow"
-				id="sidebar"></aside>
-       		<main class="content-wrapper overflow-y-auto h-100">
-				<div class="content">
-					<div class="container-fluid" id="home">
-					</div>
-				</div>
-      		</main>
-			<footer
-				class="main-footer"
-				id="common-footer"></footer>
-		</div>
->>>>>>> main
 		<script defer src="/dist/home.js"></script>
 	</body>
 </html>

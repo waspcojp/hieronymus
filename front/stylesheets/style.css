@@ -101,45 +101,11 @@ sidebar-bg-dark .brand-container {
 	width: 250px;
     z-index: 1038;
 }
-
-.login-page,
-.register-page {
-    align-items: center;
-    background-color: #e9ecef;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    justify-content: center;
-}
-
-.login-box,
-.register-box {
-    width: 360px;
-}
-.login-logo,
-.register-logo {
-    font-size: 2.1rem;
-    font-weight: 300;
-    margin-bottom: 0.9rem;
-    text-align: center;
-}
-
-.login-box .card,
-.register-box .card {
-    margin-bottom: 0;
-}
-
- .content-wrapper,
+.content-wrapper,
 .main-footer,
 .main-header {
     margin-left: 250px;
 }
-<<<<<<< HEAD
-.content-wrapper {
-	height: calc(100vh - 56px - 74px);
-}
-=======
->>>>>>> main
 .main-footer {
     background-color: #fff;
     border-top: 1px solid #dee2e6;

@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     tax: DataTypes.DECIMAL(12),
     taxClass: DataTypes.INTEGER,
     description: DataTypes.TEXT,
+    invoiceNo: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Voucher',

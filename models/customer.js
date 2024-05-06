@@ -32,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     bankName: DataTypes.STRING,
     bankBranchName: DataTypes.STRING,
     accountType: DataTypes.STRING,
-    accountNo: DataTypes.STRING
+    accountNo: DataTypes.STRING,
+    invoiceNo: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Customer',

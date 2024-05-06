@@ -30,6 +30,12 @@
 		</div>
 	</div>
 	<div class="row mb-3">
+		<label for="key" class="col-2 col-form-label">インボイス番号</label>
+		<div class="col-sm-3">
+			<input type="text" class="form-control" id="key" bind:value={customer.invoiceNo}>
+		</div>
+	</div>
+	<div class="row mb-3">
 		<label for="zip" class="col-2 col-form-label">郵便番号</label>
 		<div class="col-sm-3">
 			<input type="text" class="form-control" id="zip" bind:value={customer.zip}>

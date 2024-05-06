@@ -84,6 +84,12 @@
 		</div>
 	</div>
 	<div class="row mb-3">
+		<label for="key" class="col-2 col-form-label">インボイス番号</label>
+		<div class="col-sm-3">
+			<input type="text" class="form-control" id="key" bind:value={voucher.invoiceNo}>
+		</div>
+	</div>
+	<div class="row mb-3">
 		<label for="description" class="col-2 col-form-label">備考</label>
 		<div class="col-sm-10">
 			<textarea class="form-control" id="description"
@@ -307,10 +313,11 @@ const changeKey = (event) =>{
 	}
 }
 const	customerSelect = (event)	=> {
-	console.log('taget', event.target);
+	console.log('target', event.target);
 	for	( let i = 0; i < customers.length; i ++ )	{
 		if	( customers[i].id == event.target.value)	{
 			voucher.customerId = customers[i].id;
+			voucher.invoiceNo = customers[i].invoiceNo;
 			customerKey = customers[i].name;
 			break;
 		}

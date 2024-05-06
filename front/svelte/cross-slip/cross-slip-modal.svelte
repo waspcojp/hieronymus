@@ -85,7 +85,6 @@
 						{/if}
 					{/if}
 				{/if}
-<<<<<<< HEAD
 				{#if (( !slip ) || 
 					  (( !slip.approvedAt ) &&
 					   (( user.accounting ) ||
@@ -94,11 +93,6 @@
 							on:click={save}>Save</button>
 				{/if}
 				</div>
-=======
-				<button type="button" class="btn btn-primary" id="save-button"
-						on:click={save}>保存&nbsp;<i class="bi bi-save"></i></button>
-			</div>
->>>>>>> main
 		</div>
 	</div>
 </div>
@@ -136,10 +130,10 @@ const onDragEnd = (event) => {
 
 }
 beforeUpdate(() => {
-	console.log('beforeUpdate cross-slip-modal', slip);
+	//console.log('beforeUpdate cross-slip-modal', slip);
 });
 afterUpdate(() => {
-	console.log('afterUpdate cross-slip-modal');
+	//console.log('afterUpdate cross-slip-modal');
 	init = false;
 });
 
@@ -167,21 +161,18 @@ const save = (event) => {
 			slip.lines[i].creditVoucher = undefined;
 			sums.debit += slip.lines[i].debitAmount;
 			sums.credit += slip.lines[i].creditAmount;
-      if ( slip.lines[i].debitAccount === undefined ){
+      if (( !slip.lines[i].debitAccount ) &&
+				  ( slip.lines[i].debitAmount != 0 ) )	{
         ok = false;
         errorMessages.push(`${i+1}行目 : 借方科目に未登録の勘定科目が入力されています。`);
       }
-      if( slip.lines[i].debitAccount !== undefined  &&
-          slip.lines[i].debitAccount.trim().length === 0 ){
+      if  (( !slip.lines[i].debitAccount ) &&
+           ( slip.lines[i].debitAmount != 0 ))  {
         ok = false;
         errorMessages.push(`${i+1}行目 : 借方科目が未入力です。`);
       }
-      if ( slip.lines[i].creditAccount === undefined ) {
-        ok = false;
-        errorMessages.push(`${i+1}行目 : 貸方科目に未登録の勘定科目が入力されています。`);
-      }
-      if ( slip.lines[i].creditAccount !== undefined && 
-           slip.lines[i].creditAccount.trim().length === 0 ){
+      if  (( !slip.lines[i].creditAccount ) &&
+	  	     ( slip.lines[i].creditAmount != 0 ))	{
         ok = false;
         errorMessages.push(`${i+1}行目 : 貸方科目が未入力です。`);
       }

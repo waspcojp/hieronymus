@@ -130,7 +130,7 @@ const changeKey = (event) => {
 	code = ( list && list.length > 0 ) ? list[0].code : undefined;
 }
 const leaveKey = (event) => {
-	console.log('code', code);
+	//console.log('code', code);
 }
 const enterKey = (event) => {
 	list = [];
@@ -146,10 +146,10 @@ const changeSubKey = (event) => {
 	}
 }
 const leaveSubKey = (event) => {
-	console.log('sub_code', sub_code);
+	//console.log('sub_code', sub_code);
 }
 const enterSubKey = (event) => {
-	console.log('code', code);
+	//console.log('code', code);
 	if	( account )	{
 		sub_list = search_sub_account_by_key(account, sub_key);
 	}

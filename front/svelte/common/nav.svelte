@@ -1,9 +1,6 @@
 <div class="container-fluid">
-<<<<<<< HEAD
 	<ul class="navbar-nav">
 	</ul>
-=======
->>>>>>> main
 	<span class="havbar-text">
 		{#if ( startDate && endDate )}
 		第{term}期

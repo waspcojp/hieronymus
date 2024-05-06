@@ -1,11 +1,6 @@
 <div class="container-fluid">
-<<<<<<< HEAD
-	<div class="row">
-		<div class="col">
-=======
 	<div class="row mb-2">
 		<div class="col-5">
->>>>>>> main
 			<div class="input-group">
 				<span class="input-group-text">{slip.year}年{slip.month}月</span>
 				<input type="text" class="number" name="day" id="slip-day" size="2" maxlength="3"
