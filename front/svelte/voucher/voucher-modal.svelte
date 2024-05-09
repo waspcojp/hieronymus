@@ -114,9 +114,12 @@ const save = (event) => {
 		voucher.tax = numeric(voucher.tax);
 	}
 	voucher.taxClass = parseInt(voucher.taxClass);
+	voucher.update = undefined;
+	voucher.files = undefined;
 	console.log('input', voucher);
 	try {
 		let	pr;
+		console.log(voucher)
 		if ( voucher.id  ) {
 			voucher.id = parseInt(voucher.id);
 			pr = update_voucher(voucher);

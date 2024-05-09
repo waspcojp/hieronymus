@@ -37,6 +37,10 @@ module.exports = {
 				{
 					model: models.Customer,
 					as: 'Customer'
+				},
+				{
+					model: models.User,
+					as: 'update'
 				}
 			];
 
@@ -235,6 +239,8 @@ module.exports = {
 	},
 	post: async(req, res, next) => {
 		let body = req.body;
+		body.createdBy = req.session.user.id;
+		body.updatedBy = req.session.user.id;
 		//console.log('body:', body);
 		let voucher = await models.Voucher.create(body)
 		//console.log(voucher);
@@ -245,6 +251,7 @@ module.exports = {
 	},
 	update: async(req, res, next) => {
 		let body = req.body;
+		body.updatedBy = req.session.user.id;
 		let id = req.params.id ? req.params.id : body.id;
 
 		let voucher = await models.Voucher.findOne({

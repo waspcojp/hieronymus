@@ -118,6 +118,10 @@ module.exports = {
 						slip.lineCount = body.lines.length;
 						slip.day = body.day;
 						slip.updatedBy = req.session.user.id;
+						if	( req.session.user.approvable )	{
+							slip.approvedAt = new Date();
+							slip.approvedBy = req.session.user.id;
+						}
 						slip.save();
 		
 						details = await models.CrossSlipDetail.findAll({

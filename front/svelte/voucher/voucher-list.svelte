@@ -23,6 +23,9 @@
 				<th scope="col">
 					ファイル
 				</th>
+				<th scope="col" style="width: 100px;">
+					処理者
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -58,6 +61,9 @@
 					<input type="text" class="number" placeholder="上限" size="12" maxlength="13"
 							bind:value={upperAmount}
 							on:keypress={changeAmount} />
+				</td>
+				<td>
+
 				</td>
 				<td>
 
@@ -138,6 +144,9 @@
 						</a>
 					</div>
 					{/each}
+				</td>
+				<td>
+					{line.update.name}
 				</td>
 			</tr>
 			{/each}

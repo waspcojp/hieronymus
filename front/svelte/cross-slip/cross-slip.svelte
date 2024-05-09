@@ -3,7 +3,7 @@
 		<div class="col-5">
 			<div class="input-group">
 				<span class="input-group-text">{slip.year}年{slip.month}月</span>
-				<input type="text" class="number" name="day" id="slip-day" size="2" maxlength="3"
+				<input type="text" autocomplete="off" class="number" name="day" id="slip-day" size="2" maxlength="3"
 						bind:value={slip.day}>
 				<span class="input-group-text">日</span>
 				{#if slip.no}
@@ -66,7 +66,7 @@
 								bind:sub_code={ line.debitSubAccount }></Account>
 					</td>
 					<td class="number">
-						<input type="text" class="number" size="12" maxlength="13"
+						<input type="text" class="number" autocomplete="off" size="12" maxlength="13"
 							data-index={i}
 							data-dc="d"
 							bind:value={line.debitAmount}
@@ -90,13 +90,13 @@
 								bind:sub_code={line.creditSubAccount}></Account>
 					</td>
 					<td class="number">
-						<input type="text" class="number" size="12" maxlength="13"
+						<input type="text" class="number" autocomplete="off" size="12" maxlength="13"
 							data-index={i}
 							data-dc="c"
 							bind:value={line.creditAmount}
 							on:focusout={computeTax}>
 						{#if find_tax_class(line.creditAccount, line.creditSubAccount) != 0}
-						<input type="text" class="number" size="12" maxlength="13"
+						<input type="text" class="number" autocomplete="off" size="12" maxlength="13"
 							bind:value={line.creditTax}
 							on:focusout={makeTaxLine}>
 						{/if}
@@ -277,9 +277,13 @@ const makeTaxLine = (event) => {
 			}
 			slip.lines[gap].debitAccount = debit;
 			slip.lines[gap].debitAmount += numeric(slip.lines[i].debitTax);
-			slip.lines[gap].creditAccount = slip.lines[i].debitAccount;
-			slip.lines[gap].creditSubAccount = slip.lines[i].debitSubAccount;
-			slip.lines[gap].creditAmount += numeric(slip.lines[i].debitTax);
+			let tax_class = find_tax_class(slip.lines[i].debitAccount,
+										                 slip.lines[i].debitSubAccount);
+			if	( tax_class !== 2 ) {
+			  slip.lines[gap].creditAccount = slip.lines[i].debitAccount;
+			  slip.lines[gap].creditSubAccount = slip.lines[i].debitSubAccount;
+			  slip.lines[gap].creditAmount += numeric(slip.lines[i].debitTax);
+      }
 			updateAccount(slip);
 		}
 		if	( slip.lines[i].creditTax > 0 )	{
@@ -305,9 +309,13 @@ const makeTaxLine = (event) => {
 			}
 			slip.lines[gap].creditAccount = credit;
 			slip.lines[gap].creditAmount += numeric(slip.lines[i].creditTax);
-			slip.lines[gap].debitAccount = slip.lines[i].creditAccount;
-			slip.lines[gap].debitSubAccount = slip.lines[i].creditSubAccount;
-			slip.lines[gap].debitAmount += numeric(slip.lines[i].creditTax);
+			let tax_class = find_tax_class(slip.lines[i].creditAccount,
+										                 slip.lines[i].creditSubAccount);
+			if	( tax_class !== 2 ) {
+			  slip.lines[gap].debitAccount = slip.lines[i].creditAccount;
+			  slip.lines[gap].debitSubAccount = slip.lines[i].creditSubAccount;
+			  slip.lines[gap].debitAmount += numeric(slip.lines[i].creditTax);
+      }
 			updateAccount(slip);
 		}
 	}
@@ -329,6 +337,7 @@ const computeSumAndDelete = (event) => {
 	console.log(index, slip.lines.length);
 	slip.lines.splice(index, 1);
 	compute_sum();
+	updateAccount(slip);
 	slip = slip;
 }
 

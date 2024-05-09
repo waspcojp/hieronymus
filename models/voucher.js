@@ -14,6 +14,15 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: 'id',
 				sourceKey: 'customerId'
 			});
+			this.hasOne(models.User, {
+				foreignKey: 'id',
+				sourceKey: 'createdBy'
+			});
+			this.hasOne(models.User, {
+				foreignKey: 'id',
+				sourceKey: 'updatedBy',
+        as: 'update'
+			});
       this.hasMany(models.VoucherFile, {
         foreignKey: 'voucherId',
         as: 'files'
@@ -29,7 +38,9 @@ module.exports = (sequelize, DataTypes) => {
     tax: DataTypes.DECIMAL(12),
     taxClass: DataTypes.INTEGER,
     description: DataTypes.TEXT,
-    invoiceNo: DataTypes.TEXT
+    invoiceNo: DataTypes.TEXT,
+    createdBy: DataTypes.INTEGER,
+    updatedBy: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Voucher',
