@@ -231,6 +231,10 @@ const computeTax = (event) => {
 		if	( slip.lines[index].creditAmount == '=' )	{
 			slip.lines[index].creditAmount = slip.lines[index].debitAmount;
 		}
+		if	( slip.lines[index].creditAmount == '-' )	{
+      let sums = compute_sum();
+			slip.lines[index].creditAmount = sums.debit_amount - sums.credit_amount;
+		}
 		if	( ( slip.lines[index].debitAccount ) &&
 			  ( slip.lines[index].debitAccount.match(/^114|^308/) )	)	{
 

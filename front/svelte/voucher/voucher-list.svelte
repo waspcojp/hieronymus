@@ -49,10 +49,8 @@
 					</CustomerSelect>
 				</td>
 				<td>
-
 				</td>
 				<td>
-
 				</td>
 				<td>
 					<input type="text" class="number" placeholder="下限" size="12" maxlength="13"
@@ -63,13 +61,10 @@
 							on:keypress={changeAmount} />
 				</td>
 				<td>
-
 				</td>
 				<td>
-
 				</td>
 				<td>
-
 				</td>
 			</tr>
 			{#each vouchers as line}
@@ -83,12 +78,7 @@
 					{line.Customer.name}
 				</td>
 				<td>
-					{#if (  line.issueDate &&
-							( line.details.length > 0 ) &&
-							compDate(line.issueDate,
-								line.details[0].CrossSlip.year,
-								line.details[0].CrossSlip.month,
-								line.details[0].CrossSlip.day) ) }
+					{#if ( line.details.length > 0 ) }
 					<a href="#" class="link-primary"
 						data-year={line.details[0].CrossSlip.year}
 						data-month={line.details[0].CrossSlip.month}
@@ -226,6 +216,7 @@ const openSlip = (event) => {
 	if	( no )	{
 		axios.get(`/api/cross_slip/${year}/${month}/${no}`).then((result) => {
 			let slip = result.data;
+      slip.approvedAt = slip.approvedAt ? new Date(slip.approvedAt) : null;
 			console.log('slip', slip);
 			dispatch('openSlip', slip);
 		})
