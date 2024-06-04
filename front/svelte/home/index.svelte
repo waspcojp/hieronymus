@@ -16,6 +16,7 @@
             <Home
                 user={user}
                 term ={term}
+                bind:toast={toast}
                 bind:alert={alert}
                 bind:alert_level={alert_level}></Home>
         </div>
@@ -25,6 +26,7 @@
     class="main-footer">
     <CommonFooter></CommonFooter>
 </footer>
+<Toast bind:this={toast}/>
 
 <script>
 import axios from 'axios';
@@ -35,9 +37,11 @@ import CommonFooter from '../common/footer.svelte';
 import SideBar from '../common/sidebar.svelte';
 import Alert from '../components/alert.svelte';
 import Home from './home.svelte';
+import Toast from '../common/toast.svelte';
 
 export let term;
 
+let toast;
 let alert;
 let alert_level;
 let user = {};

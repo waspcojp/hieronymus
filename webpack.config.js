@@ -54,8 +54,38 @@ module.exports = {
 				]
 			},
 			{
-				test: /\.woff(2)?(\?v=[0-9]\.[0-9])?$/,
-				loader: "url-loader?limit=10000&mimetype=application/font-woff"
+				test: /\.m?js/,
+				resolve: {
+					fullySpecified: false
+				}
+			},
+			{
+				test: /\.(scss)$/,
+				use: [{
+					// Adds CSS to the DOM by injecting a `<style>` tag
+					loader: 'style-loader'
+				  },
+				  {
+					// Interprets `@import` and `url()` like `import/require()` and will resolve them
+					loader: 'css-loader'
+				  },
+				  {
+					// Loads a SASS/SCSS file and compiles it to CSS
+					loader: 'sass-loader',
+					options: {
+						  sassOptions: {
+							includePaths: ['node_modules']
+						  }
+					   }
+				}
+				]
+			  },
+			{
+				test: /\.(woff|woff2|eot|ttf|otf)$/i, 
+				type: 'asset/resource', 
+				generator: {
+					filename: 'fonts/[name][ext][query]'
+				}
 			},
             {
 				test: /\.svg(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -91,5 +121,8 @@ module.exports = {
 			'front/javascripts',
 			'libs'
 		],
+		extensions: ['.mjs', '.js', '.svelte'],
+		mainFields: ['svelte', 'browser', 'module', 'main'],
+		conditionNames: ['svelte', 'browser']
 	}
 }
