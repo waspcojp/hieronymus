@@ -74,7 +74,7 @@ import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte'
 import VoucherModal from './voucher-modal.svelte';
 import VoucherList from './voucher-list.svelte';
 import CrossSlipModal from '../cross-slip/cross-slip-modal.svelte';
-import {numeric} from '../../javascripts/cross-slip';
+import {numeric, set_accounts} from '../../javascripts/cross-slip';
 
 export let term;
 export let user;
@@ -89,7 +89,6 @@ let slip;
 let dates;
 let current_month;
 let current_params = new Map();
-
 
 const selectVoucherType = (event) => {
 	let	voucherType = event.detail;
@@ -230,6 +229,7 @@ beforeUpdate(()	=> {
 	if	( !accounts )	{
 		axios.get(`/api/accounts`).then((res) => {
 			accounts = res.data;
+			set_accounts(accounts);
 		});
 	}
 	if	( !slip )	{

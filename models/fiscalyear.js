@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
 		startDate: DataTypes.DATE,
 		endDate: DataTypes.DATE,
 		term: DataTypes.INTEGER,
-		year: DataTypes.INTEGER
+		year: DataTypes.INTEGER,
+		taxIncluded: DataTypes.BOOLEAN
 	}, {
 		sequelize,
 		modelName: 'FiscalYear',

@@ -49,6 +49,7 @@ module.exports = {
 		})
 	},
 	update: async(req, res, next) => {
+		console.log(req.body);
 		let sub_code = req.body.sub_code;
 		let account = await models.Account.findOne({
 			where: {

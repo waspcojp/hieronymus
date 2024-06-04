@@ -21,11 +21,15 @@
         {/if}
 				<CrossSlip
 					bind:slip={slip}
+          fy={fy}
 					init={init}
 					accounts={accounts}></CrossSlip>
 				{#if (vouchers)}
 				<table class="table table-striped table-bordered">
 					<thead>
+						<th style="width:20px;">
+
+						</th>
 						<th style="width:90px;">
 							種別
 						</th>
@@ -44,8 +48,13 @@
 						<tr
 							on:dragstart={onDragStart}
 							on:dragend={onDragEnd}
-							draggable="true"
+							draggable={ line.details.length > 0  ? "false" : "true" }
 							data-id={line.id}>
+              <td>
+                {#if (line.details.length > 0 )}
+                <i class="fas fa-link"></i>
+                {/if}
+              </td>
 							<td>
 								{voucherType(line.type)}
 							</td>
@@ -113,6 +122,7 @@ export let user;
 
 export	let init;
 let vouchers;
+let fy;
 let ok = true;
 let errorMessages = [];
 const clean_popup = () => {
@@ -131,6 +141,11 @@ const onDragEnd = (event) => {
 }
 beforeUpdate(() => {
 	//console.log('beforeUpdate cross-slip-modal', slip);
+  if  ( !fy ) {
+    axios(`/api/term/${term}`).then((result) => {
+      fy = result.data;
+    })
+  }
 });
 afterUpdate(() => {
 	//console.log('afterUpdate cross-slip-modal');
@@ -186,7 +201,6 @@ const save = (event) => {
     slip.day = tempDay;
     errorMessages.push("日付が正しくありません。");
 	}
-	console.log("save", ok, slip);
 	if	( ok )	{
 		try {
 			let pr;
@@ -214,7 +228,7 @@ const close_ = (event) => {
 
 const delete_ = (event) => {
 	try {
-		console.log('delete');
+		//console.log('delete');
 		axios.delete('/api/cross_slip', {
 			data: {
 				year: slip.year,
@@ -268,7 +282,7 @@ const openVouchers = (event) => {
 			}
 		}).then((result) => {
 			vouchers = result.data;
-			console.log('vouchers', vouchers);
+			//console.log('vouchers', vouchers);
 		})
 	}
 }

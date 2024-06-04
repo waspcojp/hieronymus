@@ -158,7 +158,10 @@ const	openAccount = async (event) => {
 			minor_name: acl.minor,
 			klass_id: acl.id,
 			name: '',
-			key: ''
+			key: '',
+      debit: 0,
+      credit: 0,
+      balance: 0
 		};
 	}
 	let sub_account = null;
@@ -169,7 +172,11 @@ const	openAccount = async (event) => {
 		}
 	}
 	if	( mode == 'new-sub-account' )	{
-		sub_account = {};
+		sub_account = {
+      debit: 0,
+      credit: 0,
+      balance: 0
+    };
 	}
 	dispatch('open',{
 		account: account,

@@ -101,7 +101,7 @@
 							on:focusout={makeTaxLine}>
 						{/if}
 					</td>
-					<td style="width:102px;">
+					<td style="width:125px;">
 						<button type="button" class="btn btn-primary btn-sm"
 							data-index={i}
 							on:click={computeSumAndNext}>
@@ -153,7 +153,7 @@
 
 <script>
 import axios from 'axios';
-import {numeric, sales_tax} from 'cross-slip.js';
+import {numeric, sales_tax, find_tax_class} from 'cross-slip.js';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import Account from './account.svelte';
 import {field} from '../../../libs/parse_account_code';
@@ -161,35 +161,13 @@ import {field} from '../../../libs/parse_account_code';
 export let accounts;
 export let slip;
 export let init;
+export let fy;
 
 let	sums;
 let _init;
 
-const find_tax_class = (ac, sub) => {
-	let tax = 0;
-	console.log(ac, sub);
-	for ( let i = 0; i < accounts.length; i ++ ) {
-		let account = accounts[i];
-		if ( account.code == ac ) {
-			if ( account.subAccounts ) {
-				for ( let j = 0 ; j < account.subAccounts.length; j ++ ) {
-					let sub_account = account.subAccounts[j];
-					if ( sub_account.code == sub ) {
-						tax = sub_account.taxClass;
-						break;
-					}
-				}
-			} else {
-				tax = account.taxClass;
-			}
-			break;
-		}
-	}
-	return tax;
-}
-
-const compute_sum = () => {
-	//console.log('compute_sum');
+const computeSum = () => {
+	//console.log('computeSum');
 	let debit_amount = 0;
 	let	debit_tax = 0;
 	let	credit_amount = 0;
@@ -216,131 +194,139 @@ const updateAccount = (slip) => {
 }
 
 const computeTax = (event) => {
-	let index = event.currentTarget.dataset.index;
+  let index = event.currentTarget.dataset.index;
 	let dc = event.currentTarget.dataset.dc;
 	//console.log('index', index, dc);
 	if	( dc == 'd' )	{
 		if	( ( slip.lines[index].creditAccount ) &&
-			  ( slip.lines[index].creditAccount.match(/^114|^308/) ) )	{
-
+			    ( slip.lines[index].creditAccount.match(/^114|^308/) ) )	{
 		} else {
 			let tax_class = find_tax_class(slip.lines[index].debitAccount, slip.lines[index].debitSubAccount);
-			slip.lines[index].debitTax = sales_tax(tax_class, slip.lines[index].debitAmount);
-		}
-	} else {
+      if  ( fy.taxIncluded )  {
+		    slip.lines[index].debitTax = sales_tax(tax_class, slip.lines[index].debitAmount);
+      } else {
+		    slip.lines[index].debitTax = 0;
+      }
+	  }
+  } else {
 		if	( slip.lines[index].creditAmount == '=' )	{
 			slip.lines[index].creditAmount = slip.lines[index].debitAmount;
 		}
 		if	( slip.lines[index].creditAmount == '-' )	{
-      let sums = compute_sum();
+      let sums = computeSum();
 			slip.lines[index].creditAmount = sums.debit_amount - sums.credit_amount;
 		}
 		if	( ( slip.lines[index].debitAccount ) &&
-			  ( slip.lines[index].debitAccount.match(/^114|^308/) )	)	{
-
-		} else {
+			    ( slip.lines[index].debitAccount.match(/^114|^308/) )	)	{
+  	} else {
 			let tax_class = find_tax_class(slip.lines[index].creditAccount, slip.lines[index].creditSubAccount);
-			slip.lines[index].creditTax = sales_tax(tax_class, slip.lines[index].creditAmount);
+      if  ( fy.taxIncluded )  {
+		    slip.lines[index].creditTax = sales_tax(tax_class, slip.lines[index].creditAmount);
+      } else {
+		    slip.lines[index].creditTax = 0;
+      }
 		}
 	}
-	slip = slip;
+  slip = slip;
 }
 const makeTaxLine = (event) => {
-	for ( let i = 0; i < slip.lines.length ; i ++ ) {
-		if	( ( ( slip.lines[i].creditAccount ) &&
-			    ( slip.lines[i].creditAccount.match(/^114|^308/) ) ) ||
-			  ( ( slip.lines[i].debitAccount ) &&
-			    ( slip.lines[i].debitAccount.match(/^114|^308/) ) ) )	{
-			slip.lines[i].creditAmount = 0;
-			slip.lines[i].debitAmount = 0;
-			slip.lines[i].creditTax = 0;
-			slip.lines[i].debitTax = 0;
+	if	( fy.taxIncluded )	{
+		for ( let i = 0; i < slip.lines.length ; i ++ ) {
+			if	( ( ( slip.lines[i].creditAccount ) &&
+				    ( slip.lines[i].creditAccount.match(/^114|^308/) ) ) ||
+				  ( ( slip.lines[i].debitAccount ) &&
+				    ( slip.lines[i].debitAccount.match(/^114|^308/) ) ) )	{
+				slip.lines[i].creditAmount = 0;
+				slip.lines[i].debitAmount = 0;
+				slip.lines[i].creditTax = 0;
+				slip.lines[i].debitTax = 0;
+			}
 		}
-	}
-	for ( let i = 0; i < slip.lines.length ; i ++ ) {
-		if	( slip.lines[i].debitTax > 0 )	{
-			let debit = ( field(slip.lines[i].debitAccount) == '6' ) ? '3080000' : (
-					 	( field(slip.lines[i].debitAccount) == '7' ) ? '1140000' : undefined );
-			let gap;
-			for	( let j = i + 1;  j < slip.lines.length ; j += 1 )	{
-				let line = slip.lines[j];
-				if	( ( line.debitAccount == debit ) &&
-					  ( line.creditAccount == slip.lines[i].debitAccount ) &&
-				  	  ( line.creditSubAccount == slip.lines[i].debitSubAccount ) )	{
-					gap = j;
-				}
-			}
-			if	( !gap )	{
-				gap = slip.lines.length;
-				slip.lines.push({
-					debitAmount: 0,
-					debitTax: 0,
-					creditAmount: 0,
-					creditTax: 0
-				});
-			}
-			slip.lines[gap].debitAccount = debit;
-			slip.lines[gap].debitAmount += numeric(slip.lines[i].debitTax);
-			let tax_class = find_tax_class(slip.lines[i].debitAccount,
-										                 slip.lines[i].debitSubAccount);
-			if	( tax_class !== 2 ) {
-			  slip.lines[gap].creditAccount = slip.lines[i].debitAccount;
-			  slip.lines[gap].creditSubAccount = slip.lines[i].debitSubAccount;
-			  slip.lines[gap].creditAmount += numeric(slip.lines[i].debitTax);
-      }
-			updateAccount(slip);
-		}
-		if	( slip.lines[i].creditTax > 0 )	{
-			let credit = ( field(slip.lines[i].creditAccount) == '6' ) ? '3080000' : (
-						 ( field(slip.lines[i].creditAccount) == '7' ) ? '1140000' : undefined );
-			let gap;
-			for	( let j = i + 1; j < slip.lines.length ; j += 1 )	{
-				let line = slip.lines[j];
-				if	( ( line.creditAccount == credit ) &&
-					  ( line.debitAccount == slip.lines[i].creditAccount ) &&
-				  	  ( line.debitSubAccount == slip.lines[i].creditSubAccount ) )	{
-					gap = j;
-				}
-			}
-			if	( !gap )	{
-				gap = slip.lines.length;
-				slip.lines.push({
-					debitAmount: 0,
-					debitTax: 0,
-					creditAmount: 0,
-					creditTax: 0
-				});
-			}
-			slip.lines[gap].creditAccount = credit;
-			slip.lines[gap].creditAmount += numeric(slip.lines[i].creditTax);
-			let tax_class = find_tax_class(slip.lines[i].creditAccount,
-										                 slip.lines[i].creditSubAccount);
-			if	( tax_class !== 2 ) {
-			  slip.lines[gap].debitAccount = slip.lines[i].creditAccount;
-			  slip.lines[gap].debitSubAccount = slip.lines[i].creditSubAccount;
-			  slip.lines[gap].debitAmount += numeric(slip.lines[i].creditTax);
-      }
-			updateAccount(slip);
-		}
-	}
+		for ( let i = 0; i < slip.lines.length ; i ++ ) {
+			if	( slip.lines[i].debitTax > 0 )	{
+				let debit = ( field(slip.lines[i].debitAccount) == '6' ) ? '3080000' : (
+						 	( field(slip.lines[i].debitAccount) == '7' ) ? '1140000' : undefined );
+			  let gap;
+			  for	( let j = i + 1;  j < slip.lines.length ; j += 1 )	{
+				  let line = slip.lines[j];
+				  if	( ( line.debitAccount == debit ) &&
+					      ( line.creditAccount == slip.lines[i].debitAccount ) &&
+				  	    ( line.creditSubAccount == slip.lines[i].debitSubAccount ) )	{
+					  gap = j;
+				  }
+			  }
+			  if	( !gap )	{
+				  gap = slip.lines.length;
+				  slip.lines.push({
+					  debitAmount: 0,
+					  debitTax: 0,
+					  creditAmount: 0,
+					  creditTax: 0
+				  });
+			  }
+			  slip.lines[gap].debitAccount = debit;
+			  slip.lines[gap].debitAmount += numeric(slip.lines[i].debitTax);
+			  let tax_class = find_tax_class(slip.lines[i].debitAccount,
+  										                 slip.lines[i].debitSubAccount);
+	  		if	( tax_class !== 2 ) {
+		  	  slip.lines[gap].creditAccount = slip.lines[i].debitAccount;
+			    slip.lines[gap].creditSubAccount = slip.lines[i].debitSubAccount;
+  			  slip.lines[gap].creditAmount += numeric(slip.lines[i].debitTax);
+        }
+		  	updateAccount(slip);
+		  }
+  		if	( slip.lines[i].creditTax > 0 )	{
+	  		let credit = ( field(slip.lines[i].creditAccount) == '6' ) ? '3080000' : (
+		  				 ( field(slip.lines[i].creditAccount) == '7' ) ? '1140000' : undefined );
+  			let gap;
+	  		for	( let j = i + 1; j < slip.lines.length ; j += 1 )	{
+		  		let line = slip.lines[j];
+  				if	( ( line.creditAccount == credit ) &&
+	    				  ( line.debitAccount == slip.lines[i].creditAccount ) &&
+			  	  	  ( line.debitSubAccount == slip.lines[i].creditSubAccount ) )	{
+					  gap = j;
+				  }
+			  }
+  			if	( !gap )	{
+	  			gap = slip.lines.length;
+		  		slip.lines.push({
+  					debitAmount: 0,
+  					debitTax: 0,
+	  				creditAmount: 0,
+		  			creditTax: 0
+  				});
+	  		}
+		  	slip.lines[gap].creditAccount = credit;
+  			slip.lines[gap].creditAmount += numeric(slip.lines[i].creditTax);
+	  		let tax_class = find_tax_class(slip.lines[i].creditAccount,
+		  								                 slip.lines[i].creditSubAccount);
+			  if	( tax_class !== 2 ) {
+  			  slip.lines[gap].debitAccount = slip.lines[i].creditAccount;
+	  		  slip.lines[gap].debitSubAccount = slip.lines[i].creditSubAccount;
+		  	  slip.lines[gap].debitAmount += numeric(slip.lines[i].creditTax);
+        }
+  			updateAccount(slip);
+		  }
+	  }
+  }
 }
 const computeSumAndNext = (event) => {
-	console.log('computeSumAndNext');
+	//console.log('computeSumAndNext');
 	let index = parseInt(event.currentTarget.dataset.index);
 
-	compute_sum();
-	console.log(index, slip.lines.length);
+	computeSum();
+	//console.log(index, slip.lines.length);
 	slip.lines.splice(index + 1, 0, {});
 	updateAccount(slip);
 	slip = slip;
 }
 const computeSumAndDelete = (event) => {
-	console.log('computeSumAndNext');
+	//console.log('computeSumAndNext');
 	let index = parseInt(event.currentTarget.dataset.index);
 
-	console.log(index, slip.lines.length);
+	//console.log(index, slip.lines.length);
 	slip.lines.splice(index, 1);
-	compute_sum();
+	computeSum();
 	updateAccount(slip);
 	slip = slip;
 }
@@ -355,7 +341,7 @@ const bindVoucher = (i, voucher_id) => {
 	axios.get(`/api/voucher/${voucher_id}`).then((result) => {
 		return(result.data);
 	}).then((voucher) => {
-		console.log('voucher', voucher);
+		//console.log('voucher', voucher);
 		let detail = slip.lines[i];
 		switch	(voucher.type)	{
 		  case	1:	//	受取請求書
@@ -388,12 +374,14 @@ const bindVoucher = (i, voucher_id) => {
 }
 
 const onDrop = (event) => {
-	let voucher_id = event.dataTransfer.getData('id');
 	let index = event.currentTarget.dataset.index;
-	console.log('onDrop', voucher_id);
+	let voucher_id = event.dataTransfer.getData('id');
+	//console.log('onDrop', voucher_id);
+  if  ( voucher_id )  {
+	  bindVoucher(index, voucher_id);
+  }
 	event.currentTarget.classList.remove('over');
 	event.stopPropagation();
-	bindVoucher(index, voucher_id);
 }
 
 const onDragEnter = (event) => {
@@ -405,8 +393,8 @@ const onDragLeave = (event) => {
 	event.stopPropagation();
 }
 beforeUpdate(() => {
-	console.log('cross-slip beforeUpdate', init);
-	sums = compute_sum();
+	//console.log('cross-slip beforeUpdate', init);
+	sums = computeSum();
 	//console.log('sums', sums);
 	if	( init )	{
 		_init = [];

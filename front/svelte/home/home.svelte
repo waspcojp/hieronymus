@@ -15,6 +15,13 @@
         {/if}
     </div>
 </div>
+{#if ( user &&  user.administrable) }
+<div class="row">
+    <div class="col-6" style="padding:10px;">
+        <MakeBackup></MakeBackup>
+    </div>
+</div>
+{/if}
 <div class="row">
     <div class="col-6" style="padding:10px;">
         <Password

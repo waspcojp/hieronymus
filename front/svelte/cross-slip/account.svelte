@@ -1,36 +1,53 @@
-<input type="text" size="12" maxlength="13" autocomplete="off"
-	bind:value={acc_key}
-	on:change={changeKey}
-	on:keyup={changeKey}
-	on:focusout={leaveKey}
-	on:focusin={enterKey}>
-	{#if ( list && list.length > 0 ) }
-<select bind:value={code}
-	on:focusout={leaveAccountSelect}>
-	{#each list as item}
-	<option value={item.code}>
-		{item.name}
-	</option>
-	{/each}
-</select>
-{/if}
-<input type="text" size="12" maxlength="13"
-	bind:value={sub_key}
-	on:change={changeSubKey}
-	on:keyup={changeSubKey}
-	on:focusout={leaveSubKey}
-	on:focusin={enterSubKey}>
-{#if ( account && account.subAccounts )}
-	{#if ( sub_list && sub_list.length > 0 ) }
-	<select bind:value={sub_code}
-		on:focusout={leaveSubAccountSelect}>
-		{#each sub_list as item}
-		<option value={item.code}>{item.name}</option>
+<div class="search-container">
+  <input type="text" size="12" maxlength="13" autocomplete="off"
+    placeholder="Search"
+    class="search-input"
+	  bind:value={acc_key}
+    on:change={changeKey}
+    on:keyup={changeKey}
+    on:focusout={leaveKey}
+    on:focusin={enterKey}>
+    {#if ( list && list.length > 0 ) }
+    <select bind:value={code}
+		  on:focusout={leaveAccountSelect}>
+		{#each list as item}
+		<option value={item.code}>
+			{item.name}
+		</option>
 		{/each}
-	</select>
-	{/if}
-{/if}
+	  </select>
+    {/if}
+  <input type="text" size="12" maxlength="13" autocomplete="off"
+    placeholder="Search"
+    class="search-input"
+    bind:value={sub_key}
+    on:change={changeSubKey}
+    on:keyup={changeSubKey}
+    on:focusout={leaveSubKey}
+    on:focusin={enterSubKey}>
+    {#if ( account && account.subAccounts )}
+	  {#if ( sub_list && sub_list.length > 0 ) }
+	  <select bind:value={sub_code}
+		  on:focusout={leaveSubAccountSelect}>
+		  {#each sub_list as item}
+		  <option value={item.code}>{item.name}</option>
+		  {/each}
+	  </select>
+	  {/if}
+  {/if}
+</div>
 
+<style>
+.search-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-input {
+  margin-bottom: 8px;
+}
+</style>
 <script>
 import {set_accounts, find_account, find_sub_account, element_dc, element_index} from '../../javascripts/cross-slip';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
@@ -49,9 +66,10 @@ let sub_list;
 let sub_account;
 
 beforeUpdate(() => {
-	console.log('beforeUpdate account', init, code, sub_code);
+	//console.log('beforeUpdate account', init, code, sub_code);
 	if	( init )	{
-		console.log('init');
+		//console.log('init');
+    list = [];
 		set_accounts(accounts);
 		setAccount();
 		setSubAccount();
@@ -107,6 +125,7 @@ const setAccount = () => {
 	} else {
 		acc_key = '';
 	}
+  sub_key = '';
 }
 
 const setSubAccount = () => {

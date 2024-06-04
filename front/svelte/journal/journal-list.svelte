@@ -34,8 +34,10 @@
 					</a>
 				</td>
 				<td class="number">
+					{#if ( line.debitAccount !== '')}
 					{line.debitAmount}<br/>
 					{line.debitTax}
+					{/if}
 				</td>
 				<td>
 					{line.debitAccount}<br/>
@@ -70,8 +72,10 @@
 					{line.creditSubAccount}
 				</td>
 				<td class="number">
+					{#if ( line.creditAccount !== '')}
 					{line.creditAmount}<br/>
 					{line.creditTax}
+					{/if}
 				</td>
 			</tr>
 			{/each}

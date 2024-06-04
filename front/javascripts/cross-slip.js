@@ -81,6 +81,30 @@ const find_sub_account_by_code = (account_code, code) => {
 	return sub_account;
 }
 
+const find_tax_class = (ac, sub) => {
+	let tax = 0;
+	//console.log(ac, sub);
+	for ( let i = 0; i < accounts.length; i ++ ) {
+		let account = accounts[i];
+		if ( account.code == ac ) {
+			if ( account.subAccounts ) {
+				for ( let j = 0 ; j < account.subAccounts.length; j ++ ) {
+					let sub_account = account.subAccounts[j];
+					if ( sub_account.code == sub ) {
+						tax = sub_account.taxClass;
+						break;
+					}
+				}
+			} else {
+				tax = account.taxClass;
+			}
+			break;
+		}
+	}
+	return tax;
+}
+
+
 const set_accounts = (arg) => {
 	accounts = arg;
 }
@@ -133,7 +157,7 @@ const salesTax = (tax_class, _amount) => {
 		tax = '';
 		break;
 	}
-	console.log('tax', tax);
+	//console.log('tax', tax);
 	return	(tax)
 }
 
@@ -142,6 +166,7 @@ module.exports = {
 	find_account: find_account,
 	find_sub_account: find_sub_account,
 	find_sub_account_by_code: find_sub_account_by_code,
+	find_tax_class: find_tax_class,
 	element_index: element_index,
 	element_dc: element_dc,
 	numeric: numeric,

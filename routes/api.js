@@ -117,8 +117,22 @@ router.get('/term/:term', async (req, res, next) => {
 		res.json(fy);
 	}
 });
+router.put('/term/:id', async(req, res, next) => {
+  let id = parseInt(req.params.id);
+  console.log({id});
+  fy = await models.FiscalYear.findByPk(id);
+  fy.taxIncluded = req.body.taxIncluded;
+  fy.save();
+  res.json({
+    code: 0
+  })
+})
 router.get('/term', async (req, res, next) => {
-	models.FiscalYear.findAll().then((lines) => {
+	models.FiscalYear.findAll({
+    order: [
+      ['term', 'ASC']
+    ]
+  }).then((lines) => {
 		res.json(lines);
 	});
 });
