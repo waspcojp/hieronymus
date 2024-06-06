@@ -203,9 +203,9 @@ const computeTax = (event) => {
 		} else {
 			let tax_class = find_tax_class(slip.lines[index].debitAccount, slip.lines[index].debitSubAccount);
       if  ( fy.taxIncluded )  {
-		    slip.lines[index].debitTax = sales_tax(tax_class, slip.lines[index].debitAmount);
-      } else {
 		    slip.lines[index].debitTax = 0;
+      } else {
+		    slip.lines[index].debitTax = sales_tax(tax_class, slip.lines[index].debitAmount);
       }
 	  }
   } else {
@@ -221,16 +221,16 @@ const computeTax = (event) => {
   	} else {
 			let tax_class = find_tax_class(slip.lines[index].creditAccount, slip.lines[index].creditSubAccount);
       if  ( fy.taxIncluded )  {
-		    slip.lines[index].creditTax = sales_tax(tax_class, slip.lines[index].creditAmount);
-      } else {
 		    slip.lines[index].creditTax = 0;
+      } else {
+		    slip.lines[index].creditTax = sales_tax(tax_class, slip.lines[index].creditAmount);
       }
 		}
 	}
   slip = slip;
 }
 const makeTaxLine = (event) => {
-	if	( fy.taxIncluded )	{
+	if	( !fy.taxIncluded )	{
 		for ( let i = 0; i < slip.lines.length ; i ++ ) {
 			if	( ( ( slip.lines[i].creditAccount ) &&
 				    ( slip.lines[i].creditAccount.match(/^114|^308/) ) ) ||
