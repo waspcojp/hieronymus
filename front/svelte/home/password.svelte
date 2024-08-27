@@ -1,7 +1,7 @@
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">パスワード変更</h3>
-    </div>
+  <div class="card-header">
+    <h3 class="card-title">パスワード変更</h3>
+  </div>
     <div class="card-body">
         <form>
             <div class="row mb-3">
@@ -44,8 +44,7 @@ let currentPassword;
 let newPassword;
 let confirmPassword;
 
-export let alert;
-export let alert_level;
+export let toast;
 
 const updatePassword = (event) => {
     if  ( newPassword ) {
@@ -54,18 +53,15 @@ const updatePassword = (event) => {
                 currentPassword: currentPassword,
                 newPassword: newPassword
             }).then((res) => {
-                alert = 'password update success';
-                alert_level = 'alert-success';
+                toast.show('パスワード', 'パスワードを更新しました');
                 currentPassword = '';
                 newPassword = '';
                 confirmPassword = '';
             }).catch ((e) => {
-                alert = 'password update fail';
-                alert_level = 'alert-danger';
+                toast.show('パスワード', 'パスワードを更新できませんでした');
             });
         } else {
-            alert = 'invalid password';
-            alert_level = 'alert-danger';
+            toast.show('パスワード', 'パスワードが間違っています');
         }
     }
 }

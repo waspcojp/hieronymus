@@ -10,6 +10,7 @@ const customer = require('./api_customer');
 const voucher = require('./api_voucher');
 const user = require('./api_user');
 const invoice = require('./api_invoice');
+const admin = require('./api_admin');
 
 //const account_classes = require('./api_account_classes');
 const cross_slip = require('./api_cross_slip');
@@ -19,6 +20,11 @@ const models = require('../models');
 const Op = models.Sequelize.Op;
 const pkg = require('../package.json');
 const VERSION = pkg.version;
+
+router.post('/admin/backup', admin.backup);
+router.post('/admin/restore', admin.restore);
+router.get('/admin/backups', admin.backups);
+router.delete('/admin/backup/:date', admin.delete);
 
 router.get('/user', user.get);
 router.get('/user/:id', user.get);
@@ -236,6 +242,7 @@ router.post('/setup', async (req, res, next) => {
     res.json({code: -1});
   }
 })
+
 router.get('/version', async (req, res, next) => {
 	res.json({version: VERSION});
 });

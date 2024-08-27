@@ -12,13 +12,10 @@
 <main class="content-wrapper">
     <div class="content">
         <div class="container-fluid" id="home">
-            <Alert bind:alert={alert} {alert_level}></Alert>
             <Home
                 user={user}
                 term ={term}
-                bind:toast={toast}
-                bind:alert={alert}
-                bind:alert_level={alert_level}></Home>
+                bind:toast={toast}></Home>
         </div>
     </div>
 </main>
@@ -35,15 +32,13 @@ import {onMount} from 'svelte';
 import NavBar from '../common/nav.svelte';
 import CommonFooter from '../common/footer.svelte';
 import SideBar from '../common/sidebar.svelte';
-import Alert from '../components/alert.svelte';
 import Home from './home.svelte';
 import Toast from '../common/toast.svelte';
 
 export let term;
 
 let toast;
-let alert;
-let alert_level;
+let toast_dialog;
 let user = {};
 
 onMount(() => {

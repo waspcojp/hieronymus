@@ -15,21 +15,17 @@
     {/if}
   </div>
 </div>
-{#if ( user &&  user.administrable) }
-<div class="row">
-  <div class="col-6" style="padding:10px;">
-    <Backup bind:toast={toast}/>
-  </div>
-</div>
-{/if}
 <div class="row">
   <div class="col-6" style="padding:10px;">
     <Password
-        bind:alert={alert}
-        bind:alert_level={alert_level}></Password>
+      bind:toast={toast}></Password>
   </div>
+  {#if ( user &&  user.administrable) }
+    <div class="col-4" style="padding:10px;">
+      <Backup bind:toast={toast}/>
+    </div>
+  {/if}
 </div>
-
 <script>
 
 import  FormPrint from './form-print.svelte';
