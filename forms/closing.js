@@ -1,11 +1,9 @@
-const models = require('../models');
-const Op = models.Sequelize.Op;
-const { exit } = require('process');
-const CrossSlipDetails = require('../libs/crossslipdetails');
-const Accounts = require('../libs/accounts');
-const {field, dc, numeric} = require('../libs/parse_account_code');
-const {ledger_lines} = require('../libs/ledger');
-const TrialBalance = require('../libs/trial_balance');
+import models from '../models/index.js';
+import CrossSlipDetails from '../libs/crossslipdetails.js';
+import Accounts from '../libs/accounts.js';
+import {field, dc, numeric} from '../libs/parse_account_code.js';
+import {ledger_lines} from '../libs/ledger.js';
+import TrialBalance from '../libs/trial_balance.js';
 
 const   fiscalYear = async (term) => {
     let fy = await models.FiscalYear.findOne({
@@ -184,7 +182,7 @@ fiscalYear(14).then((ret) => {
 });
 */
 
-module.exports = async (term) => {
+export default async (term) => {
     let fy = await fiscalYear(term);
     let {lines} = await TrialBalance(term);
     let carry = net_income(lines);

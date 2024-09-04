@@ -1,7 +1,7 @@
-const TrialBalance = require('../libs/trial_balance');
-const {Book, Page} = require('./book');
-const {field, numeric} = require('../libs/parse_account_code');
-const SumTable = require('./sum_table');
+import TrialBalance from '../libs/trial_balance.js';
+import {Book, Page} from './book.js';
+import {field, numeric} from '../libs/parse_account_code.js';
+import SumTable from './sum_table.js';
 
 
 class TrialBalancePage  {
@@ -321,7 +321,7 @@ TrialBalance(TERM).then((lines) => {
     book.save('残高試算表.xlsx');
 });
 */
-module.exports = async (term) => {
+export default async (term) => {
     let book = new Book(term);
     let {lines} = await TrialBalance(term);
     let trial_balance_page = new TrialBalancePage(book, term, lines);

@@ -1,9 +1,9 @@
-const models = require('../models');
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
-const Account = require('../libs/accounts');
-const AccountPage = require('./account_page');
-const Ledger = require('./ledger_page');
-const {Book} = require('./book');
+import Account from '../libs/accounts.js';
+import AccountPage from './account_page.js';
+import Ledger from './ledger_page.js';
+import {Book} from './book.js';
 
 const TERM=14;
 
@@ -21,7 +21,7 @@ Account.all2(TERM).then((accounts) => {
 });
 */
 
-module.exports = async (term) => {
+export default async (term) => {
     let book = new Book(term);
     let accounts = await Account.all2(term);
     let account_page = new AccountPage(book, accounts);

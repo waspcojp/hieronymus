@@ -1,8 +1,8 @@
-const CrossSlipDetails = require('../libs/crossslipdetails');
-const Account = require('../libs/accounts');
-const {Page} = require('./book');
-const {ledger_lines} = require('../libs/ledger');
-const {set_accounts} = require('../front/javascripts/cross-slip');
+import CrossSlipDetails from '../libs/crossslipdetails.js';
+import Account from '../libs/accounts.js';
+import {Page} from './book.js';
+import {ledger_lines} from '../libs/ledger.js';
+import {set_accounts} from '../front/javascripts/cross-slip.js';
 
 class LedgerPage{
     constructor(book, account, subAccount) {
@@ -421,7 +421,7 @@ class LedgerPage{
 
     }
 }
-module.exports = class {
+export default class {
     constructor(book, accounts) {
         this.book = book;
         this.accounts = accounts;

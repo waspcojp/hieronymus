@@ -1,7 +1,7 @@
-const Account = require('../libs/accounts');
-const {Book, Page} = require('./book');
+import Account from '../libs/accounts.js';
+import {Book, Page} from './book.js';
 
-module.exports = class {
+export default class {
     constructor(book, lines, accounts)    {
         this.accounts = accounts;
         this.book = book;

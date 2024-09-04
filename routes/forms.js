@@ -1,12 +1,12 @@
 import express from 'express';
 const router = express.Router();
 import {is_authenticated} from '../libs/user.js';
-import explanatory_journal from '../forms/explanatory_journal.mjs';
-import general_ledger from '../forms/general_ledger.mjs';
-import subsidiary_ledger from '../forms/subsidiary_ledger.mjs';
-import trial_balance from '../forms/trial_balance.mjs';
-import closing from '../forms/closing.mjs';
-import financial_statement from '../forms/financial_statement.mjs';
+import explanatory_journal from '../forms/explanatory_journal.js';
+import general_ledger from '../forms/general_ledger.js';
+import subsidiary_ledger from '../forms/subsidiary_ledger.js';
+import trial_balance from '../forms/trial_balance.js';
+import closing from '../forms/closing.js';
+import financial_statement from '../forms/financial_statement.js';
 
 router.get('/explanatory_journal/:term', is_authenticated, (req, res, next) => {
 	if (( req.session.user.accounting ) ||

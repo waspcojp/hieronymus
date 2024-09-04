@@ -1,4 +1,4 @@
-module.exports = class {
+export default class {
     constructor(n)  {
         this.n = n;
         this.sums = Array(n);

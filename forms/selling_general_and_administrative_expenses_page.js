@@ -1,8 +1,8 @@
-const {Book, Page} = require('./book');
-const SumTable = require('./sum_table');
-const {field, numeric} = require('../libs/parse_account_code');
+import {Book, Page} from './book.js';
+import SumTable from './sum_table.js';
+import {field, numeric} from '../libs/parse_account_code.js';
 
-module.exports = class {
+export default class {
     constructor(book, lines, accounts)    {
         this.accounts = accounts;
         this.book = book;

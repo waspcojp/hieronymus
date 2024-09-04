@@ -1,8 +1,8 @@
-const CrossSlipDetails = require('../libs/crossslipdetails');
-const Account = require('../libs/accounts');
-const {Page} = require('./book');
+import CrossSlipDetails from '../libs/crossslipdetails.js';
+import Account from '../libs/accounts.js';
+import {Page} from './book.js';
 
-module.exports = class {
+export default class {
     constructor(book, accounts) {
         this.book = book;
         this.accounts = accounts;
