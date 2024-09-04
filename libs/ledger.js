@@ -1,7 +1,7 @@
-const {dc, numeric} = require('./parse_account_code');
-const {find_account, find_sub_account_by_code, tax_class} = require('../front/javascripts/cross-slip');
+import {dc, numeric} from './parse_account_code.js';
+import {find_account, find_sub_account_by_code, tax_class} from '../front/javascripts/cross-slip.js';
 
-const   ledger_lines = (account_code, sub_account_code, remaining, details) => {
+export const ledger_lines = (account_code, sub_account_code, remaining, details) => {
     //console.log({remaining});
     let lines = [];
     let sums;
@@ -218,8 +218,4 @@ const   ledger_lines = (account_code, sub_account_code, remaining, details) => {
         sums: sums,
         pickup: pickup
     });
-};
-
-module.exports = {
-    ledger_lines: ledger_lines
 };

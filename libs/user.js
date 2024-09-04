@@ -1,11 +1,12 @@
-const models = require('../models');
-const bcrypt = require('bcrypt');
+import models from '../models/index.js';
+import bcrypt from 'bcrypt';
 const SALT_ROUNDS = 10;
 
-const passport = require('passport');
-const Local = require('passport-local').Strategy;
+import _passport from 'passport';
+import local from 'passport-local';
+const Local = local.Strategy;
 
-passport.use(new Local({
+_passport.use(new Local({
 		usernameField: 'user_name',
 		passwordField: 'password',
 		passReqToCallback: true,
@@ -32,17 +33,19 @@ passport.use(new Local({
 	})
 )
 
-passport.serializeUser((user, done) => {
+_passport.serializeUser((user, done) => {
 	//console.log('serialize:', user);
 	done(null, user);
 });
 
-passport.deserializeUser((user, done) => {
+_passport.deserializeUser((user, done) => {
 	//console.log('deserialize:', user);
 	done(null, user);
 });
 
-const	is_authenticated = (req, res, next) => {
+export const passport = _passport;
+
+export	const	is_authenticated = (req, res, next) => {
 	//console.log(req.session);
 
 	if ( req.isAuthenticated() ) {
@@ -52,7 +55,7 @@ const	is_authenticated = (req, res, next) => {
 	}
 }
 
-const	auth_user = (name, password) => {
+export	const	auth_user = (name, password) => {
 	return new Promise((done, fail) => {
 		models.User.findOne({
 			where: {
@@ -74,7 +77,7 @@ const	auth_user = (name, password) => {
 		});
 	});
 }
-const   passwd = (name, old_pass, new_pass) => {
+export const   passwd = (name, old_pass, new_pass) => {
     //console.log('passwd', user.name, old_pass, new_pass);
     return new Promise((done, fail) => {
         auth_user(name, old_pass).then((user) => {
@@ -90,7 +93,8 @@ const   passwd = (name, old_pass, new_pass) => {
     });
 }
 
-module.exports = {
+
+export default {
 	is_authenticated: is_authenticated,
 	auth_user: auth_user,
 	passwd: passwd,

@@ -1,7 +1,7 @@
-const models = require('../models');
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
 
-module.exports = class {
+export default class {
     static  async   all(fy, accountCode, subAccountCode) {
         //console.log(fy);
         let details = []

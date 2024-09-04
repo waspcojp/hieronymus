@@ -1,10 +1,8 @@
 const INPUT_FILE = './accounts.csv'
 
-const path = require('path');
-const fs = require('fs');
-const child_process = require('child_process');
+import child_process from 'child_process';
 
-const exec = (term) => {
+export const exec = (term) => {
   //let file = fs.readFileSync(INPUT_FILE, "utf-8");		// csv uft-8 encoded
   let file = child_process.execSync(`/usr/bin/iconv -f shift_jis -t utf-8 < ${INPUT_FILE}`, {	//	csv by Excel
     encoding: "utf-8"
@@ -108,6 +106,4 @@ const exec = (term) => {
   };
 }
 
-module.exports = {
-	exec: exec
-};
+export default exec;

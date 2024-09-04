@@ -1,4 +1,4 @@
-const models = require('../models');
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
 
 const	get_details = async (fy, account, sub_account) => {
@@ -70,7 +70,7 @@ const	get_details = async (fy, account, sub_account) => {
 				models.sequelize.literal('"CrossSlip"."year", "CrossSlip"."month", "CrossSlip"."day", "CrossSlip"."no", "CrossSlipDetail"."lineNo" ASC')
 			]
 		});
-		for ( i = 0; i < details.length; i ++ ) {
+		for ( let i = 0; i < details.length; i ++ ) {
 			ledger.push(details[i]);
 		}
 		mon.setMonth(mon.getMonth() + 1);
@@ -78,7 +78,7 @@ const	get_details = async (fy, account, sub_account) => {
 	return	(ledger)
 }
 
-module.exports = {
+export default {
 	get: (req, res, next) => {
 		let term =  req.params.term;
 		let account = req.params.account;

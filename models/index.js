@@ -1,12 +1,28 @@
-'use strict';
+import Account from './account.js';
+import AccountClass from './accountclass.js';
+import AccountRemaining from './accountremaining.js';
+import CrossSlip from './crossslip.js';
+import CrossSlipDetail from './crossslipdetail.js';
+import Customer from './customer.js';
+import FiscalYear from './fiscalyear.js';
+import Invoice from './invoice.js';
+import InvoiceDetail from './invoicedetail.js';
+import MonthlyLog from './monthlylog.js';
+import Product from './product.js';
+import Sticky from './sticky.js';
+import StickyStatus from './stickystatus.js';
+import SubAccount from './subaccount.js';
+import SubAccountRemaining from './subaccountremaining.js';
+import User from './user.js';
+import Voucher from './voucher.js';
+import VoucherFile from './voucherfile.js';
+import {Sequelize, DataTypes} from 'sequelize';
+import fs from 'fs';
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
-const db = {};
+
+const jsonData = JSON.parse(fs.readFileSync('config/config.json', 'utf-8'));
+const config = jsonData[env];
 
 let sequelize;
 if (config.use_env_variable) {
@@ -15,23 +31,34 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
+const models = {
+  Account: Account(sequelize, DataTypes),
+  AccountClass: AccountClass(sequelize, DataTypes),
+  AccountRemaining: AccountRemaining(sequelize, DataTypes),
+  CrossSlip: CrossSlip(sequelize, DataTypes),
+  CrossSlipDetail: CrossSlipDetail(sequelize, DataTypes),
+  Customer: Customer(sequelize, DataTypes),
+  FiscalYear: FiscalYear(sequelize, DataTypes),
+  Invoice: Invoice(sequelize, DataTypes),
+  InvoiceDetail: InvoiceDetail(sequelize, DataTypes),
+  MonthlyLog: MonthlyLog(sequelize, DataTypes),
+  Product: Product(sequelize, DataTypes),
+  Sticky: Sticky(sequelize, DataTypes),
+  StickyStatus: StickyStatus(sequelize, DataTypes),
+  SubAccount: SubAccount(sequelize, DataTypes),
+  SubAccountRemaining: SubAccountRemaining(sequelize, DataTypes),
+  User: User(sequelize, DataTypes),
+  Voucher: Voucher(sequelize, DataTypes),
+  VoucherFile: VoucherFile(sequelize, DataTypes)
+}
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
+Object.keys(models).forEach(key => {
+  if (models[key].associate) {
+    models[key].associate(models)
   }
-});
+})
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+models.sequelize = sequelize;
+models.Sequelize = Sequelize;
 
-module.exports = db;
+export default models;

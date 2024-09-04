@@ -1,24 +1,28 @@
-const express = require('express');
+import express from 'express';
 const app = express();
-const session = require('express-session');
-const FileStore = require('session-file-store')(session);
-const passport = require('passport');
-const multipart = require('connect-multiparty');
+import session from 'express-session';
+import fileStore from 'session-file-store';
+const FileStore = fileStore(session);
+import passport from 'passport';
+import multipart from 'connect-multiparty';
 
-const cors = require('cors');
-const sprightly = require('sprightly');
-const path = require('path');
+import cors from 'cors';
+import sprightly from 'sprightly';
+import path from 'path';
 
-const apiRouter = require('./routes/api');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const homeRouter = require('./routes/home');
-const formsRouter = require('./routes/forms');
-const customerRouter = require('./routes/customer');
-const voucherRouter = require('./routes/voucher');
-const {User, is_authenticated} = require('./libs/user');
+import apiRouter from './routes/api.js';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import homeRouter from './routes/home.js';
+import formsRouter from './routes/forms.js';
+import customerRouter from './routes/customer.js';
+import voucherRouter from './routes/voucher.js';
+import {is_authenticated} from './libs/user.js';
 
-global.env = require('./config/env');
+import env from './config/env.js';
+global.env = env;
+
+const __dirname = import.meta.dirname;
 
 app.use(logger('dev'));		//	アクセスログを見たい時には有効にする
 app.use(express.json());
@@ -48,7 +52,6 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 app.engine('spy', sprightly);
 app.set('views', './views');
@@ -82,6 +85,17 @@ app.use('/journal/:year/:month', is_authenticated, (req, res, next) => {
 app.use('/ledger/:term/:account', is_authenticated, (req, res, next) => {
 	if ( req.session.user.accounting )	{
 		res.render('ledger.spy', {
+			term: req.session.term,
+			account: req.params.account,
+			user: req.session.user.name
+		});
+	} else {
+		res.redirect('/home');
+	}
+});
+app.use('/changes/:term/:account', is_authenticated, (req, res, next) => {
+	if ( req.session.user.accounting )	{
+		res.render('changes.spy', {
 			term: req.session.term,
 			account: req.params.account,
 			user: req.session.user.name
@@ -168,4 +182,5 @@ app.use('/forms', formsRouter);
 app.use('/', homeRouter);
 app.use('/api', apiRouter);
 
-module.exports = app;
+export default app;
+

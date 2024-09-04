@@ -1,9 +1,8 @@
-const models = require('../models');
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
-const {is_authenticated} = require('../libs/user');
-const company = require('../config/company');
+import company from '../config/company.js';
 
-module.exports = {
+export default {
 	get: async (req, res, next) => {
 		let id =  req.params.id;
 		console.log('/api/invoicer/', id);

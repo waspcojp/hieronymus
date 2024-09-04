@@ -1,5 +1,4 @@
-'use strict';
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 const SALT_ROUNDS = 10;
 const NG_NAMES = [
 	'admin',
@@ -10,9 +9,9 @@ const NG_NAMES = [
 	'user'
 ];
 
-const {Model} = require('sequelize');
+import {Model} from 'sequelize';
 
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
 	class User extends Model  {
     	static  associate(models) {
       	// associations can be defined here

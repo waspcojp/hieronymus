@@ -1,8 +1,8 @@
-const models = require('../models');
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
-const Acc = require('../libs/parse_account_code.js');
+import Acc from '../libs/parse_account_code.js';
 
-module.exports = {
+export default {
 	get: async (req, res, next) => {
 		let account_code = req.params.code;
 

@@ -1,8 +1,8 @@
-const models = require('../models');
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
-const {passwd, passport, is_authenticated} = require('../libs/user');
+import {passwd, passport, is_authenticated} from '../libs/user.js';
 
-module.exports = {
+export default {
     list: (req, res, next) => {
         models.User.findAll({
             order: [

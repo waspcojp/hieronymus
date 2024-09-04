@@ -1,12 +1,21 @@
-const models = require('../models');
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
 
-module.exports = {
+export default {
 	get: async (req, res, next) => {
-		let term = req.params.term;
+		let term = parseInt(req.params.term);
 		let account = req.params.account;
 		let sub_account = req.params.sub_account;
 		let remaining;
+
+		if	( term === 0 )	{
+			let d = await models.FiscalYear.findOne({
+				order: [
+					['term', 'ASC']
+				]
+			});
+			term = d.term;
+		}
 
 		let account_rec = await models.Account.findOne({
 			where: {

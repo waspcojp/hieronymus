@@ -1,7 +1,6 @@
-const trial_balance = require('../libs/trial_balance.js');
+import trial_balance from '../libs/trial_balance.js';
 
-
-module.exports = {
+export default {
 	get: (req, res, next) => {
 		let term = req.params.term;
 

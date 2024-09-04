@@ -1,15 +1,16 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {is_authenticated, passport} = require('../libs/user');
-const models = require('../models');
+import {is_authenticated, passport} from '../libs/user.js';
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
-const pkg = require('../package.json');
-const VERSION = pkg.version;
 
 router.get('/logout', (req, res, next) => {
 	//console.log('logout', req.user);
 	req.session.destroy();
-	req.logout();
+	req.logout((err) => {
+		if (err) { return next(err); }
+    	res.redirect('/');
+	});
 	res.redirect('/login');
 });
 
@@ -85,4 +86,4 @@ router.get('/signup', (req, res, next) => {
 	});
 });
 
-module.exports = router;
+export default router;

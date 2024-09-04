@@ -1,21 +1,22 @@
-const path = require('path');
-const models = require('../models');
-const fs = require('fs/promises');
-const util = require('util');
-const Tempo = require('@formkit/tempo');
-const exec = util.promisify(require('child_process').exec);
+import path from 'path';
+import models from '../models/index.js';
+import fs from 'fs/promises';
+import util from 'util';
+import {format, parse} from '@formkit/tempo';
+import {exec} from 'child_process';
+const Exec = util.promisify(exec);
 
 const sequelize = models.sequelize;
 const config = sequelize.config;
 
 const backup = async () => {
     const backupDir = global.env.backup_dir || path.join(__dirname, '..');
-    const now = Tempo.format(new Date(), 'YYYYMMDDHHmmss');
+    const now = format(new Date(), 'YYYYMMDDHHmmss');
     const backupFilePath = path.join(backupDir, `${config.database}-${now}.dump`);
     const command = `PGPASSWORD='${config.password}' pg_dump -U ${config.username} -h ${config.host}  -p ${config.port} -b -f ${backupFilePath} ${config.database}`;
 
     console.log({command});
-    return  (exec(command));
+    return  (Exec(command));
 }
 
 const backups = async(req, res, next) => {
@@ -27,7 +28,7 @@ const backups = async(req, res, next) => {
             let m;
             if  ( m = ent.match(rex) )   {
                 let name = ent.split('.')[0];
-                let d = Tempo.parse(m[1], 'YYYYMMDDHHmmss');
+                let d = parse(m[1], 'YYYYMMDDHHmmss');
                 console.log(m[1], d.toLocaleString());
                 files.push(d);
             }
@@ -49,32 +50,32 @@ const backups = async(req, res, next) => {
 const restore = async(json) => {
     let date = new Date(json);
     //console.log({date});
-    const file = Tempo.format(date, 'YYYYMMDDHHmmss');
+    const file = format(date, 'YYYYMMDDHHmmss');
     const backupDir = global.env.backup_dir || path.join(__dirname, '..');
     const backupFilePath = path.join(backupDir, `${config.database}-${file}.dump`);
     //console.log({backupFilePath});
     let command = `PGPASSWORD='${config.password}' dropdb -U ${config.username} -h ${config.host} -p ${config.port} -f ${config.database}`;
     //console.log({command});
-    await exec(command);
+    await Exec(command);
     command = `PGPASSWORD='${config.password}' createdb -U ${config.username} -h ${config.host} -p ${config.port} ${config.database}`;
     //console.log({command});
-    await exec(command);
+    await Exec(command);
     command = `PGPASSWORD='${config.password}' psql -U ${config.username} -h ${config.host} -p ${config.port} ${config.database} < ${backupFilePath}`;
     //console.log({command});
-    await exec(command);
+    await Exec(command);
 }
 
 const remove = async(json) => {
     let date = new Date(json);
     console.log({date});
-    const file = Tempo.format(date, 'YYYYMMDDHHmmss');
+    const file = format(date, 'YYYYMMDDHHmmss');
     const backupDir = global.env.backup_dir || path.join(__dirname, '..');
     const backupFilePath = path.join(backupDir, `${config.database}-${file}.dump`);
     //console.log({backupFilePath});
     await fs.rm(backupFilePath);
 }
 
-module.exports = {
+export default {
     backups:backups,
     backup: async(req, res, next) => {
         backup().then(() =>  {

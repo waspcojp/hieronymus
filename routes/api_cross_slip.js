@@ -1,7 +1,7 @@
-const models = require('../models');
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
 
-module.exports = {
+export default {
 	get: async(req, res, next) => {
 		let year = req.params.year;
 		let month = req.params.month;

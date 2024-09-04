@@ -1,24 +1,28 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const journal = require('./api_journal');
-const ledger = require('./api_ledger');
-const account = require('./api_account');
-const sub_account = require('./api_sub_account');
-const remaining = require('./api_remaining');
-const trial_balance = require('./api_trial_balance');
-const customer = require('./api_customer');
-const voucher = require('./api_voucher');
-const user = require('./api_user');
-const invoice = require('./api_invoice');
-const admin = require('./api_admin');
+import fs from 'fs';
 
-//const account_classes = require('./api_account_classes');
-const cross_slip = require('./api_cross_slip');
-const cross_slip_detail = require('./api_cross_slip_detail');
+import journal from './api_journal.js';
+import ledger from './api_ledger.js';
+import account from './api_account.js';
+import sub_account from './api_sub_account.js';
+import remaining from './api_remaining.js';
+import trial_balance from './api_trial_balance.js';
+import customer from './api_customer.js';
+import voucher from './api_voucher.js';
+import user from './api_user.js';
+import invoice from './api_invoice.js';
+import admin from './api_admin.js';
+import changes from './api_changes.js';
 
-const models = require('../models');
+//import account_classes from './api_account_classes';
+import cross_slip from './api_cross_slip.js';
+import cross_slip_detail from './api_cross_slip_detail.js';
+import parseAccounts from '../libs/parse_accounts.js';
+
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
-const pkg = require('../package.json');
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
 const VERSION = pkg.version;
 
 router.post('/admin/backup', admin.backup);
@@ -46,6 +50,9 @@ router.get('/journal/:year/:month', journal.get);
 
 router.get('/ledger/:term/:account', ledger.get);
 router.get('/ledger/:term/:account/:sub_account', ledger.get);
+
+router.get('/changes/:term/:account', changes.get);
+router.get('/changes/:term/:account/:sub_account', changes.get);
 
 router.get('/remaining/:term/:account', remaining.get);
 router.get('/remaining/:term/:account/:sub_account', remaining.get);
@@ -95,7 +102,7 @@ router.get('/voucher/files/:id', voucher.files);
 router.get('/term/:year/:month', async (req, res, next) => {
 	let year = req.params.year;
 	let month = req.params.month;
-	fy = await models.FiscalYear.findOne({
+	let fy = await models.FiscalYear.findOne({
 		where: {
 			[Op.and]: {
 				startDate: {
@@ -115,7 +122,7 @@ router.get('/term/:term', async (req, res, next) => {
 	let term = parseInt(req.params.term);
 	console.log({term});
 	if	( term > 0 )	{
-		fy = await models.FiscalYear.findOne({
+		let fy = await models.FiscalYear.findOne({
 			where: {
 				term: term
 			}
@@ -142,7 +149,7 @@ router.get('/term', async (req, res, next) => {
 		res.json(lines);
 	});
 });
-const parseAccounts = require('../libs/parse_accounts');
+
 const createInitialAccount = async (term, t) => {
   const now = new Date();
   let account_classes = [];
@@ -246,4 +253,5 @@ router.post('/setup', async (req, res, next) => {
 router.get('/version', async (req, res, next) => {
 	res.json({version: VERSION});
 });
-module.exports = router;
+
+export default router;

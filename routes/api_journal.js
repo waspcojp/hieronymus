@@ -1,7 +1,7 @@
-const models = require('../models');
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
 
-module.exports = {
+export default {
 	get: async (req, res, next) => {
 		let year =  req.params.year;
 		let month =  req.params.month;
@@ -33,7 +33,7 @@ module.exports = {
 		});
 		//console.log('slips', slips);
 
-		for ( i = 0; i < slips.length; i ++ ) {
+		for ( let i = 0; i < slips.length; i ++ ) {
 			let slip = slips[i];
 			let details = await models.CrossSlipDetail.findAll({
 				where: {
@@ -64,8 +64,8 @@ module.exports = {
 				]
 			});
 			let lines = [];
-			for ( j = 0; j < details.length; j ++ ) {
-				detail = details[j];
+			for ( let j = 0; j < details.length; j ++ ) {
+				let detail = details[j];
 				lines.push({
 					id: detail.id,
 					lineNo: detail.lineNo,

@@ -1,8 +1,8 @@
-const models = require('../models');
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
-const {make_klass} = require( './parse_account_code');
+import {make_klass} from  './parse_account_code.js';
 
-module.exports = class {
+export default class {
     static accounts;
 
     static async  all () {

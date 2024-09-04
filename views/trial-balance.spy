@@ -5,13 +5,14 @@
 		<meta http-equiv="Content-Language" content="ja" />
 		<link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
 		<link rel="stylesheet" href="/style/style.css">
+		<link rel="stylesheet" href="/dist/common.css">
+		<script src="/dist/common.js" type="module"></script>
     	<link rel="icon" href="/public/favicon.ico" sizes="any">
-		<script defer src="/dist/common.js"></script>
 		<base href="/" />
 	</head>
 	<body class="layout-fixed" id="body"
 			term={{term}}>
 		<div class="wrapper" id="trial-balance"></div>
-		<script defer src="/dist/trial_balance.js"></script>
+		<script defer src="/dist/trial_balance.js" type="module"></script>
 	</body>
 </html>

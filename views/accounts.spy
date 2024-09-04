@@ -3,15 +3,15 @@
 	<head>
 		<title>勘定科目管理::Hieronymus</title>
 		<meta http-equiv="Content-Language" content="ja" />
-		<link rel="stylesheet" href="/style/style.css">
 		<link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="icon" href="/public/favicon.ico" sizes="any">
-		<script defer src="/dist/common.js"></script>
+		<link rel="stylesheet" href="/style/style.css">
+		<link rel="stylesheet" href="/dist/common.css">
+    	<link rel="icon" href="/public/favicon.ico" sizes="any">
 		<base href="/" />
 	</head>
 	<body class="layout-fixed" id="body"
 			term={{term}}>
 		<div class="wrapper" id="accounts"></div>
-		<script defer src="/dist/accounts.js"></script>
+		<script defer src="/dist/accounts.js" type="module"></script>
 	</body>
 </html>

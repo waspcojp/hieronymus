@@ -3,14 +3,14 @@
 	<head>
 		<title>{{year}}/{{month}}::Journal</title>
 		<link rel="stylesheet" href="/style/style.css">
+		<link rel="stylesheet" href="/dist/common.css">
 		<link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="icon" href="/public/favicon.ico" sizes="any">
-		<script defer src="/dist/common.js"></script>
+    	<link rel="icon" href="/public/favicon.ico" sizes="any">
 		<base href="/" />
 	</head>
 	<body class="layout-fixed" id="body"
 			term={{term}}>
 		<div class="wrapper" id="journal"></div>
-		<script defer src="/dist/journal.js"></script>
+		<script defer src="/dist/journal.js" type="module"></script>
 	</body>
 </html>

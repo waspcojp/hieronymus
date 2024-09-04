@@ -3,15 +3,16 @@
 	<head>
 		<title>取引先管理::Hieronymus</title>
 		<meta http-equiv="Content-Language" content="ja" />
-		<link rel="stylesheet" href="/style/style.css">
 		<link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="icon" href="/public/favicon.ico" sizes="any">
-		<script defer src="/dist/common.js"></script>
+		<link rel="stylesheet" href="/style/style.css">
+		<link rel="stylesheet" href="/dist/common.css">
+		<script src="/dist/common.js" type="module"></script>
+    	<link rel="icon" href="/public/favicon.ico" sizes="any">
 		<base href="/" />
 	</head>
 	<body class="layout-fixed" id="body"
 			term={{term}}>
 		<div class="wrapper" id="customer"></div>
-		<script defer src="/dist/customer.js"></script>
+		<script defer src="/dist/customer.js" type="module"></script>
 	</body>
 </html>

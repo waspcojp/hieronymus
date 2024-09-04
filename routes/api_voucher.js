@@ -1,7 +1,7 @@
-const models = require('../models');
-const fs = require('fs');
+import models from '../models/index.js';
+import fs from 'fs';
 const Op = models.Sequelize.Op;
-const Mime = require('mime');
+import Mime from 'mime';
 
 const getFiles = async (id) => {
 	let files = await models.VoucherFile.findAll({
@@ -29,10 +29,11 @@ const getFiles = async (id) => {
 	}
 	return	(files);
 }
-module.exports = {
+
+export default {
 	get: async (req, res, next) => {
 		let id =  req.params.id;
-		console.log('/api/voucher/', id);
+		//console.log('/api/voucher/', id);
 		let include = [
 				{
 					model: models.Customer,
@@ -48,7 +49,7 @@ module.exports = {
 		if	( !id )	{
 			let	order;
 			let where;
-			console.log('query', req.query);
+			//console.log('query', req.query);
 			if	( req.query.order )	{
 				order = req.params.order;
 			} else {
@@ -77,7 +78,7 @@ module.exports = {
 				let ymd = req.query.month.split('-');
 				let fromDate = new Date(parseInt(ymd[0]), parseInt(ymd[1]) - 1, 1);
 				let toDate = new Date(parseInt(ymd[0]), parseInt(ymd[1]), 1);
-				console.log('month', fromDate, toDate);
+				//console.log('month', fromDate, toDate);
 				where = {
 					[Op.or]: [
 						{
@@ -109,7 +110,7 @@ module.exports = {
 					]
 				};
 			} else {
-				fy = await models.FiscalYear.findOne({
+				let fy = await models.FiscalYear.findOne({
 					where: {
 						term: req.session.term
 					}
@@ -201,7 +202,7 @@ module.exports = {
 				let vouchers = [];
 				for	( let i = 0; i < _vouchers.length ; i += 1 )	{
 					let voucher = _vouchers[i].dataValues;
-					files = await getFiles(voucher.id);
+					let files = await getFiles(voucher.id);
 					voucher.files = files;
 					let details = await models.CrossSlipDetail.findAll({
 						where: {

@@ -1,9 +1,9 @@
-const models = require('../models');
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
-const Accounts = require('./accounts.js');
-const {numeric, dc} = require('./parse_account_code.js');
+import Accounts from './accounts.js';
+import {numeric, dc} from './parse_account_code.js';
 
-module.exports = async (term) => {
+export default async (term) => {
     let lines = [];
     let index = [];
 
@@ -13,7 +13,7 @@ module.exports = async (term) => {
         }
     });
 
-    accounts = await Accounts.all3(term);
+    let accounts = await Accounts.all3(term);
     for ( let i = 0; i < accounts.length; i += 1)   {
         let acc = accounts[i];
         let balance = numeric(acc.balance);     //  don't forget!!!
@@ -63,7 +63,7 @@ module.exports = async (term) => {
                     //lines[ix].debit += ( numeric(detail.debitAmount) - numeric(detail.debitTax) );
                 }
                 if ( detail.creditAccount ) {
-                    ix = index[detail.creditAccount];
+                    let ix = index[detail.creditAccount];
                     //console.log('ix', ix, detail);
                     lines[ix].credit += numeric(detail.creditAmount);
                     //lines[ix].credit += ( numeric(detail.creditAmount) - numeric(detail.creditTax) );
@@ -72,7 +72,7 @@ module.exports = async (term) => {
         }
         mon.setMonth(mon.getMonth() + 1);
     }
-    for ( line of lines )   {
+    for ( let line of lines )   {
         //console.log({line});
         if  ( line.code )   {
             if ( dc(line.code) == 'D' ) {

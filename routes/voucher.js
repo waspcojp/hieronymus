@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {is_authenticated} = require('../libs/user');
-const models = require('../models');
+import {is_authenticated} from '../libs/user.js';
+import models from '../models/index.js';
 const Op = models.Sequelize.Op;
 
 const home =  async (req, res, next) => {
@@ -38,4 +38,4 @@ router.get('/', is_authenticated, home);
 router.get('/file/:id', is_authenticated, file)
 router.get('/:term', is_authenticated, home);
 
-module.exports = router;
+export default router;

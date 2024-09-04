@@ -1,12 +1,12 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {is_authenticated} = require('../libs/user');
-const explanatory_journal = require('../forms/explanatory_journal');
-const general_ledger = require('../forms/general_ledger');
-const subsidiary_ledger = require('../forms/subsidiary_ledger');
-const trial_balance = require('../forms/trial_balance');
-const closing = require('../forms/closing');
-const financial_statement = require('../forms/financial_statement');
+import {is_authenticated} from '../libs/user.js';
+import explanatory_journal from '../forms/explanatory_journal.mjs';
+import general_ledger from '../forms/general_ledger.mjs';
+import subsidiary_ledger from '../forms/subsidiary_ledger.mjs';
+import trial_balance from '../forms/trial_balance.mjs';
+import closing from '../forms/closing.mjs';
+import financial_statement from '../forms/financial_statement.mjs';
 
 router.get('/explanatory_journal/:term', is_authenticated, (req, res, next) => {
 	if (( req.session.user.accounting ) ||
@@ -69,4 +69,4 @@ router.get('/financial_statement/:term', is_authenticated,(req, res, next) => {
 	}
 });
 
-module.exports = router;
+export default router;
