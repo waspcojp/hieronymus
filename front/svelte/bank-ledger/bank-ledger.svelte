@@ -25,8 +25,8 @@
 		{#if bank_list }
 		{#each bank_list.SubAccounts as bank}
 			<li class="nav-item">
-				{#if ( sub_account == bank.id )}
-				<a class="btn btn-outline-info"
+				{#if ( sub_account === bank.id )}
+				<a class="btn btn-info"
 					on:click={openBank}
 					href="#"
 					data-account={this_account}
@@ -34,7 +34,7 @@
 					{bank.name}
 				</a>
 				{:else}
-				<a class="btn btn-info"
+				<a class="btn btn-outline-info"
 					on:click={openBank}
 					href="#"
 					data-account={this_account}
@@ -151,8 +151,12 @@ export let user;
 let	bank_list;
 let	this_account;
 let	sub_account;
-let	slip;
-let	lines;
+let slip = {
+		year: 0,
+		month: 0,
+		lines: []
+	};
+let	lines = [];
 let	modal;
 let	accounts;
 let init;
@@ -166,59 +170,43 @@ const BANK_ACCOUNTS = [
 const openAccount = (event) => {
     event.preventDefault();
 	let dataset = event.currentTarget.dataset;
-	console.log('openBank');
+	//console.log('openBank');
 	this_account = dataset.account;
 	updateAccount(true);
 }
 const openBank = (event) => {
     event.preventDefault();
 	let dataset = event.currentTarget.dataset;
-	console.log('openAccount');
+	//console.log('openAccount');
 	this_account = dataset.account;
 	sub_account = dataset.id;
 	updateList(true);
 }
 onMount(() => {
-	console.log('onMount');
-});
-beforeUpdate(()	=> {
+	//console.log('onMount');
 	let args = location.pathname.split('/');
 	if	( !term )	{
 		term = parseInt(args[2]);
 		this_account = args[3];
 		sub_account = args[4];
 		
-		window.onpopstate = (event) => {
-			if	( window.history.state )	{
-				let	state = window.history.state;
-				term = state.term;
-				this_account = state.account;
-				sub_account = state.sub_account;
-				lines = undefined;
-				bank_list = undefined;
-			}
+	}
+	window.onpopstate = (event) => {
+		if	( window.history.state )	{
+			let	state = window.history.state;
+			term = state.term;
+			this_account = state.account;
+			sub_account = state.sub_account;
+			lines = undefined;
+			bank_list = undefined;
 		}
 	}
-	if	( !accounts )	{
-		axios.get('/api/accounts').then((result) => {
-			accounts = result.data;
-			set_accounts(accounts);
-		});
-	}
-	if	( !bank_list )	{
-		updateAccount();
-	}
-	if	( !lines)	{
-		lines = [];
-		updateList();
-	}
-	if	( !slip )	{
-		slip = {
-			year: 0,
-			month: 0,
-			lines: []
-		}
-	}
+	axios.get('/api/accounts').then((result) => {
+		accounts = result.data;
+		set_accounts(accounts);
+	});
+	updateAccount();
+	updateList();
 });
 
 const updateAccount = (forward) => {
@@ -239,14 +227,14 @@ const updateList = (forward) => {
 	if	( sub_account )	{
 		axios.get(`/api/remaining/${term}/${this_account}/${sub_account}`).then((result) => {
 			let remaining = result.data;
-			console.log('remaining', remaining);
+			//console.log('remaining', remaining);
 
 			axios.get(`/api/ledger/${term}/${this_account}/${sub_account}`).then((result) => {
 				let details = result.data;
 				let ret = ledger_lines(this_account, sub_account,
 												remaining, details);
 				lines = ret.lines;
-				console.log('lines', lines);
+				//console.log('lines', lines);
 			});
 			if	( forward )	{
 				window.history.pushState({
@@ -264,10 +252,10 @@ let openModal = false;
 afterUpdate(() => {
 	if	( !modal )	{
 		modal = new Modal(document.getElementById('cross-slip-modal'));
-		console.log('modal new')
+		//console.log('modal new')
 	}
 	if	( openModal )	{
-		console.log('accounts', accounts);
+		//console.log('accounts', accounts);
 		modal.show();
 		openModal = false;
 	}
@@ -276,7 +264,7 @@ afterUpdate(() => {
 const	openSlip = (event) => {
 	event.preventDefault();
 	let dataset = event.target.dataset;
-	console.log('openSlip', dataset);
+	//console.log('openSlip', dataset);
 	axios.get(`/api/cross_slip/${dataset.year}/${dataset.month}/${dataset.no}`).then((result) => {
 		let data = result.data;
 		slip = {
@@ -292,7 +280,7 @@ const	openSlip = (event) => {
 		};
 		openModal = true;
 		init = true;
-		console.log('slip', slip);
+		//console.log('slip', slip);
 	});
 }
 </script>
