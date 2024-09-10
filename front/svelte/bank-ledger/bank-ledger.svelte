@@ -183,7 +183,6 @@ const openBank = (event) => {
 	updateList(true);
 }
 onMount(() => {
-	//console.log('onMount');
 	let args = location.pathname.split('/');
 	if	( !term )	{
 		term = parseInt(args[2]);

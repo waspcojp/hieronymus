@@ -1,13 +1,13 @@
-const element_index = (element) => {
+export const element_index = (element) => {
 	return parseInt(element.id.match(/.*\[(\d+)\]/)[1]);
 }
-const element_dc = (element) => {
+export const element_dc = (element) => {
 	return element.id.split('-')[0];
 }
 
 let accounts;
 
-const numeric = (s) => {
+export const numeric = (s) => {
 	let ret;
 	let sign;
 
@@ -37,7 +37,7 @@ const numeric = (s) => {
 	return ret;
 }
 
-const find_account = (code) => {
+export const find_account = (code) => {
 	//console.log(`account [${code}]`);
 	let account = { name: '', key: ''};
 	if ( accounts ) {
@@ -50,7 +50,7 @@ const find_account = (code) => {
 	}
 	return account;
 }
-const find_sub_account = (account, code) => {
+export const find_sub_account = (account, code) => {
 	let sub_account = { name: '', key: ''};
 	
 	if	( ( account ) &&
@@ -65,7 +65,7 @@ const find_sub_account = (account, code) => {
 	return sub_account;
 }
 
-const find_sub_account_by_code = (account_code, code) => {
+export const find_sub_account_by_code = (account_code, code) => {
 	let sub_account = { name: '', key: ''};
 
 	let account = find_account(account_code);
@@ -81,7 +81,7 @@ const find_sub_account_by_code = (account_code, code) => {
 	return sub_account;
 }
 
-const find_tax_class = (ac, sub) => {
+export const find_tax_class = (ac, sub) => {
 	let tax = 0;
 	//console.log(ac, sub);
 	for ( let i = 0; i < accounts.length; i ++ ) {
@@ -105,11 +105,11 @@ const find_tax_class = (ac, sub) => {
 }
 
 
-const set_accounts = (arg) => {
+export const set_accounts = (arg) => {
 	accounts = arg;
 }
 
-const formatDate = (_date) => {
+export const formatDate = (_date) => {
 	let date;
 	if ( _date )	{
 		date = new Date(_date);
@@ -119,7 +119,7 @@ const formatDate = (_date) => {
 	}
 }
 
-const voucherType = (code) => {
+export const voucherType = (code) => {
 	if	( code )	{
 		switch	(code)	{
 		  case	1:
@@ -143,7 +143,7 @@ const voucherType = (code) => {
 	}
 }
 
-const salesTax = (tax_class, _amount) => {
+export const salesTax = (tax_class, _amount) => {
 	let amount = numeric(_amount);
 	let tax;
 	switch ( parseInt(tax_class) ) {
@@ -161,7 +161,27 @@ const salesTax = (tax_class, _amount) => {
 	return	(tax)
 }
 
-module.exports = {
+export const TAX_CLASS = [
+	[ '非課税', 0],
+	[ '内税',   1],
+	[ '外税',   2],
+	[ '別計算', 9]
+];
+
+export const tax_class = (taxClass) => {
+	switch(taxClass) {
+		case 0:
+			return ("");
+		case 1:
+			return ('内税');
+		case 2:
+			return ('外税');
+		case 9:
+			return ('別計算');
+	}
+	return ('');
+}
+export default {
 	set_accounts: set_accounts,
 	find_account: find_account,
 	find_sub_account: find_sub_account,
@@ -173,23 +193,7 @@ module.exports = {
 	formatDate: formatDate,
 	voucherType: voucherType,
 	sales_tax: salesTax,
-	tax_class: (taxClass) => {
-		switch(taxClass) {
-			case 0:
-				return ("");
-			case 1:
-				return ('内税');
-			case 2:
-				return ('外税');
-			case 9:
-				return ('別計算');
-		}
-		return ('');
-	},
-	TAX_CLASS: [
-		[ '非課税', 0],
-		[ '内税',   1],
-		[ '外税',   2],
-		[ '別計算', 9]
-	]
-};
+	tax_class: tax_class,
+	TAX_CLASS: TAX_CLASS
+}
+

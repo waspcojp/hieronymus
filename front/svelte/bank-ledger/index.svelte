@@ -43,6 +43,7 @@ let alert_level;
 let user = {};
 
 onMount(() => {
+    console.log('bank-ledger index onMount');
     user = axios.get('/api/user').then((res) => {
         user = res.data;
     });

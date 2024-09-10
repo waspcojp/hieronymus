@@ -1,13 +1,13 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import postcssUrl from 'postcss-url';
 
 const realPath = (name) => {
   return  path.resolve(__dirname, path.resolve('front/javascripts', name));
 }
 
 export default defineConfig({
+  cacheDir: 'node_modules/.vite-cache',
   root: path.resolve(__dirname, 'front/javascripts'),
   base: '/dist/',
   build: {
@@ -15,8 +15,8 @@ export default defineConfig({
     cssUrl: 'relative',
     rollupOptions: {
       input: {
-        home: realPath('home.js'),
         common: realPath('common.js'),
+        home: realPath('home.js'),
         accounts: realPath('accounts.js'),
         journal: realPath('journal.js'),
         ledger: realPath('ledger.js'),
@@ -26,14 +26,11 @@ export default defineConfig({
         'bank-ledger': realPath('bank-ledger.js'),
         index: realPath('index.js'),
         changes: realPath('changes.js'),
-/*
         setup: realPath('setup.js')
-*/
       },
       output: {
         entryFileNames: '[name].js',
         chunkFileNames: 'assets/[name].js',
-        //assetFileNames: '[name].[ext]'
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             return '[name].[ext]';  // CSSファイルを/dist/直下に配置
@@ -42,6 +39,9 @@ export default defineConfig({
         }
       },
     },
+  },
+  esbuild: {
+    minify: true
   },
   plugins: [
     svelte({

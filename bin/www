@@ -27,13 +27,13 @@ var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
- */
 
+*/
 app.listen(port);
 //server.listen(port, host);
 server.on('error', onError);
 server.on('listening', onListening);
-
+ 
 /**
  * Normalize a port into a number, string, or false.
  */

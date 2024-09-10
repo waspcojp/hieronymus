@@ -28,7 +28,6 @@
 
 <script>
 import axios from 'axios';
-import {numeric} from 'cross-slip';
 import AccountEntry from './account-entry.svelte';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();

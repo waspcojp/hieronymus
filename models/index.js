@@ -1,3 +1,4 @@
+// see https://zenn.dev/tatsuyasusukida/articles/sequelize-cjs-to-esm
 import Account from './account.js';
 import AccountClass from './accountclass.js';
 import AccountRemaining from './accountremaining.js';

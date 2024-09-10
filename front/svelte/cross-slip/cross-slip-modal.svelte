@@ -107,7 +107,7 @@
 </div>
 <script>
 
-import {numeric, voucherType} from 'cross-slip.js';
+import {numeric, voucherType} from '../../javascripts/cross-slip';
 import axios from 'axios';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();

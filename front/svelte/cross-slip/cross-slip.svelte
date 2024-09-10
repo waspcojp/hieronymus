@@ -153,7 +153,7 @@
 
 <script>
 import axios from 'axios';
-import {numeric, sales_tax, find_tax_class} from 'cross-slip.js';
+import {numeric, salesTax, find_tax_class} from '../../javascripts/cross-slip';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import Account from './account.svelte';
 import {field} from '../../../libs/parse_account_code';
@@ -205,7 +205,7 @@ const computeTax = (event) => {
       if  ( fy.taxIncluded )  {
 		    slip.lines[index].debitTax = 0;
       } else {
-		    slip.lines[index].debitTax = sales_tax(tax_class, slip.lines[index].debitAmount);
+		    slip.lines[index].debitTax = salesTax(tax_class, slip.lines[index].debitAmount);
       }
 	  }
   } else {
@@ -223,7 +223,7 @@ const computeTax = (event) => {
       if  ( fy.taxIncluded )  {
 		    slip.lines[index].creditTax = 0;
       } else {
-		    slip.lines[index].creditTax = sales_tax(tax_class, slip.lines[index].creditAmount);
+		    slip.lines[index].creditTax = salesTax(tax_class, slip.lines[index].creditAmount);
       }
 		}
 	}

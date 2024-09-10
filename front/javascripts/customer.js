@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
 import Customer from '../svelte/customer/index.svelte';

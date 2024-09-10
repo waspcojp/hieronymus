@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
 import Setup from '../svelte/setup/setup.svelte';

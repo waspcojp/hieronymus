@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
 import Ledger from '../svelte/ledger/index.svelte';

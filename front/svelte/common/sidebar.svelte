@@ -36,7 +36,14 @@
           残高試算表
         </a>
 			</li>
-    		<li class="nav-item">
+			<li class="nav-item">
+				<a class={pathname.match(/\/changes\//)  ? 'nav-link active': 'nav-link'}
+				    href="/changes/{term}/6000000">
+          <i class="bi bi-journal"></i>
+          推移表
+        </a>
+			</li>
+    	<li class="nav-item">
 				<a class={pathname.match(/\/voucher/)  ? 'nav-link active': 'nav-link'}
             href="/voucher/{term}">
           <i class="bi bi-archive-fill"></i>
@@ -94,8 +101,8 @@ let endDate;
 beforeUpdate(() => {
 	if	( !pathname )	{
     	pathname = location.pathname;
-        console.log('term', term);
-      console.log(pathname);
+      //console.log('term', term);
+      //console.log(pathname);
     	axios.get(`/api/term/${term}`).then((res) => {
         	let fy = res.data;
         	startDate = new Date(fy.startDate);

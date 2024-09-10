@@ -20,6 +20,7 @@ module.exports = {
 		voucher: './voucher.js',
 		'bank-ledger': './bank-ledger.js',
 		index: './index.js',
+		changes: './changes.js',
     	setup: './setup.js'
 	},
     output: {
@@ -115,6 +116,7 @@ module.exports = {
 	resolve: {
 		alias: {
 			path: "path-browserify",
+			'chart.js$': path.resolve(__dirname, 'node_modules/chart.js/dist/Chart.js')
 		},
 		modules: [
 			'node_modules',

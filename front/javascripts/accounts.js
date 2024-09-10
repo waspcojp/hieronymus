@@ -1,6 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap';
-
 import Accounts from '../svelte/accounts/index.svelte';
 
 let target = document.getElementById('body');

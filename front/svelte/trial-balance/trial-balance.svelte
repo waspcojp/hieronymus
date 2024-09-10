@@ -28,8 +28,8 @@ import axios from 'axios';
 
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import TrialBalanceList from './trial-balance-list.svelte';
-import {numeric} from 'cross-slip';
-import {dc} from 'parse_account_code';
+import {numeric} from '../../javascripts/cross-slip';
+import {dc} from '../../../libs/parse_account_code';
 
 let term;
 let lines;
@@ -40,7 +40,7 @@ beforeUpdate(() => {
 		lines = [];
 		axios.get(`/api/trial-balance/${term}`).then((result) => {
 			let data = result.data;
-			console.log('trial-balance update', data);
+			//console.log('trial-balance update', data);
 			let trial_balance = data;
 			let last_account = {};
 			for ( let i = 0; i < trial_balance.length; i ++ ) {
@@ -55,7 +55,7 @@ beforeUpdate(() => {
 					credit: numeric(account.credit),
 					code: account.code
 				};
-				console.log('new_line', new_line);
+				//console.log('new_line', new_line);
 				if ( dc(account.code) == 'D' ) {
 					new_line.balance = new_line.pickup + new_line.debit - new_line.credit;
 				} else {
@@ -80,7 +80,7 @@ beforeUpdate(() => {
 				}
 				last_account = account;	 
 			}
-			console.log('lines', lines);
+			//console.log('lines', lines);
 			lines = lines;
 		});
 	}
