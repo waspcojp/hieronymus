@@ -13,7 +13,7 @@ export default {
 			include: [{
 				model: models.SubAccount,
 				order: ['subAccountId', 'ASC'],
-				as: 'SubAccounts'
+				as: 'subAccounts'
 			}],
 		});
 		//console.log(account);
@@ -31,6 +31,7 @@ export default {
 		});
 	},
 	post: async(req, res, next) => {
+		let term = parseInt(req.params.term);
 		let new_account = await models.Account.create({
 			name: req.body.name,
 			key: req.body.key,
@@ -40,7 +41,7 @@ export default {
 			subAccountCount: 0
 		});
 		await models.AccountRemaining.create({
-			term: req.params.term,
+			term: term,
 			accountId: new_account.id,
 			debit: req.body.debit,
 			credit: req.body.credit,
@@ -52,6 +53,7 @@ export default {
 	},
 	update: async(req, res, next) => {
 		let sub_code = req.body.sub_code;
+		let term = parseInt(req.params.term);
 		let account = await models.Account.findOne({
 			where: {
 				accountCode: req.body.code
@@ -64,14 +66,14 @@ export default {
 		let rem = await models.AccountRemaining.findOne({
 			where: {
 				[Op.and]: {
-					term: req.params.term,
+					term: term,
 					accountId: account.id
 				}
 			}
 		});
 		if ( !rem ) {
 			rem = new models.AccountRemaining({
-				term: req.params.term,
+				term: term,
 				accountId: account.id
 			});
 		}

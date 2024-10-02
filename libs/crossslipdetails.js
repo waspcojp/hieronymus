@@ -27,10 +27,10 @@ export default class {
                     },
                     include: [{
                         model: models.CrossSlip,
-                        as: 'CrossSlip'
+                        as: 'crossSlip'
                     }],
                     order: [
-                        models.sequelize.literal('"CrossSlip"."year", "CrossSlip"."month", "CrossSlip"."day", "CrossSlip"."no", "CrossSlipDetail"."lineNo" ASC')
+                        models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "crossSlipDetail"."lineNo" ASC')
                     ]
                 }));
             } else {
@@ -47,10 +47,10 @@ export default class {
                     },
                     include: [{
                         model: models.CrossSlip,
-                        as: 'CrossSlip'
+                        as: 'crossSlip'
                     }],
                     order: [
-                        models.sequelize.literal('"CrossSlip"."year", "CrossSlip"."month", "CrossSlip"."day", "CrossSlip"."no", "CrossSlipDetail"."lineNo" ASC')
+                        models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "crossSlipDetail"."lineNo" ASC')
                     ]
                 }));
             }

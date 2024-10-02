@@ -131,9 +131,9 @@ const ready = (slips) => {
 				approvedAt: slip.approvedAt,
 				lineNo: line.lineNo,
 
-				debitAmount: line.debitAmount != null ? numeric(line.debitAmount).toLocaleString() : '',
+				debitAmount: line.debitAmount !== null ? numeric(line.debitAmount).toLocaleString() : '',
 				debitTax: line.debitTax != null ? numeric(line.debitTax).toLocaleString() : '',
-				creditAmount: line.creditAmount != null ? numeric(line.creditAmount).toLocaleString() : '',
+				creditAmount: line.creditAmount !== null ? numeric(line.creditAmount).toLocaleString() : '',
 				creditTax: line.creditTax != null ? numeric(line.creditTax).toLocaleString() : '',
 					 
 				debitAccount: find_account(line.debitAccount).name,

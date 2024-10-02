@@ -160,7 +160,7 @@ beforeUpdate(() => {
 			axios.get(`/api/voucher/files/${voucher.id}`).then((result) => {
 				files = result.data;
 			});
-			customerKey = voucher.Customer.name;
+			customerKey = voucher.customer.name;
 			voucher.amount = numeric(voucher.amount).toLocaleString();
 			voucher.tax = numeric(voucher.tax).toLocaleString();
 		} else {

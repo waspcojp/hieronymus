@@ -186,7 +186,7 @@ const	delete_ = (event) => {
 	try {
 		console.log('delete');
 		delete_voucher(voucher).then(() => {
-			clean_popup();
+			close_();
 		});
 	}
 	catch(e) {

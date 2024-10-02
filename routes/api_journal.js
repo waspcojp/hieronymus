@@ -3,8 +3,8 @@ const Op = models.Sequelize.Op;
 
 export default {
 	get: async (req, res, next) => {
-		let year =  req.params.year;
-		let month =  req.params.month;
+		let year =  parseInt(req.params.year);
+		let month =  parseInt(req.params.month);
 		//console.log('/api/journal/', year, month);
 		
 		let cross_slips = [];
@@ -102,7 +102,7 @@ export default {
 				lines: lines
 			});
 		}
-		//console.log(cross_slips);
+		//console.log(JSON.stringify(cross_slips, ' ', 2));
 		res.json(cross_slips);
 	},
 };

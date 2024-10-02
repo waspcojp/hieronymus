@@ -1,11 +1,12 @@
-import models from '../models';
+import models from '../models/index.js';
 
 const append_sub_accounts = async (account) => {
 
 	let code_len = account.code.length;
-	let field = account.code.substring(code_len - 8, code_len - 6);
-	let adding = account.code.substring(code_len - 5, code_len - 4);
+	let field = parseInt(account.code.substring(code_len - 8, code_len - 6));
+	let adding = parseInt(account.code.substring(code_len - 5, code_len - 4));
 
+	//console.log(field, adding);
 	let account_class = await models.AccountClass.findOne({
 		where: {
 			field: field,
@@ -13,9 +14,8 @@ const append_sub_accounts = async (account) => {
 		}
 	});
 	console.log(account_class);
-	let account_rec;
 
-	account_rec = await models.Account.findOne({
+	let account_rec = await models.Account.findOne({
 		where: {
 			accountCode: account.code
 		}
@@ -44,10 +44,10 @@ const append_sub_accounts = async (account) => {
 
 append_sub_accounts({
 	code: '7010000',
-	name: 'プラックス',
-	key: 'pulax',
+	name: 'TestTest',
+	key: 'test',
 	tax_class: 1,
-	term: 14,
+	term: 17,
 	balance: 0
 });
 

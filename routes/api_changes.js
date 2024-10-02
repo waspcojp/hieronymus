@@ -65,7 +65,7 @@ const	get_details = async (fy, account, sub_account) => {
 			include: [
 				{
 					model: models.CrossSlip,
-					as: 'CrossSlip',
+					as: 'crossSlip',
 				},
 				{
 					model: models.Voucher,
@@ -87,7 +87,7 @@ const	get_details = async (fy, account, sub_account) => {
 				}
 			],
 			order: [
-				models.sequelize.literal('"CrossSlip"."year", "CrossSlip"."month", "CrossSlip"."day", "CrossSlip"."no", "CrossSlipDetail"."lineNo" ASC')
+				models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "crossSlipDetail"."lineNo" ASC')
 			]
 		});
 		let change = {

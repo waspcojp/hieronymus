@@ -37,7 +37,7 @@ export default {
 		let body = req.body;
 		//console.log('body:', body);
 
-		fy = await models.FiscalYear.findOne({
+		let fy = await models.FiscalYear.findOne({
 			where: {
 				startDate: {
 					[Op.lte]: new Date(body.year, body.month - 1, 2)
@@ -48,7 +48,7 @@ export default {
 			}
 		});
 		//console.log('fy', fy);
-		ml = await models.MonthlyLog.findOne({
+		let ml = await models.MonthlyLog.findOne({
 			where: {
 				term: fy.term,
 				month: body.month

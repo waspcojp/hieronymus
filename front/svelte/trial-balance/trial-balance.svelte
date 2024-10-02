@@ -7,8 +7,8 @@
 		</ul>
 		<ul class="navbar-nav ms-auto">
 			<li class="nav-item">
-				<a href="/forms/trial_balance/{term}" download="残高試算表.xlsx">
-					残高試算表
+				<a href="/forms/trial_balance/{term}" download="残高試算表.xlsx" class="btn btn-primary">
+					残高試算表&nbsp;をダウンロード&nbsp;<i class="bi bi-download"></i>
 				</a>
 			</li>
 		</ul>
@@ -31,11 +31,14 @@ import TrialBalanceList from './trial-balance-list.svelte';
 import {numeric} from '../../javascripts/cross-slip';
 import {dc} from '../../../libs/parse_account_code';
 
-let term;
+export let term;
+export let user;
+export let alert;
+export let alert_level;
+
 let lines;
 
 beforeUpdate(() => {
-	term = location.pathname.split('/')[2];
 	if	( !lines )	{
 		lines = [];
 		axios.get(`/api/trial-balance/${term}`).then((result) => {

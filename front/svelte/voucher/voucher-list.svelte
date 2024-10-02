@@ -75,7 +75,7 @@
 					</a>
 				</td>
 				<td>
-					{line.Customer.name}
+					{line.customer.name}
 				</td>
 				<td>
 					{#if ( line.details.length > 0 ) }
@@ -99,15 +99,15 @@
 				</td>
 				<td>
 					{#if (	line.paymentDate &&
-							( line.details.length > 0 ) &&
+							 ( line.details.length > 0 ) &&
 							compDate(line.paymentDate,
-							line.details[0].CrossSlip.year,
-							line.details[0].CrossSlip.month,
-							line.details[0].CrossSlip.day) ) }
+							line.details[0].crossSlip.year,
+							line.details[0].crossSlip.month,
+							line.details[0].crossSlip.day) ) }
 					<a href="#"
-						data-year={line.details[0].CrossSlip.year}
-						data-month={line.details[0].CrossSlip.month}
-						data-no={line.details[0].CrossSlip.no}
+						data-year={line.details[0].crossSlip.year}
+						data-month={line.details[0].crossSlip.month}
+						data-no={line.details[0].crossSlip.no}
 						on:click={openSlip}>
 						{formatDate(line.paymentDate)}
 					</a>
@@ -136,7 +136,7 @@
 					{/each}
 				</td>
 				<td>
-					{line.update.name}
+					{line.updateUser.name}
 				</td>
 			</tr>
 			{/each}
@@ -185,7 +185,7 @@ const compDate = (date, year, month, day) => {
 }
 
 beforeUpdate(() => {
-	console.log('voucher-list beforeUpdate', term);
+	console.log('voucher-list beforeUpdate', term, vouchers);
 });
 
 const changeVoucherType = (event) => {

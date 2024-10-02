@@ -45,7 +45,7 @@ const	get_details = async (fy, account, sub_account) => {
 			include: [
 				{
 					model: models.CrossSlip,
-					as: 'CrossSlip',
+					as: 'crossSlip',
 				},
 				{
 					model: models.Voucher,
@@ -67,7 +67,7 @@ const	get_details = async (fy, account, sub_account) => {
 				}
 			],
 			order: [
-				models.sequelize.literal('"CrossSlip"."year", "CrossSlip"."month", "CrossSlip"."day", "CrossSlip"."no", "CrossSlipDetail"."lineNo" ASC')
+				models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "crossSlipDetail"."lineNo" ASC')
 			]
 		});
 		for ( let i = 0; i < details.length; i ++ ) {
@@ -80,9 +80,9 @@ const	get_details = async (fy, account, sub_account) => {
 
 export default {
 	get: (req, res, next) => {
-		let term =  req.params.term;
+		let term =  parseInt(req.params.term);
 		let account = req.params.account;
-		let sub_account = req.params.sub_account;
+		let sub_account = parseInt(req.params.sub_account);
 		
 		//console.log('/api/ledger/', term, account, sub_account);
 

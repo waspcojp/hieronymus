@@ -98,7 +98,7 @@ let pathname;
 let startDate = new Date();
 let endDate;
 
-beforeUpdate(() => {
+onMount(() => {
 	if	( !pathname )	{
     	pathname = location.pathname;
       //console.log('term', term);

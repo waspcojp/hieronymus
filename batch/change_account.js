@@ -1,5 +1,4 @@
-const models = require('../models');
-const  crossSlipDetails = require('../libs/crossslipdetails');
+import models from '../models/index.js';
 
 const   change_detail = (list) => {
     models.CrossSlipDetail.findAll().then((details) => {

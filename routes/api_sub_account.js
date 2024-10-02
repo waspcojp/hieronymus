@@ -13,7 +13,7 @@ export default {
 			include: [{
 				model: models.SubAccount,
 				order: ['subAccountId', 'ASC'],
-				as: 'SubAccounts'
+				as: 'subAccounts'
 			}],
 		});
 		//console.log(account);
@@ -51,6 +51,7 @@ export default {
 	update: async(req, res, next) => {
 		console.log(req.body);
 		let sub_code = req.body.sub_code;
+		let term = parseInt(req.params.term);
 		let account = await models.Account.findOne({
 			where: {
 				accountCode: req.body.code
@@ -71,14 +72,14 @@ export default {
 			let rem = await models.SubAccountRemaining.findOne({
 				where: {
 					[Op.and]: {
-						term: req.params.term,
+						term: term,
 						subAccountId: sub.id
 					}
 				}
 			});
 			if ( !rem ) {
 				rem = new models.SubAccountRemaining({
-					term: req.params.term,
+					term: term,
 					subAccountId: sub.id
 				});
 			}

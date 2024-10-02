@@ -1,4 +1,4 @@
-const models = require('../models');
+import models from '../models/index.js';
 
 const term = 14;
 
@@ -63,15 +63,17 @@ const run = async () => {
 								term: term
 							}
 						});
-						subAccounts.push({
-							name: sub.name,
-							key: sub.key,
-							subAccountCode: sub.subAccountCode,
-							taxClass: sub.taxClass,
-							debit: subr.debit,
-							credit: subr.credit,
-							balance: subr.balance
-						});
+						if	( subr )	{
+							subAccounts.push({
+								name: sub.name,
+								key: sub.key,
+								subAccountCode: sub.subAccountCode,
+								taxClass: sub.taxClass,
+								debit: subr.debit,
+								credit: subr.credit,
+								balance: subr.balance
+							});
+						}
 					})
 				);
 			}
@@ -81,22 +83,24 @@ const run = async () => {
 					term: term
 				}
 			});
-			dump.Account.push({
-				name: acc.name,
-				key: acc.key,
-				accountClass: {
-					field: account_class.field,
-					adding: account_class.adding
-				},
-				accountCode: acc.accountCode,
-				taxClass: acc.taxClass,
-				subAccountCount: acc.subAccountCount,
-				debit: account_remain.debit,
-				credit: account_remain.credit,
-				balance: account_remain.balance,
-				expiredAt: acc.expiredAt,
-				SubAccounts: subAccounts
-			});
+			if	( account_remain )	{
+				dump.Account.push({
+					name: acc.name,
+					key: acc.key,
+					accountClass: {
+						field: account_class.field,
+						adding: account_class.adding
+					},
+					accountCode: acc.accountCode,
+					taxClass: acc.taxClass,
+					subAccountCount: acc.subAccountCount,
+					debit: account_remain.debit,
+					credit: account_remain.credit,
+					balance: account_remain.balance,
+					expiredAt: acc.expiredAt,
+					SubAccounts: subAccounts
+				});
+			}
 		})
 	);
 

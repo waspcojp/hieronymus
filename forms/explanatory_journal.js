@@ -3,8 +3,6 @@ import models from '../models/index.js';
 const Op = models.Sequelize.Op;
 import Account from '../libs/accounts.js';
 
-const TERM=14;
-
 class ExplanatoryJournal {
     constructor(term) {
         this.book = new ExcelJS.Workbook();

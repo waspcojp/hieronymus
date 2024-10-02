@@ -37,8 +37,11 @@ export const numeric = (s) => {
 		if	( s == '' )	{
 			ret = 0;
 		} else
-		if ( typeof s == 'number' ) {
+		if ( typeof s === 'number' ) {
 			ret = s;
+		} else
+		if	( typeof s === 'object' )	{
+			ret = s.toNumber();
 		} else {
 			if ( s.length > 0 ) {
 				if ( s[0] == '-' ) {

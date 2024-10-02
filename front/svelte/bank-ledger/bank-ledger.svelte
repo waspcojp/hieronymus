@@ -23,7 +23,7 @@
 				</ul>
 			</li>
 		{#if bank_list }
-		{#each bank_list.SubAccounts as bank}
+		{#each bank_list.subAccounts as bank}
 			<li class="nav-item">
 				{#if ( sub_account === bank.id )}
 				<a class="btn btn-info"

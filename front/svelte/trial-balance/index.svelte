@@ -45,6 +45,7 @@ let user = {};
 onMount(() => {
     user = axios.get('/api/user').then((res) => {
         user = res.data;
+        //console.log({user});
     });
 })
 

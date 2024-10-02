@@ -17,10 +17,10 @@ export default async (term) => {
     for ( let i = 0; i < accounts.length; i += 1)   {
         let acc = accounts[i];
         let balance = numeric(acc.balance);     //  don't forget!!!
-        if  ( acc.SubAccounts > 0 )  {
+        if  ( acc.subAccounts > 0 )  {
             //console.log(acc);
-            for ( let j = 0 ; j < acc.SubAccounts.length; j += 1)   {
-                let sub = acc.SubAccounts[j];
+            for ( let j = 0 ; j < acc.subAccounts.length; j += 1)   {
+                let sub = acc.subAccounts[j];
                 balance += sub.balance ? sub.balance : 0;
             }
         }

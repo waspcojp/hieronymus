@@ -1,7 +1,7 @@
-import models from '../models';
+import models from '../models/index.js';
 
 export const append_account_class = async (args) => {
-	account_rec = await models.AccountClass.create({
+	let account_rec = await models.AccountClass.create({
 		major: args.major,
 		middle: args.middle,
 		minor: args.minor,

@@ -37,11 +37,11 @@ export default {
 		let include = [
 				{
 					model: models.Customer,
-					as: 'Customer'
+					as: 'customer'
 				},
 				{
 					model: models.User,
-					as: 'update'
+					as: 'updateUser'
 				}
 			];
 
@@ -217,7 +217,7 @@ export default {
 						include: [
 							{
 								model: models.CrossSlip,
-								as: 'CrossSlip'
+								as: 'crossSlip'
 							}
 						]
 					});
@@ -255,11 +255,7 @@ export default {
 		body.updatedBy = req.session.user.id;
 		let id = req.params.id ? req.params.id : body.id;
 
-		let voucher = await models.Voucher.findOne({
-			where: {
-				id: id
-			}
-		});
+		let voucher = await models.Voucher.findByPk(id)
 		if	( voucher )	{
 			voucher.set(body);
 			voucher.save().then(() => {
@@ -271,11 +267,7 @@ export default {
 		let body = req.body;
 		let id = req.params.id ? req.params.id : body.id;
 
-		let voucher = await models.Voucher.findOne({
-			where: {
-				id: id
-			}
-		});
+		let voucher = await models.Voucher.findByPk(id);
 		if	( voucher )	{
 			voucher.destroy().then(() => {
 				res.json({
@@ -284,7 +276,7 @@ export default {
 		}
 	},
 	upload: (req, res, next) => {
-		let voucher_id = req.params.id;
+		let voucher_id = parseInt(req.params.id);
 		let name = req.files.file.name;
 		let tmp_name = req.files.file.path;
 		let body = fs.readFileSync(tmp_name);
@@ -307,7 +299,7 @@ export default {
 		});
 	},
 	files: async (req, res, next) => {
-		let id =  req.params.id;
+		let id =  parseInt(req.params.id);
 		console.log('/api/voucher/files', id);
 		if	( id )	{
 			let files = await getFiles(id);
@@ -316,11 +308,7 @@ export default {
 	},
 	bind: (req, res, next) => {
 		let	body = req.body;
-		models.VoucherFile.findOne({
-			where: {
-				id: body.id
-			}
-		}).then((file) => {
+		models.VoucherFile.findByPk(body.id).then((file) => {
 			file.voucherId = body.voucherId;
 			file.save().then(() => {
 				res.json({
@@ -335,13 +323,9 @@ export default {
 		})
 	},
 	deleteFile: (req, res, next) => {
-		let id = req.body.id;
+		let id = parseInt(req.body.id);
 		console.log('deleteFile', id);
-		models.VoucherFile.findOne({
-			where: {
-				id: id
-			}
-		}).then((file) => {
+		models.VoucherFile.findByPk(id).then((file) => {
 			file.destroy().then(() => {
 				res.json({
 					code: 0

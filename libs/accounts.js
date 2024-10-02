@@ -73,7 +73,7 @@ export default class {
 		let	lines = [];
 		for	( let i = 0; i < accountClasses.length ; i ++ )	{
 			let acl = accountClasses[i];
-			if	( acl.Accounts.length == 0 )	{
+			if	( acl.accounts.length === 0 )	{
 				lines.push({
 					major_name: acl.major,
 					middle_name: acl.middle,
@@ -82,12 +82,12 @@ export default class {
 					acl_code: make_klass(acl.field, acl.adding)
 				});
 			} else
-			for	( let j = 0; j < acl.Accounts.length; j ++ )	{
-				let acc = acl.Accounts[j];
-				if ( acc.SubAccounts.length > 0 ) {
+			for	( let j = 0; j < acl.accounts.length; j ++ )	{
+				let acc = acl.accounts[j];
+				if ( acc.subAccounts.length > 0 ) {
 					let sub_lines = [];
-					for ( let j = 0; j < acc.SubAccounts.length; j ++ ) {
-						let suba = acc.SubAccounts[j];
+					for ( let j = 0; j < acc.subAccounts.length; j ++ ) {
+						let suba = acc.subAccounts[j];
 						let rem = await models.SubAccountRemaining.findOne({
 							where: {
 								[Op.and]: {

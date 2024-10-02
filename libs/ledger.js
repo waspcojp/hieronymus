@@ -175,11 +175,11 @@ export const ledger_lines = (account_code, sub_account_code, remaining, details)
                             find_sub_account_by_code(otherAccount, otherSubAccount).taxClass :
                             find_account(otherAccount).taxClass;
         lines.push({
-            year: detail.CrossSlip.year,
-            month: detail.CrossSlip.month,
-            day: detail.CrossSlip.day,
-            approvedAt: detail.CrossSlip.approvedAt,
-            no: detail.CrossSlip.no,
+            year: detail.crossSlip.year,
+            month: detail.crossSlip.month,
+            day: detail.crossSlip.day,
+            approvedAt: detail.crossSlip.approvedAt,
+            no: detail.crossSlip.no,
 
             accountCode: account_code,
             subAccountCode: thisSubAccount,

@@ -14,7 +14,7 @@
   </a>
   {/if}
 </nav>
-{#if (account && (account.SubAccounts.length > 0))}
+{#if (account && (account.subAccounts.length > 0))}
 <div class="d-flex justify-content-between mb-2">
   <div>
 	<SubAccountSelect

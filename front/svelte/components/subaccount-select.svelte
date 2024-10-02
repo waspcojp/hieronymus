@@ -1,5 +1,5 @@
 <ul class="nav">
-  {#each account.SubAccounts as sub}
+  {#each account.subAccounts as sub}
     <li class="nav-item pe-2">
       <a class="btn {sub.subAccountCode === sub_account_code ? ' btn-primary disabled' : 'btn-outline-primary'}"
           href={`${href}/${account.accountCode}/${sub.subAccountCode}`}>
