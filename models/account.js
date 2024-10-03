@@ -11,10 +11,14 @@ export default (sequelize, DataTypes) => {
 			this.hasMany(models.SubAccount, {
 				foreignKey: 'accountId',
 				sourceKey: 'id',
+				as: 'subAccounts'
 			});
 			this.hasOne(models.AccountClass, {
 				foreignKey: 'id',
 				sourceKey: 'accountClassId',
+				as: 'accountClass',
+				onDelete: 'cascade',
+				onUpdate: 'cascade'
 			});
 		}
 	};

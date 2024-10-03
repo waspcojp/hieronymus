@@ -22,15 +22,15 @@ const	get_details = async (fy, account, sub_account) => {
 							creditSubAccount: sub_account
 						}
 					],
-					'$CrossSlip.year$': mon.getFullYear(),
-					'$CrossSlip.month$': mon.getMonth() + 1
+					'$crossSlip.year$': mon.getFullYear(),
+					'$crossSlip.month$': mon.getMonth() + 1
 				}
 			};
 		} else {
 			where = {
 					[Op.and]: {
-						'$CrossSlip.year$': mon.getFullYear(),
-						'$CrossSlip.month$': mon.getMonth() + 1,
+						'$crossSlip.year$': mon.getFullYear(),
+						'$crossSlip.month$': mon.getMonth() + 1,
 						[Op.or]: {
 							debitAccount: account,
 							creditAccount: account
@@ -67,7 +67,7 @@ const	get_details = async (fy, account, sub_account) => {
 				}
 			],
 			order: [
-				models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "crossSlipDetail"."lineNo" ASC')
+				models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "CrossSlipDetail"."lineNo" ASC')
 			]
 		});
 		for ( let i = 0; i < details.length; i ++ ) {

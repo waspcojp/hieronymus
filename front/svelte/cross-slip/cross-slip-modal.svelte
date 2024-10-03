@@ -59,7 +59,7 @@
 								{voucherType(line.type)}
 							</td>
 							<td>
-								{line.Customer.name}
+								{line.customer.name}
 							</td>
 							<td class="number">
 								{numeric(line.amount).toLocaleString()}

@@ -21,8 +21,8 @@ export default class {
                                     creditSubAccount: subAccountCode
                                 }
                             ],
-                            '$CrossSlip.year$': mon.getFullYear(),
-                            '$CrossSlip.month$': mon.getMonth() + 1
+                            '$crossSlip.year$': mon.getFullYear(),
+                            '$crossSlip.month$': mon.getMonth() + 1
                         },
                     },
                     include: [{
@@ -30,15 +30,15 @@ export default class {
                         as: 'crossSlip'
                     }],
                     order: [
-                        models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "crossSlipDetail"."lineNo" ASC')
+                        models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "CrossSlipDetail"."lineNo" ASC')
                     ]
                 }));
             } else {
                 details = details.concat( await models.CrossSlipDetail.findAll({
                     where: {
                         [Op.and]: {
-                            '$CrossSlip.year$': mon.getFullYear(),
-                            '$CrossSlip.month$': mon.getMonth() + 1,
+                            '$crossSlip.year$': mon.getFullYear(),
+                            '$crossSlip.month$': mon.getMonth() + 1,
                             [Op.or]: {
                                 debitAccount: accountCode,
                                 creditAccount: accountCode
@@ -50,7 +50,7 @@ export default class {
                         as: 'crossSlip'
                     }],
                     order: [
-                        models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "crossSlipDetail"."lineNo" ASC')
+                        models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "CrossSlipDetail"."lineNo" ASC')
                     ]
                 }));
             }

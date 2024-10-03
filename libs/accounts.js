@@ -57,16 +57,20 @@ export default class {
 			order: [
 				['field', 'ASC'],
 				['adding', 'ASC'],
-				[models.Account, 'accountCode', 'ASC']
 			],
 			include: [{
 				model: models.Account,
+				as: 'accounts',
 				include: [{
 						model: models.SubAccount,
+						as: 'subAccounts',
 						order: [
 							['subAccountCode', 'ASC']
 						]
 					}
+				],
+				order: [
+					['accountCode', 'ASC']
 				]
 			}]
 		});
@@ -170,19 +174,21 @@ export default class {
 			],
 			include: [{
 				model: models.SubAccount,
-				order: ['subAccountCode', 'ASC']
+				order: ['subAccountCode', 'ASC'],
+				as: 'subAccounts'
 			}, {
-				model: models.AccountClass
+				model: models.AccountClass,
+				as: 'accountClass'
 			}]
 		});
 		//console.log(JSON.stringify(accounts,null,2));
 		let lines = [];
 		for ( let i = 0; i < accounts.length; i ++ ) {
 			let acc = accounts[i];
-			if ( acc.SubAccounts.length > 0 ) {
+			if ( acc.subAccounts.length > 0 ) {
 				let sub_lines = [];
-				for ( let j = 0; j < acc.SubAccounts.length; j ++ ) {
-					let suba = acc.SubAccounts[j];
+				for ( let j = 0; j < acc.subAccounts.length; j ++ ) {
+					let suba = acc.subAccounts[j];
 					let rem = await models.SubAccountRemaining.findOne({
 						where: {
 							[Op.and]: {
@@ -212,9 +218,9 @@ export default class {
 				});
 				lines.push({
 					id: acc.id,
-					major_name: acc.AccountClass.major,
-					middle_name: acc.AccountClass.middle,
-					minor_name: acc.AccountClass.minor,
+					major_name: acc.accountClass.major,
+					middle_name: acc.accountClass.middle,
+					minor_name: acc.accountClass.minor,
 					key: acc.key,
 					name: acc.name,
 					code: acc.accountCode,
@@ -236,9 +242,9 @@ export default class {
 				//console.log('remaining', rem);
 				lines.push({
 					id: acc.id,
-					major_name: acc.AccountClass.major,
-					middle_name: acc.AccountClass.middle,
-					minor_name: acc.AccountClass.minor,
+					major_name: acc.accountClass.major,
+					middle_name: acc.accountClass.middle,
+					minor_name: acc.accountClass.minor,
 					key: acc.key,
 					name: acc.name,
 					code: acc.accountCode,

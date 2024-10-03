@@ -49,7 +49,7 @@ export default {
 		if	( !id )	{
 			let	order;
 			let where;
-			//console.log('query', req.query);
+			console.log('query', req.query);
 			if	( req.query.order )	{
 				order = req.params.order;
 			} else {
@@ -199,6 +199,7 @@ export default {
 				include: include,
 				distinct: true
 			}).then( async(_vouchers) => {
+				//console.log('_vouchers', _vouchers);
 				let vouchers = [];
 				for	( let i = 0; i < _vouchers.length ; i += 1 )	{
 					let voucher = _vouchers[i].dataValues;

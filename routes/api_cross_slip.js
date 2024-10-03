@@ -124,7 +124,7 @@ export default {
 						}
 						slip.save();
 		
-						details = await models.CrossSlipDetail.findAll({
+						let details = await models.CrossSlipDetail.findAll({
 							where: {
 								crossSlipId: slip.id
 							}
@@ -175,16 +175,6 @@ export default {
 				}
 			});
 			if	( !slip.approvedAt )	{
-				//console.log('delete', slip);
-				details = await models.CrossSlipDetail.findAll({
-					where: {
-						crossSlipId: slip.id
-					}
-				});
-				for ( let i = 0; i < details.length; i ++ ) {
-					//console.log('delete', details[i]);
-					await details[i].destroy();
-				}
 				await slip.destroy();
 				res.json({
 					code: 0,

@@ -11,18 +11,23 @@ export default (sequelize, DataTypes) => {
 			this.hasOne(models.CrossSlip, {
 				sourceKey: 'crossSlipId',
 				foreignKey: 'id',
-				as: 'CrossSlip',
-				onDelete: 'CASCADE'
+				as: 'crossSlip',
+				onDelete: 'cascade',
+				onUpdate: 'cascade'
 			});
 			this.hasOne(models.Voucher, {
 				sourceKey: 'debitVoucherId',
 				foreignKey: 'id',
-				as: 'debitVoucher'
+				as: 'debitVoucher',
+				onDelete: 'SET NULL',
+				onUpdate: 'cascade'
 			});
 			this.hasOne(models.Voucher, {
 				sourceKey: 'creditVoucherId',
 				foreignKey: 'id',
-				as: 'creditVoucher'
+				as: 'creditVoucher',
+				onDelete: 'SET NULL',
+				onUpdate: 'cascade'
 			});
 
 		}

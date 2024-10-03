@@ -42,15 +42,15 @@ const	get_details = async (fy, account, sub_account) => {
 							creditSubAccount: sub_account
 						}
 					],
-					'$CrossSlip.year$': mon.getFullYear(),
-					'$CrossSlip.month$': mon.getMonth() + 1
+					'$crossSlip.year$': mon.getFullYear(),
+					'$crossSlip.month$': mon.getMonth() + 1
 				}
 			};
 		} else {
 			where = {
 					[Op.and]: {
-						'$CrossSlip.year$': mon.getFullYear(),
-						'$CrossSlip.month$': mon.getMonth() + 1,
+						'$crossSlip.year$': mon.getFullYear(),
+						'$crossSlip.month$': mon.getMonth() + 1,
 						[Op.or]: {
 							debitAccount: account,
 							creditAccount: account
@@ -66,28 +66,10 @@ const	get_details = async (fy, account, sub_account) => {
 				{
 					model: models.CrossSlip,
 					as: 'crossSlip',
-				},
-				{
-					model: models.Voucher,
-					required: false,
-					as: 'debitVoucher',
-					include: [{
-						model: models.VoucherFile,
-						as: 'files'
-					}]
-				},
-				{
-					model: models.Voucher,
-					required: false,
-					as: 'creditVoucher',
-					include: [{
-						model: models.VoucherFile,
-						as: 'files'
-					}]
 				}
 			],
 			order: [
-				models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "crossSlipDetail"."lineNo" ASC')
+				models.sequelize.literal('"crossSlip"."year", "crossSlip"."month", "crossSlip"."day", "crossSlip"."no", "CrossSlipDetail"."lineNo" ASC')
 			]
 		});
 		let change = {

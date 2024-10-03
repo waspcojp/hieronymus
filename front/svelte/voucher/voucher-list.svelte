@@ -80,9 +80,9 @@
 				<td>
 					{#if ( line.details.length > 0 ) }
 					<a href="#" class="link-primary"
-						data-year={line.details[0].CrossSlip.year}
-						data-month={line.details[0].CrossSlip.month}
-						data-no={line.details[0].CrossSlip.no}
+						data-year={line.details[0].crossSlip.year}
+						data-month={line.details[0].crossSlip.month}
+						data-no={line.details[0].crossSlip.no}
 						on:click={openSlip}>
 						{formatDate(line.issueDate)}
 					</a>

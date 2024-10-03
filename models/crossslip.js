@@ -16,12 +16,16 @@ export default (sequelize, DataTypes) => {
 			this.hasOne(models.User, {
 				foreignKey: 'id',
 				sourceKey: 'createdBy',
-				as: 'creater'
+				as: 'creater',
+				onDelete: 'RESTRICT',
+				onUpdate: 'CASCADE'
 			});
 			this.hasOne(models.User, {
 				foreignKey: 'id',
 				sourceKey: 'approvedBy',
-				as: 'approver'
+				as: 'approver',
+				onDelete: 'RESTRICT',
+				onUpdate: 'CASCADE'
 			});
 		}
 	};

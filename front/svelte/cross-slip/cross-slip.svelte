@@ -365,7 +365,7 @@ const bindVoucher = (i, voucher_id) => {
 			detail.creditTax = voucher.tax;
 			break;
 		}
-		slip.lines[i].application2 = voucher.Customer.name;
+		slip.lines[i].application2 = voucher.customer.name;
 		slip.lines[i].debitAmount = detail.debitAmount != null ? numeric(detail.debitAmount).toLocaleString() : '';
 		slip.lines[i].debitTax = detail.debitTax != null ? numeric(detail.debitTax).toLocaleString() : '';
 		slip.lines[i].creditAmount = detail.creditAmount != null ? numeric(detail.creditAmount).toLocaleString() : '';

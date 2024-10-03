@@ -8,10 +8,12 @@ export default (sequelize, DataTypes) => {
 		 * The `models/index` file will call this method automatically.
 		 */
 		static associate(models) {
-			// define association here
 			this.hasMany(models.Account, {
 				foreignKey: 'accountClassId',
-				sourceKey: 'id'
+				sourceKey: 'id',
+				as: 'accounts',
+				onDelete: 'cascade',
+				onUpdate: 'cascade'
 			});
 		}
 	};

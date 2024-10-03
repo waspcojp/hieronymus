@@ -10,16 +10,18 @@ export default (sequelize, DataTypes) => {
     static associate(models) {
 			this.hasOne(models.Customer, {
 				foreignKey: 'id',
-				sourceKey: 'customerId'
+				sourceKey: 'customerId',
+        as: 'customer'
 			});
 			this.hasOne(models.User, {
 				foreignKey: 'id',
-				sourceKey: 'createdBy'
+				sourceKey: 'createdBy',
+        as: 'createUser'
 			});
 			this.hasOne(models.User, {
 				foreignKey: 'id',
 				sourceKey: 'updatedBy',
-        as: 'update'
+        as: 'updateUser'
 			});
       this.hasMany(models.VoucherFile, {
         foreignKey: 'voucherId',
