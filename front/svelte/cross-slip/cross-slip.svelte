@@ -51,6 +51,7 @@
 				</th>
 			</thead>
 			<tbody id="cross-slip">
+				{#if slip}
 				{#each slip.lines as line, i}
 				<tr class=""
 					on:drop|preventDefault={onDrop}
@@ -124,6 +125,7 @@
 					</td>
 				</tr>
 				{/each}
+				{/if}
 				<tr>
 					<td>
 					</td>
@@ -172,7 +174,7 @@ const computeSum = () => {
 	let	debit_tax = 0;
 	let	credit_amount = 0;
 	let	credit_tax = 0;
-		 
+
 	for ( let i = 0; i < slip.lines.length ; i ++ ) {
 		debit_amount += numeric(slip.lines[i].debitAmount);
 		debit_tax += numeric(slip.lines[i].debitTax);
@@ -398,9 +400,11 @@ beforeUpdate(() => {
 	//console.log('sums', sums);
 	if	( init )	{
 		_init = [];
-		for	( let i = 0; i < slip.lines.length; i ++ )	{
-			_init.push(false);
-		}
+    if  ( slip.lines )  {
+		  for	( let i = 0; i < slip.lines.length; i ++ )	{
+  			_init.push(false);
+	  	}
+    }
 	}
 });
 afterUpdate(() => {

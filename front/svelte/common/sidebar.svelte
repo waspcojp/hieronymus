@@ -47,7 +47,7 @@
 				<a class={pathname.match(/\/voucher/)  ? 'nav-link active': 'nav-link'}
             href="/voucher/{term}">
           <i class="bi bi-archive-fill"></i>
-          証票管理
+          証憑管理
         </a>
 			</li>
 			<li class="nav-item">

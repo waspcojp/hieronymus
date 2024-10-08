@@ -139,7 +139,7 @@ const onDragStart = (event) => {
 const onDragEnd = (event) => {
 
 }
-beforeUpdate(() => {
+onMount(() => {
 	//console.log('beforeUpdate cross-slip-modal', slip);
   if  ( !fy ) {
     axios(`/api/term/${term}`).then((result) => {

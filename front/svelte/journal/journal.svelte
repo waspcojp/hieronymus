@@ -68,8 +68,8 @@ export let term;
 let year;
 let month;
 let fy;
-let slip;
-let dates;
+let slip = { lines: []};
+let dates = [];
 let modal;
 let accounts;
 let	sums;
@@ -157,67 +157,66 @@ const ready = (slips) => {
 	//console.log('lines', lines);
 }
 
-beforeUpdate(() => {
-	console.log('journal beforeUpdate');
+const setupDates = () => {
+	dates = [];
+	axios.get(`/api/term/${year}/${month}`).then((result) => {
+		fy = result.data;
+		term = fy.term;
+		for ( let mon = new Date(fy.startDate); mon < new Date(fy.endDate); ) {
+			dates.push({
+				year: mon.getFullYear(),
+				month: mon.getMonth()+1
+			});
+			mon.setMonth(mon.getMonth() + 1);
+		}
+		dates = dates;
+	});
+	console.log('dates', dates);
+	window.onpopstate = (event) => {
+		if	( window.history.state )	{
+			let	state = window.history.state;
+			year = state.year;
+			month = state.month;
+		} else {
+			let arg = location.pathname.split('/');
+			year = arg[2];
+			month = arg[3];
+		}
+		console.log('date', year, month);
+		updateList();
+	}
+}
+
+const setupAccount = () => {
+	accounts = [];
+	axios.get(`/api/accounts`).then((res) => {
+		accounts = res.data;
+		set_accounts(accounts);
+	}).then(() => {
+		axios.get(`/api/journal/${year}/${month}`).then((result) => {
+			slips = result.data;
+			ready(slips);
+		});
+	});
+}
+
+onMount(() => {
+	console.log('journal onMount');
 	let args = location.pathname.split('/');
 	year = args[2];
 	month = args[3];
-	if	( !dates )	{
-		dates = [];
-		axios.get(`/api/term/${year}/${month}`).then((result) => {
-			fy = result.data;
-			term = fy.term;
-			for ( let mon = new Date(fy.startDate); mon < new Date(fy.endDate); ) {
-				dates.push({
-					year: mon.getFullYear(),
-					month: mon.getMonth()+1
-				});
-				mon.setMonth(mon.getMonth() + 1);
-			}
-			dates = dates;
-		});
-		console.log('dates', dates);
-		window.onpopstate = (event) => {
-			if	( window.history.state )	{
-				let	state = window.history.state;
-				year = state.year;
-				month = state.month;
-			} else {
-				let arg = location.pathname.split('/');
-				year = arg[2];
-				month = arg[3];
-			}
-			console.log('date', year, month);
-			updateList();
-		}
-	}
-	if	( !accounts )	{
-		accounts = [];
-		axios.get(`/api/accounts`).then((res) => {
-			accounts = res.data;
-			set_accounts(accounts);
-		}).then(() => {
-			axios.get(`/api/journal/${year}/${month}`).then((result) => {
-				slips = result.data;
-				ready(slips);
-			});
-		});
-	}
-	if	( !slip )	{
-		slip = {
+	setupDates();
+	setupAccount();
+	slip = {
 			year: year,
 			month: month,
 			lines: []
-		}
-	}
-});
+	};
+	modal = new Modal(document.getElementById('cross-slip-modal'));
+})
 
 let openModal = false;
 afterUpdate(() => {
-	if	( !modal )	{
-		modal = new Modal(document.getElementById('cross-slip-modal'));
-		console.log('modal new')
-	}
 	if	( openModal )	{
 		modal.show();
 		openModal = false;
