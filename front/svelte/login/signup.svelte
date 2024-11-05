@@ -1,88 +1,97 @@
 <div class="login-page">
-    <div class="login-box">
-        <div class="login-logo">
-            <a href="/"><b>Napier</b></a>
-        </div>
-        <div class="card">
-            <div class="card-body login-card-body">
-                <p class="login-box-msg">Sign up to start your session</p>
-                <div class="input-group mb-3">
-                    <input type="text" bind:value={user_name}
-                        class="form-control" placeholder="User name">
-                </div>
-                <div class="input-group mb-3">
-                    <input type="password" bind:value={password}
-                        class="form-control" placeholder="Password">
-                </div>
-                <div class="input-group mb-3">
-                    <input type="password" bind:value={confirmPassword}
-                        class="form-control" placeholder="Confirm Password">
-                </div>
-                <div class="row">
-                    <div class="col-8">
-                    </div>
-                    <div class="col-4 d-grid">
-                        <button type="button" class="btn btn-primary"
-                            on:click={SignUp}>
-                            Sign Up
-                        </button>
-                    </div>
-                </div>
-                <p class="mb-0">
-                    <a on:click|preventDefault={change}
-                        href="#" class="text-center">
-                        Member login
-                    </a>
-                </p>
-            </div>
-        </div>
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="/public/logo.png" alt="Logo" class="pe-1">Hieronyms
     </div>
-    {#if alert}
-    <div class="alert alert-danger fade show" style="width:600px;" role="alert">
-        <button type="button" class="btn-close" aria-label="Close"
-            on:click="{() => {alert = undefined}}"></button>
-        <strong>{alert}</strong>
+    <div class="card">
+      <div class="card-body login-card-body">
+        <p class="fs-4 text-center ">サインアップ</p>
+        <p class="text-{msg_type} text-center">{message}</p>
+        <div class="mb-3">
+          <label for="user_input">ユーザー名</label>
+          <input type="text" bind:value={user_name}
+            class="form-control" placeholder="ユーザー名">
+        </div>
+        <div class="mb-3">
+          <label for="password_input">パスワード</label>
+          <input type="password" bind:value={password}
+            class="form-control" placeholder="パスワード">
+        </div>
+        <div class="mb-3">
+          <label for="password_input">パスワード(確認)</label>
+          <input type="password" bind:value={confirmPassword}
+              class="form-control" placeholder="パスワード(確認)">
+        </div>
+        <div class="row d-flex justify-content-center">
+          <div class="col-lg-8 col-4 d-grid">
+            <button type="submit" class="btn btn-primary mb-2"
+              on:click={SignUp}>
+              登録
+            </button>
+            <a on:click|preventDefault={change}
+            href="#" class="text-center">ログインはこちら</a>
+          </div>
+        </div>
+      </div>
     </div>
-    {/if}
+  </div>
 </div>
 <script>
 import axios from 'axios';
+import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 
 export let current;
 
 let user_name;
 let password;
 let confirmPassword;
-let alert;
+let message;
+let msg_type;
+
+onMount(() => {
+  user_name = '';
+  password = '';
+  message = '';
+})
 
 const change = (event) => {
-    current = 'login';
-    window.history.pushState(null, "", `/login`);
+  current = 'login';
+  window.history.pushState(null, "", `/login`);
 }
 
 const SignUp = () => {
+  if ( user_name.length === 0 || password.length === 0 ){
+    msg_type = 'danger';
+    message = `ユーザー名またはパスワードが入力されていません。`;
+  }else{
     try {
-        if  ( password == confirmPassword ) {
-            axios.post('/api/user/signup',{
-                user_name: user_name,
-                password: password
-            }).then((ret) => {
-                console.log(ret.data);
-                if  ( ret.data.result == 'OK' ) {
-                    current = 'login';
-                    window.history.pushState(null, "", `/login`);
-                } else {
-                    alert = ret.data.message;
-                }
-            }).catch((msg) => {
-                alert = msg;
-            });
-        } else {
-            alert = 'password not match';
-        }
+      if  ( password == confirmPassword ) {
+        axios.post('/api/user/signup',{
+          user_name: user_name,
+          password: password
+        }).then((ret) => {
+          //console.log(ret.data);
+          if  ( ret.data.result == 'OK' ) {
+            current = 'login';
+            window.history.pushState(null, "", `/login`);
+          } else {
+            message = ret.data.message;
+            msg_type = 'danger';
+          }
+        }).catch((msg) => {
+          message = msg;
+          msg_type = 'danger';
+        });
+      } else {
+        message= 'パスワードが一致していません。';
+        msg_type = 'danger';
+      }
     } catch(e) {
-        console.log('login fail', e);
+      message = e;
+      msg_type = 'danger';
+      console.log('login fail', e);
     }
+  }
 }
 
 </script>

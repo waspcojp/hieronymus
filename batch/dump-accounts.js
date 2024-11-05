@@ -1,6 +1,6 @@
 import models from '../models/index.js';
 
-const term = 14;
+const term = 17;
 
 
 const run = async () => {

@@ -33,7 +33,7 @@ export const exec = (term) => {
     let vars = line.split(",");
 
     if ( vars.length > 3 ) {
-      for ( i = 0; i < names.length; i ++ ) {
+      for ( let i = 0; i < names.length; i ++ ) {
         ent[names[i]] = vars[i];
       }
       if (( ent.subject_code_field != ent_1.subject_code_field ) ||

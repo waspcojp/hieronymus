@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Hieronyms Init Term</title>
-		<link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
-		<link rel="stylesheet" href="/style/style.css">
+  <head>
+	  <title>Hieronyms Init Term</title>
+	  <link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
+	  <link rel="stylesheet" href="/style/style.css">
+	  <link rel="stylesheet" href="/dist/common.css">
     <link rel="icon" href="/public/favicon.ico" sizes="any">
-		<script defer src="/dist/common.js"></script>
-		<base href="/" />
-	</head>
-	<body class="layout-fixed setup-page" id="setup">
-	</body>
-  <script defer src="/dist/setup.js"></script>
+	  <script defer src="/dist/common.js"></script>
+	  <base href="/" />
+  </head>
+  <body class="layout-fixed setup-page" id="setup">
+  </body>
+  <script defer src="/dist/setup.js" type="module"></script>
 </html>

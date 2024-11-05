@@ -90,47 +90,53 @@ export default {
         })
     
     },
-    signup: (req, res, next) => {
-        let user_name = req.body.user_name;
-        let password = req.body.password;
-        console.log('signup', user_name, password);
-        models.User.check(user_name, password).then((_user) => {
-            if  ( _user) {
-                res.json({
-                    result: 'NG',
-                    message: `user ${user_name} duplicated`
-                });
-            } else {
-                let user = new models.User({
-                    name: user_name
-                });
-                user.password = password;
-                models.User.count().then((count) => {
-                    console.log('count', count);
-                    if	( count === 0 )	{
-                        user.administrable = true;
-                        user.approvable = true;
-                        user.inventory = true;
-                    } else {
-                        user.administrable = false;
-                        user.approvable = false;
-                        user.inventory = false;
-                    }
-                    //console.log('user--', user);
-                    user.save().then((ret) => {
-                        res.json({
-                            result: 'OK'
-                        })
-                    });
-                });
-            }
-        }).catch((err) => {
-            res.json({
-                result: 'NG',
-                message: err
-            });
+  signup: (req, res, next) => {
+    let user_name = req.body.user_name;
+    let password = req.body.password;
+    //console.log('signup', user_name, password);
+    models.User.check(user_name, password).then((_user) => {
+      if  ( _user) {
+        res.json({
+          result: 'NG',
+          message: `ユーザー名 ${user_name} は既に登録されています。`
         });
-    },
+      } else {
+        let user = new models.User({
+          name: user_name
+        });
+        user.password = password;
+        models.User.count().then((count) => {
+          //console.log('count', count);
+          if	( count === 0 )	{
+            user.administrable = true;
+            user.accounting = true;
+            user.fiscal_browsing = true;
+            user.approvable = true;
+            user.customer_management = true;
+            user.inventory = true;
+          } else {
+            user.administrable = false;
+            user.accounting = false;
+            user.fiscal_browsing = false;
+            user.approvable = false;
+            user.customer_management = false;
+            user.inventory = false;
+          }
+          //console.log('user--', user);
+          user.save().then((ret) => {
+            res.json({
+              result: 'OK'
+            })
+          });
+        });
+      }
+    }).catch((err) => {
+      res.json({
+        result: 'NG',
+        message: err
+      });
+    });
+  },
     login:  (req, res, next) => {
         passport.authenticate('local', (error, user, info) => {
             //console.log('error', error);

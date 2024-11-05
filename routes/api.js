@@ -153,7 +153,7 @@ router.get('/term', async (req, res, next) => {
 const createInitialAccount = async (term, t) => {
   const now = new Date();
   let account_classes = [];
-  const values = parseAccounts.exec(term);
+  const values = parseAccounts(term);
   values.account_classes.forEach((account_class) => {
     account_classes.push({
       major: account_class.major,

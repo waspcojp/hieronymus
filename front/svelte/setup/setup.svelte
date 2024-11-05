@@ -77,7 +77,7 @@
 
   onMount(async () => {
       form.term = 1;
-      form.year = new Date().getFullYear() - 1;
+      form.year = new Date().getFullYear();
       form.startDate = `${form.year}-04-01`;
       form.endDate = `${form.year + 1}-03-31`;
       invalid.term = false;
