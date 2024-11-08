@@ -168,6 +168,7 @@ app.use('/users', is_authenticated,(req, res, next) => {
 	}
 });
 app.use('/invoices', is_authenticated,(req, res, next) => {
+	console.log(req.session.term)
 	if ( req.session.user.administrable)	{
 		res.render('index.spy', {
 			term: req.session.term

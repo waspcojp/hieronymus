@@ -5,8 +5,7 @@ import company from '../config/company.js';
 export default {
 	get: async (req, res, next) => {
 		let id =  req.params.id;
-		console.log('/api/invoicer/', id);
-		let term = parseInt(req.params.term);
+		console.log('/api/invoice/', id);
 		let include = [
 				{
 					model: models.Customer,
@@ -51,7 +50,7 @@ export default {
 			} else {
 				let fy = await models.FiscalYear.findOne({
 					where: {
-						term: term
+						term: req.session.term
 					}
 				});
 				where = {

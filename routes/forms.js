@@ -40,14 +40,25 @@ router.get('/subsidiary_ledger/:term', is_authenticated, (req, res, next) => {
 });
 router.get('/trial_balance/:term', is_authenticated, (req, res, next) => {
 	if (( req.session.user.accounting ) ||
-        ( req.session.user.fiscal_browsing )) {
-        trial_balance(parseInt(req.params.term)).then((buff) => {
-            res.send(buff);
-        })
+      ( req.session.user.fiscal_browsing )) {
+    trial_balance(parseInt(req.params.term)).then((buff) => {
+      res.send(buff);
+    })
 	} else {
 		res.redirect('/home');
 	}
 });
+router.get('/trial_balance/:term/:month', is_authenticated, (req, res, next) => {
+	if (( req.session.user.accounting ) ||
+      ( req.session.user.fiscal_browsing )) {
+    trial_balance(parseInt(req.params.term), req.params.month).then((buff) => {
+      res.send(buff);
+    })
+	} else {
+		res.redirect('/home');
+	}
+});
+
 router.get('/closing/:term', is_authenticated,(req, res, next) => {
 	if (( req.session.user.accounting ) ||
         ( req.session.user.fiscal_browsing )) {

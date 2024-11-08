@@ -17,7 +17,7 @@ export const exec = (term) => {
   let names = lines[0].split(",");
   lines.shift();
 
-  let account_classes = [];
+  let accountClasses = [];
   let accounts = [];
   let subAccounts = [];
   let ent_1 = {};
@@ -36,13 +36,17 @@ export const exec = (term) => {
       for ( let i = 0; i < names.length; i ++ ) {
         ent[names[i]] = vars[i];
       }
+      ent.subject_code_seq = parseInt(ent.subject_code_seq);
+      ent.sub_subject_code = parseInt(ent.sub_subject_code);
+      ent.tax_class = parseInt(ent.tax_class);
+
       if (( ent.subject_code_field != ent_1.subject_code_field ) ||
         ( ent.subject_code_sum != ent_1.subject_code_sum )) {
         seq = 0;
         class_code = `${ent.subject_code_field}${('00'+ent.subject_code_sum).slice(-2)}`
         field = parseInt(ent.subject_code_field);
         adding = parseInt(ent.subject_code_sum);
-        account_classes.push({
+        accountClasses.push({
           major: ent.major_class,
           middle: ent.middle_class,
           minor: ent.minor_class,
@@ -50,7 +54,7 @@ export const exec = (term) => {
           adding: adding
         });
       }
-      if ( ent.sub_subject_code == 0 ) {
+      if ( ent.sub_subject_code === 0 ) {
         account_code = `${class_code}${('0000'+seq).slice(-4)}`;
         sub_account = 0;
         accounts.push({
@@ -60,7 +64,7 @@ export const exec = (term) => {
           adding: adding,
           account_code: account_code,
           sub_account_count: 0,
-          tax_class: parseInt(ent.tax_class),
+          tax_class: ent.tax_class,
           balance: parseInt(ent.beginning_balance),
           term: term
         });
@@ -73,7 +77,7 @@ export const exec = (term) => {
           account_code: account_code,
           sub_account_code: sub_account,
           term: term,
-          tax_class: parseInt(ent.tax_class),
+          tax_class: ent.tax_class,
           balance: parseInt(ent.beginning_balance)
         });
       }
@@ -95,12 +99,12 @@ export const exec = (term) => {
       account.sub_account_count = count;
     }
   });
-  //console.log(account_classes);
+  //console.log(accountClasses);
   //console.log(accounts);
   //console.log(subAccounts);
 
   return {
-    account_classes: account_classes,
+    accountClasses: accountClasses,
     accounts: accounts,
     subAccounts: subAccounts
   };

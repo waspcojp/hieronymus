@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-6" style="padding:10px;">
+  <div class="col-7" style="padding:10px;">
     {#if ( user && ( user.accounting || user.fiscal_browsing ) ) }
     <SelectTerm
         term={term}

@@ -71,7 +71,7 @@ export default {
 			approvedAt = new Date();
 			approvedBy = req.session.user.id;
 		}
-		slip = await models.CrossSlip.create({
+		let slip = await models.CrossSlip.create({
 			year: body.year,
 			month: body.month,
 			day: body.day,

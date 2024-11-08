@@ -77,6 +77,7 @@ router.get('/cross-slip-detail/:id', cross_slip_detail.get);
 router.put('/cross-slip-detail', cross_slip_detail.update);
 
 router.get('/trial-balance/:term', trial_balance.get);
+router.get('/trial-balance/:term/:lastdate', trial_balance.get);
 
 router.get('/customer', customer.get);
 router.get('/customer/:id', customer.get);
@@ -114,13 +115,13 @@ router.get('/term/:year/:month', async (req, res, next) => {
 			}
 		}
 	});
-	console.log(fy);
+	//console.log(fy);
 	res.json(fy);
 });
 
 router.get('/term/:term', async (req, res, next) => {
 	let term = parseInt(req.params.term);
-	console.log({term});
+	//console.log({term});
 	if	( term > 0 )	{
 		let fy = await models.FiscalYear.findOne({
 			where: {
@@ -132,8 +133,8 @@ router.get('/term/:term', async (req, res, next) => {
 });
 router.put('/term/:id', async(req, res, next) => {
   let id = parseInt(req.params.id);
-  console.log({id});
-  fy = await models.FiscalYear.findByPk(id);
+  //console.log({id});
+  let fy = await models.FiscalYear.findByPk(id);
   fy.taxIncluded = req.body.taxIncluded;
   fy.save();
   res.json({
@@ -152,10 +153,10 @@ router.get('/term', async (req, res, next) => {
 
 const createInitialAccount = async (term, t) => {
   const now = new Date();
-  let account_classes = [];
+  let accountClasses = [];
   const values = parseAccounts(term);
-  values.account_classes.forEach((account_class) => {
-    account_classes.push({
+  values.accountClasses.forEach((account_class) => {
+    accountClasses.push({
       major: account_class.major,
       middle: account_class.middle,
       minor: account_class.minor,
@@ -165,8 +166,8 @@ const createInitialAccount = async (term, t) => {
       updatedAt: now
     });
   });
-  await models.AccountClass.bulkCreate(account_classes,{ transaction: t });
-  account_classes = await models.AccountClass.findAll({transaction: t });
+  await models.AccountClass.bulkCreate(accountClasses,{ transaction: t });
+  accountClasses = await models.AccountClass.findAll({transaction: t });
   for ( let i = 0; i < values.accounts.length; i ++ ) {
     let account = values.accounts[i];
     let account_class = await models.AccountClass.findOne({
@@ -198,9 +199,9 @@ const createInitialAccount = async (term, t) => {
       balance: account.balance
     },{ transaction: t });
   }
-  if	( values.sub_accounts )	{
-    for ( let i = 0; i < values.sub_accounts.length; i ++ ) {
-      let sub_account = values.sub_accounts[i];
+  if	( values.subAccounts )	{
+    for ( let i = 0; i < values.subAccounts.length; i ++ ) {
+      let sub_account = values.subAccounts[i];
       let account = await models.Account.findOne({
         where: {
           accountCode: sub_account.account_code,
@@ -240,7 +241,7 @@ router.post('/setup', async (req, res, next) => {
       req.session.save();
       res.json({code: 0});
     }catch(e){
-      console.log(e.message)
+      console.log(e)
       await t.rollback();
       res.json({code: -99});
     }

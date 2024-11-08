@@ -3,7 +3,7 @@ const Op = models.Sequelize.Op;
 import Accounts from './accounts.js';
 import {numeric, dc} from './parse_account_code.js';
 
-export default async (term) => {
+export default async (term, endDate) => {
     let lines = [];
     let index = [];
 
@@ -38,8 +38,10 @@ export default async (term) => {
         });
         index[acc.code] = i;
     }
-
-    for ( let mon = new Date(fy.startDate); mon < new Date(fy.endDate); ) {
+    if  ( !endDate )    {
+        endDate = fy.endDate;
+    }
+    for ( let mon = new Date(fy.startDate); mon < new Date(endDate); ) {
         let cross_slips = await models.CrossSlip.findAll({
             where: {
                 [Op.and]: {

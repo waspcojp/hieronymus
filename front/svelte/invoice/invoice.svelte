@@ -86,7 +86,7 @@ const updateInvoices = (_params) => {
 		console.log('key, value', key, value);
 		_array.push(encodeURI(`${key}=${value}`));
 	});
-	let param = _array.join('&');
+	let param = _array.join('&') + `&term=${term}`;
 	console.log('param', param);
 	axios.get(`/api/invoice?${param}`).then((result) => {
 		invoices = result.data;
@@ -119,7 +119,7 @@ onMount(() => {
 })
 
 beforeUpdate(()	=> {
-	console.log('invoice beforeUpdate');
+	console.log('invoice beforeUpdate', term);
 	let args = location.pathname.split('/');
 	let _params = location.search.substr(1);
 	console.log('_params', _params);
@@ -131,7 +131,7 @@ beforeUpdate(()	=> {
 		});
 		console.log({params});
 	}
-	term = parseInt(args[2]);
+	term = term || parseInt(args[2]);
 	console.log('term', term);
 	if	( !dates )	{
 		window.onpopstate = (event) => {
