@@ -147,6 +147,9 @@ onMount(() => {
     })
   }
 });
+beforeUpdate(() => {
+	//console.log('cross-slip-modal', slip);
+})
 afterUpdate(() => {
 	//console.log('afterUpdate cross-slip-modal');
 	init = false;

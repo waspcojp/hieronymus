@@ -1,23 +1,23 @@
 <nav class="main-header navbar navbar-expand-lg navbar-light bg-light p-3">
-    <NavBar
-        term={term}
-        user={user.name}></NavBar>
+  <NavBar
+    term={term}
+    user={user.name}></NavBar>
 </nav>
 <aside 
-    class="main-sidebar sidebar-bg-dark sidebar-color-primary shadow">
-    <SideBar
-        user={user}
-        term={term}></SideBar>
+  class="main-sidebar sidebar-bg-dark sidebar-color-primary shadow">
+  <SideBar
+    user={user}
+    term={term}></SideBar>
 </aside>
 <main class="content-wrapper">
-    <div class="content">
-        <div class="container-fluid" id="home">
-            <Home
-                user={user}
-                term ={term}
-                bind:toast={toast}></Home>
-        </div>
-    </div>
+  <div class="content">
+    <div class="container-fluid" id="home">
+      <Home
+        user={user}
+        term ={term}
+        bind:toast={toast}></Home>
+      </div>
+  </div>
 </main>
 <footer
     class="main-footer">
@@ -42,9 +42,9 @@ let toast_dialog;
 let user = {};
 
 onMount(() => {
-    user = axios.get('/api/user').then((res) => {
-        user = res.data;
-    });
+  user = axios.get('/api/user').then((res) => {
+    user = res.data;
+  });
 })
 
 </script>

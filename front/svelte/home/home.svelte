@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-7" style="padding:10px;">
-    {#if ( user && ( user.accounting || user.fiscal_browsing ) ) }
+    {#if ( user ) }
     <SelectTerm
         term={term}
         user={user}>
@@ -13,6 +13,14 @@
         term={term}>
     </FormPrint>
     {/if}
+  </div>
+</div>
+<div class="row">
+  <div class="col-6" style="padding:10px;">
+    <Approve
+      term={term}
+      user={user}
+      bind:toast={toast} />
   </div>
 </div>
 <div class="row">
@@ -32,6 +40,7 @@ import  FormPrint from './form-print.svelte';
 import  SelectTerm from './term.svelte';
 import Password from './password.svelte';
 import Backup from './backup.svelte';
+import Approve from './approve.svelte';
 
 export	let	term;
 export  let toast;

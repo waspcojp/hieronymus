@@ -27,6 +27,13 @@ export default (sequelize, DataTypes) => {
 				onDelete: 'RESTRICT',
 				onUpdate: 'CASCADE'
 			});
+			this.hasOne(models.User, {
+				foreignKey: 'id',
+				sourceKey: 'updatedBy',
+				as: 'updater',
+				onDelete: 'RESTRICT',
+				onUpdate: 'CASCADE'
+			});
 		}
 	};
 	CrossSlip.init({
