@@ -168,8 +168,16 @@ app.use('/users', is_authenticated,(req, res, next) => {
 	}
 });
 app.use('/invoices', is_authenticated,(req, res, next) => {
-	console.log(req.session.term)
-	if ( req.session.user.administrable)	{
+	if ( req.session.user.accounting )	{
+		res.render('index.spy', {
+			term: req.session.term
+		});
+	} else {
+		res.redirect('/home');
+	}
+});
+app.use('/invoices/:command', is_authenticated,(req, res, next) => {
+	if ( req.session.user.accounting )	{
 		res.render('index.spy', {
 			term: req.session.term
 		});

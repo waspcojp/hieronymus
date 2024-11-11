@@ -199,3 +199,11 @@ ul.nav {
 .login-logo img {
   width: 45px;
 }
+
+.entry {
+    border: 2px solid #dee2e6;
+    padding: 10px;
+}
+.entry-content {
+    padding-top: 20px;
+}

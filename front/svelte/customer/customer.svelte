@@ -1,50 +1,65 @@
+{#if ( state === 'list' )}
 <div class="d-flex justify-content-between mb-3 mt-3">
   <h1 class="fs-3">顧客台帳</h1>
   <button type="button" class="btn btn-primary"
-    on:click={openModal}>顧客入力&nbsp;<i class="bi bi-pencil-square"></i></button>
+    on:click={openEntry}>顧客入力&nbsp;<i class="bi bi-pencil-square"></i></button>
 </div>
 <CustomerList
     update={list_update}
-    on:open={openModal}></CustomerList>
-
-<CustomerModal
-	modal={modal}
+    on:open={openEntry}></CustomerList>
+{:else}
+<CustomerEntry
 	on:save={update}
+  on:close={closeEntry}
 	customer={customer}>
-</CustomerModal>
+</CustomerEntry>
+{/if}
 
 <style>
 </style>
 
 <script>
-import axios from 'axios';
-import Modal from 'bootstrap/js/dist/modal';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
-import CustomerModal from './customer-modal.svelte';
+import CustomerEntry from './customer-entry.svelte';
 import CustomerList from './customer-list.svelte';
 
-let	modal;
 let	customer;
 let	list_update;
+let state = 'list';
 
 const	update = (event) => {
 	console.log('update');
 	list_update = true;
+  state = 'list';
 }
 
-const	openModal = (event)	=> {
+const	openEntry = (event)	=> {
 	console.log('open', event.detail);
 	if	( typeof event.detail === 'object' )	{
 		customer = event.detail;
-	}
+	} else {
+    customer = {};
+  }
 	console.log('customer', customer)
-	modal.show();
+  state = 'entry';
 };
+const closeEntry = (event) => {
+  console.log('close');
+  state = 'list';
+}
+
 beforeUpdate(()	=> {
 });
 afterUpdate(() => {
-	if	( !modal )	{
-		modal = new Modal(document.getElementById('customer-modal'));
-	}
+})
+onMount(() => {
+  let args = location.pathname.split('/');
+  if  (( args[2] === '') ||
+       ( args[2] === 'list' ))  {
+    state = 'list';
+  } else {
+    state = 'entry';
+  }
+  console.log('customer onMount')
 })
 </script>

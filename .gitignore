@@ -68,6 +68,7 @@ typings/
 /node_modules
 /dist
 /sessions
+/backups
 docker-histoy/
 config/config.json
 accounts.json
