@@ -18,20 +18,21 @@
         </div>
         {/if}
         <VoucherInfo
-          bind:init={init}
+          on:startregister={() => { disabled = true} }
+          on:endregister={() => { disabled = false} }
           bind:voucher={voucher}
           bind:files={files}></VoucherInfo>
       </div>
       <div class="entry-footer">
-        <button type="button" class="btn btn-secondary"
+        <button type="button" class="btn btn-secondary" disabled={disabled}
           on:click={close_}
           >もどる</button>
         {#if ( voucher && voucher.id && voucher.id > 0 )}
-          <button type="button" class="btn btn-danger"
+          <button type="button" class="btn btn-danger" disabled={disabled}
               on:click={delete_}
                   id="delete-button">Delete</button>
         {/if}
-        <button type="button" class="btn btn-primary"
+        <button type="button" class="btn btn-primary" disabled={disabled}
             on:click={save}
             id="save-button">保存&nbsp;<i class="bi bi-save"></i></button>
       </div>
@@ -51,12 +52,12 @@ import VoucherInfo from './voucher-info.svelte';
 
 
 export	let	voucher;
-export	let init;
 
 let	files;
 let update;
 let ok = true;
 let errorMessages = [];
+let disabled = false;
 
 const create_voucher = async (_voucher) => {
   let result = await axios.post('/api/voucher', _voucher);
@@ -161,10 +162,13 @@ const	close_ = (event) => {
   dispatch('close', update);
 }
 
+onMount(() => {
+
+})
+
 beforeUpdate(() => {
-  console.log('voucher-entry beforeUpdate', voucher, init);
+  console.log('voucher-entry beforeUpdate', voucher);
   update = false;
-  init = init;
   if	( !voucher )	{
     voucher = {
       issueDate: formatDate(new Date()),

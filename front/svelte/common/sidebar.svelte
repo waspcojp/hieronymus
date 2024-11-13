@@ -68,7 +68,7 @@
 			</li>
     	<li class="nav-item">
 				<a class={pathname.match(/\/invoice/)  ? 'nav-link active': 'nav-link'}
-            href="/invoices/">
+            href="/invoices/{term}">
           <i class="nav-icon fas fa-circle"></i>
           請求管理
         </a>

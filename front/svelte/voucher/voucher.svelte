@@ -48,10 +48,9 @@
   on:selectCustomerId={selectCustomer}
   on:selectAmount={selectAmount}
   ></VoucherList>
-{:else if ( state === 'entry' )}
+{:else if ( state === 'entry' || state === 'new' )}
 <VoucherEntry
   term={term}
-  bind:init={init}
   bind:voucher={voucher}
   on:close={closeEntry}>
 </VoucherEntry>
@@ -93,21 +92,21 @@ let state = 'list';
 
 const selectVoucherType = (event) => {
   let	voucherType = event.detail;
-  console.log({voucherType});
+  //console.log({voucherType});
   updateVouchers({
     type: voucherType
   });
 }
 const selectCustomer = (event) => {
   let	customerId = event.detail;
-  console.log({customerId});
+  //console.log({customerId});
   updateVouchers({
     customer: customerId
   });
 }
 const selectAmount = (event) => {
   let amounts = event.detail;
-  console.log({amounts});
+  //console.log({amounts});
   updateVouchers({
     upper: numeric(amounts.upperAmount),
     lower: numeric(amounts.lowerAmount)
@@ -124,17 +123,17 @@ const updateVouchers = (_params) => {
       }
     });
   }
-  console.log('current_params', current_params);
+  //console.log('current_params', current_params);
   let _array = [];
   current_params.forEach((value, key) => {
-    console.log('key, value', key, value);
+    //console.log('key, value', key, value);
     _array.push(encodeURI(`${key}=${value}`));
   });
   let param = _array.join('&');
-  console.log('param', param);
+  //console.log('param', param);
   axios.get(`/api/voucher?${param}`).then((result) => {
     vouchers = result.data;
-    console.log('vouchers', vouchers);
+    //console.log('vouchers', vouchers);
   });
   if	( _params )	{
     window.history.pushState(
@@ -148,7 +147,7 @@ const openMonth = (event) => {
   gotoMonth(month);
 }
 const gotoMonth = (month) => {
-  console.log('month', month);
+  //console.log('month', month);
   updateVouchers({
     month: month
   });
@@ -156,62 +155,86 @@ const gotoMonth = (month) => {
 }
 
 const	openSlip = (event)	=> {
-  console.log('openSlip', event.detail);
+  //console.log('openSlip', event.detail);
   slip = event.detail;
   init = true;
-  console.log('slip', slip)
+  //console.log('slip', slip)
   slipModal.show();
 };
 
 const	openEntry = (event)	=> {
-  console.log('open', event.detail);
+  //console.log('open', event.detail);
   voucher = event.detail;
   if ( !voucher.id )	{
     voucher = null;
+    state = 'new';
+    window.history.pushState(
+      null, "", `/voucher/${term}/new`);
+  } else {
+    state = 'entry';
+    window.history.pushState(
+      null, "", `/voucher/${term}/entry/${voucher.id}`);
   }
-  init = true;
-  console.log('voucher', voucher)
-  state = 'entry';
+  //console.log('voucher', voucher)
 };
 
 const closeEntry = (event) => {
-  console.log('close', event.detail);
+  //console.log('close', event.detail);
   state = 'list';
+  window.history.pushState(
+      null, "", `/voucher/${term}/`);
   updateVouchers();
 }
 
-onMount(() => {
+const checkPage = () => {
   let args = location.pathname.split('/');
-  if  (( args[3] === '') ||
+  console.log({args});
+  if  (( !args[3] ) ||
+       ( args[3] === '') ||
        ( args[3] === 'list' ))  {
     state = 'list';
   } else
   if  ( args[3] === 'entry' ) {
     state = 'entry';
+    if  ( !voucher ) {
+      axios(`/api/voucher/${args[4]}`).then((result) => {
+        voucher = result.data;
+        //console.log({voucher});
+      });
+    }
+  } else
+  if  ( args[3] === 'new' ) {
+    state = 'new';
   }
-  console.log('voucher onMount')
+  console.log({state});
+  term = parseInt(args[2]);
+}
+
+onMount(async () => {
+  console.log('voucher onMount', voucher);
+  checkPage()
+  //console.log('voucher onMount')
 })
 
 beforeUpdate(()	=> {
   console.log('voucher beforeUpdate');
-  let args = location.pathname.split('/');
+  checkPage();
   let _params = location.search.substr(1);
-  console.log('_params', _params);
+  //console.log('_params', _params);
   let params = [];
   if  ( _params )	{
     _params.split('&').map((item) => {
       let kv = item.split('=');
       params[decodeURI(kv[0])] = decodeURI(kv[1]);
     });
-    console.log({params});
+    //console.log({params});
   }
-  term = parseInt(args[2]);
-  console.log('term', term);
+  //console.log('term', term);
   if	( !dates )	{
     window.onpopstate = (event) => {
       if	( window.history.state )	{
         current_params = window.history.state;
-        console.log({current_params});
+        //console.log({current_params});
         current_month = current_params.get('month');
         updateVouchers();
       }
@@ -230,7 +253,7 @@ beforeUpdate(()	=> {
       }
       dates = dates;
     });
-    console.log('dates', dates);
+    //console.log('dates', dates);
   }
   if	( !vouchers )	{
     vouchers = [];
@@ -251,7 +274,7 @@ beforeUpdate(()	=> {
   }
 });
 afterUpdate(() => {
-  console.log('voucher afterUpdate');
+  //console.log('voucher afterUpdate');
   if	( !slipModal )	{
     slipModal = new Modal(document.getElementById('cross-slip-modal'));
   }

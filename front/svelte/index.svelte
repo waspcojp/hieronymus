@@ -1,39 +1,39 @@
 {#if ( current === 'login') }
-    <Login
-        bind:current={current}></Login>
+<Login
+  bind:current={current}></Login>
 {:else if ( current === 'signup' ) }
-    <SignUp
-        bind:current={current}></SignUp>
+<SignUp
+  bind:current={current}></SignUp>
 {:else}
 <div class="wrapper">
-    <nav class="main-header navbar navbar-expand-lg navbar-light bg-light p-3">
-        <NavBar
-            term={term}
-            user={user.name}></NavBar>
-    </nav>
-    <aside 
-        class="main-sidebar sidebar-bg-dark sidebar-color-primary shadow">
-        <SideBar
-            user={user}
-            term={term}></SideBar>
-    </aside>
-    <main class="content-wrapper">
-        <div class="content">
-            <div class="container-fluid">
-                <Alert bind:alert={alert} {alert_level}></Alert>
-                {#if ( current == 'users' )}
-                <Users></Users>
-                {:else if ( current == 'invoices' )}
-                <Invoices
-                    term={term}></Invoices>
-                {/if}
-            </div>
-        </div>
-    </main>
-    <footer
-        class="main-footer">
-        <CommonFooter></CommonFooter>
-    </footer>
+  <nav class="main-header navbar navbar-expand-lg navbar-light bg-light p-3">
+    <NavBar
+      term={term}
+      user={user.name}></NavBar>
+  </nav>
+  <aside 
+    class="main-sidebar sidebar-bg-dark sidebar-color-primary shadow">
+    <SideBar
+      user={user}
+      term={term}></SideBar>
+  </aside>
+  <main class="content-wrapper">
+    <div class="content">
+      <div class="container-fluid">
+        <Alert bind:alert={alert} {alert_level}></Alert>
+        {#if ( current == 'users' )}
+        <Users></Users>
+        {:else if ( current === 'invoices' || current === 'invoice')}
+        <Invoices
+          term={term}></Invoices>
+        {/if}
+      </div>
+    </div>
+  </main>
+  <footer
+    class="main-footer">
+    <CommonFooter></CommonFooter>
+  </footer>
 </div>
 {/if}
 <script>
@@ -57,14 +57,14 @@ let user ={};
 let current = 'login';
 
 onMount(() => {
-    user = axios.get('/api/user').then((res) => {
-                console.log('user', res);
-                user = res.data;
-            });
+  user = axios.get('/api/user').then((res) => {
+    console.log('user', res);
+    user = res.data;
+  });
 })
 
 beforeUpdate(() => {
-	let args = location.pathname.split('/');
+  let args = location.pathname.split('/');
     current = args[1];
 })
 

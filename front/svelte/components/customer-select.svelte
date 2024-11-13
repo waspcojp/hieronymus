@@ -12,7 +12,7 @@
   <button type="button" class="btn btn-primary"
     on:click={openEntry}>登録</button>
   {/if}
-  {#if ( customers && customers.length > 0) }
+  {#if ( customers && customers.length > 0 ) }
   <select id="customerId" style="width:100%;"
     bind:value={customerId}>
     {#each customers as customer}
@@ -69,12 +69,12 @@ const closeEntry = (event) => {
   dispatch('endregister');
 }
 const	openEntry = (event)	=> {
-	console.log('open', event.detail);
+	//console.log('open', event.detail);
 	if	( typeof event.detail === 'object' )	{
 		customer = event.detail;
 	}
   dispatch('startregister');
-	console.log('customer', customer)
+	//console.log('customer', customer)
 	status = 'entry';
 }
 
@@ -100,24 +100,36 @@ const changeKey = (event) =>{
     }
   }
 }
-const	customerSelect = (event)	=> {
-    customerId = undefined;
-  for	( let i = 0; i < customers.length; i ++ )	{
-    if	( customers[i].id == event.target.value)	{
-      customerId = customers[i].id;
-      customerKey = customers[i].name;
-      break;
+const customerName = (id) => {
+  if  ( customers )   {
+    for	( let i = 0; i < customers.length; i ++ )	{
+      if	( customers[i].id == id )	{
+        customerId = customers[i].id;
+        customerKey = customers[i].name;
+        break;
+      }
     }
+  } else {
+    customerKey = '';
   }
-  customers = [];
-    dispatch('input', customerId);
 }
-
+const	customerSelect = (event)	=> {
+  customerId = undefined;
+  customerName(event.target.value);
+  customers = [];
+  dispatch('input', customerId);
+}
+beforeUpdate(() => {
+  //console.log({customerId});
+})
 onMount(() => {
-  console.log('customer-select onMount');
+  //console.log('customer-select onMount');
   axios.get(`/api/customer/`).then((result) => {
     original_customers = result.data;
-    console.log('customer update', original_customers);
+    customers = original_customers;
+    //console.log('customer update', original_customers);
+    customerName(customerId);
+    customers = undefined;
   });
-});
+})
 </script>

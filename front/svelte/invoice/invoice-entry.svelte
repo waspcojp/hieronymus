@@ -7,9 +7,8 @@
   <div class="entry-content">
     <div class="entry-body">
       <InvoiceInfo
-        on:startregister={startRegister}
-        on:endregister={endRegister}
-        bind:init={init}
+        on:startregister={() => { disabled = true}}
+        on:endregister={() => { disabled = false}}
         bind:invoice={invoice}></InvoiceInfo>
     </div>
     <div class="entry-footer">
@@ -35,18 +34,10 @@ import InvoiceInfo from './invoice-info.svelte';
 
 
 export	let	invoice;
-export	let init;
 
 let	files;
 let update;
 let disabled = false;
-
-const startRegister = () => {
-  disabled = true;
-}
-const endRegister = () => {
-  disabled = false;
-}
 
 const create_invoice = async (_invoice) => {
   let result = await axios.post('/api/invoice', _invoice);
@@ -120,9 +111,8 @@ const	close_ = (event) => {
 }
 
 beforeUpdate(() => {
-  console.log('invoice-entry beforeUpdate', invoice, init);
+  console.log('invoice-entry beforeUpdate', invoice);
   update = false;
-  init = init;
   if	( !invoice )	{
     invoice = {
       issueDate: formatDate(new Date()),

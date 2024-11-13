@@ -167,24 +167,30 @@ app.use('/users', is_authenticated,(req, res, next) => {
 		res.redirect('/home');
 	}
 });
-app.use('/invoices', is_authenticated,(req, res, next) => {
+
+const invoice = (req, res, next) => {
+	let term;
+	if	( req.params.term )	{
+		term = parseInt(req.params.term);
+	} else {
+		term = req.session.term;
+	}
 	if ( req.session.user.accounting )	{
 		res.render('index.spy', {
-			term: req.session.term
+			term: term,
+			user: req.session.user.name
 		});
 	} else {
 		res.redirect('/home');
 	}
-});
-app.use('/invoices/:command', is_authenticated,(req, res, next) => {
-	if ( req.session.user.accounting )	{
-		res.render('index.spy', {
-			term: req.session.term
-		});
-	} else {
-		res.redirect('/home');
-	}
-});
+}
+app.use('/invoices', is_authenticated, invoice);
+app.use('/invoices/:term', is_authenticated, invoice);
+app.use('/invoice/:term', is_authenticated, (req, res, next) => {
+	res.redirect(`/invoices/${req.params.term}`);
+})
+app.use('/invoice/:term/:command', is_authenticated, invoice);
+app.use('/invoice/:term/:command/:id', is_authenticated, invoice);
 
 app.use('/customer', customerRouter);
 app.use('/voucher', voucherRouter);

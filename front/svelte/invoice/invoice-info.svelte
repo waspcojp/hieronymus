@@ -105,23 +105,12 @@ import axios from 'axios';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import CustomerSelect from '../components/customer-select.svelte';
 export	let	invoice;
-export	let	init;
 
 let	original_customers;
 let customerKey;
 
 beforeUpdate(() => {
-  console.log('invoice-info beforeUpdate',invoice, init);
-  if	( init )	{
-    if	( invoice.id )	{
-      customerKey = invoice.Customer.name;
-      invoice.amount = numeric(invoice.amount).toLocaleString();
-      invoice.tax = numeric(invoice.tax).toLocaleString();
-    } else {
-      customerKey = '';
-    }
-    init = false;
-  }
+  console.log('invoice-info beforeUpdate',invoice);
   computeTax();
 });
 
@@ -158,6 +147,13 @@ const focusin = (event) => {
 
 onMount(() => {
   console.log('invoice-info onMount');
+  if	( invoice.id )	{
+      customerKey = invoice.Customer.name;
+      invoice.amount = numeric(invoice.amount).toLocaleString();
+      invoice.tax = numeric(invoice.tax).toLocaleString();
+    } else {
+      customerKey = '';
+    }
   axios.get(`/api/customer/`).then((result) => {
     original_customers = result.data;
     console.log('customer update', original_customers);

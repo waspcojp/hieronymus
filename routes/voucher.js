@@ -37,5 +37,7 @@ const file = (req, res, next) => {
 router.get('/', is_authenticated, home);
 router.get('/file/:id', is_authenticated, file)
 router.get('/:term', is_authenticated, home);
+router.get('/:term/:command', is_authenticated, home);
+router.get('/:term/:command/:id', is_authenticated, home);
 
 export default router;

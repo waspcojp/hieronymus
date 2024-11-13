@@ -24,7 +24,6 @@
 {:else}
   <InvoiceEntry
     term={term}
-    bind:init={init}
     bind:invoice={invoice}
     on:close={closeEntry}>
   </InvoiceEntry>
@@ -40,7 +39,6 @@ export let term;
 export let user;
 
 let	invoice;
-let init;
 let invoices;
 let dates;
 let current_params = new Map();
@@ -102,36 +100,57 @@ const	openEntry = (event)	=> {
   invoice = event.detail;
   if ( !invoice.id )	{
     invoice = null;
+    state = 'new';
+    window.history.pushState(
+      {}, "", `/invoice/${term}/new`);
+  } else {
+    state = 'entry';
+    window.history.pushState(
+      {}, "", `/invoice/${term}/entry/${invoice.id}`);
   }
-  init = true;
   console.log('invoice', invoice)
-  window.history.pushState(
-      {}, "", `/invoices/entry`);
-  state = 'entry';
 };
 
 const closeEntry = (event) => {
   console.log('close', event.detail);
   state = 'list';
   window.history.pushState(
-      {}, "", `/invoices/`);
+      {}, "", `/invoices/${term}/`);
   updateInvoices();
 }
 
-onMount(() => {
+const checkPage = () => {
   let args = location.pathname.split('/');
-  if  (( args[2] === '') ||
-       ( args[2] === 'list' ))  {
+  console.log({args});
+  if  (( !args[3] ) ||
+       ( args[3] === '') ||
+       ( args[3] === 'list' ))  {
     state = 'list';
-  } else {
+  } else
+  if  ( args[3] === 'entry' ) {
     state = 'entry';
+    if  ( !invoice ) {
+      axios(`/api/invoice/${args[4]}`).then((result) => {
+        invoice = result.data;
+        //console.log({invoice});
+      });
+    }
+  } else
+  if  ( args[3] === 'new' ) {
+    state = 'new';
   }
+  console.log({state});
+  term = parseInt(args[2]);
+}
+
+onMount(() => {
+  checkPage();
   console.log('invoice onMount')
 })
 
 beforeUpdate(()	=> {
   console.log('invoice beforeUpdate', term);
-  let args = location.pathname.split('/');
+  checkPage();
   let _params = location.search.substr(1);
   console.log('_params', _params);
   let params = [];
@@ -142,8 +161,6 @@ beforeUpdate(()	=> {
     });
     console.log({params});
   }
-  term = term || parseInt(args[2]);
-  console.log('term', term);
   if	( !dates )	{
     window.onpopstate = (event) => {
       if	( window.history.state )	{

@@ -1,4 +1,4 @@
-<input type="hidden" id="id" bind:value={voucher.id}>
+<input type="hidden" id="id" bind:value={voucher.id} />
 <div class="container-fluid"
   on:drop={onDrop}
   on:dragover={onDragOver}>
@@ -44,8 +44,11 @@
 
     <div class="col-sm-5">
       <CustomerSelect
-      style="width:100%;"
-      bind:cutomerId={voucher.customerId}/>
+        style="width:100%;"
+        on:startregister
+        on:endregister
+        register=true
+        bind:customerId={voucher.customerId}/>
     </div>
   </div>
   <div class="row mb-3">
@@ -137,7 +140,6 @@ import CustomerSelect from '../components/customer-select.svelte';
 
 export	let	voucher;
 export	let	files;
-export	let	init;
 
 let	original_customers;
 let	customers;
@@ -145,20 +147,7 @@ let	field_value;
 let customerKey;
 
 beforeUpdate(() => {
-  console.log('voucher-info beforeUpdate',voucher, init);
-  if	( init )	{
-    if	( voucher.id )	{
-      axios.get(`/api/voucher/files/${voucher.id}`).then((result) => {
-        files = result.data;
-      });
-      customerKey = voucher.customer.name;
-      voucher.amount = numeric(voucher.amount).toLocaleString();
-      voucher.tax = numeric(voucher.tax).toLocaleString();
-    } else {
-      customerKey = '';
-    }
-    init = false;
-  }
+  console.log('voucher-info beforeUpdate',voucher);
   computeTax();
 });
 
@@ -241,6 +230,17 @@ const upload = (file) => {
 
 onMount(() => {
   console.log('voucher-info onMount');
+  if	( voucher.id )	{
+      axios.get(`/api/voucher/files/${voucher.id}`).then((result) => {
+        files = result.data;
+      });
+      customerKey = voucher.customer.name;
+      voucher.amount = numeric(voucher.amount).toLocaleString();
+      voucher.tax = numeric(voucher.tax).toLocaleString();
+    } else {
+      customerKey = '';
+    }
+
   axios.get(`/api/customer/`).then((result) => {
     original_customers = result.data;
     console.log('customer update', original_customers);
