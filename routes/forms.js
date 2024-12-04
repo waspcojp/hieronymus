@@ -10,7 +10,7 @@ import financial_statement from '../forms/financial_statement.js';
 
 router.get('/explanatory_journal/:term', is_authenticated, (req, res, next) => {
 	if (( req.session.user.accounting ) ||
-        ( req.session.user.fiscal_browsing )) {
+        ( req.session.user.fiscalBrowsing )) {
         explanatory_journal(parseInt(req.params.term)).then((buff) => {
             res.send(buff);
         });
@@ -20,7 +20,7 @@ router.get('/explanatory_journal/:term', is_authenticated, (req, res, next) => {
 });
 router.get('/general_ledger/:term', is_authenticated, (req, res, next) => {
 	if (( req.session.user.accounting ) ||
-        ( req.session.user.fiscal_browsing )) {
+        ( req.session.user.fiscalBrowsing )) {
         general_ledger(parseInt(req.params.term)).then((buff) => {
             res.send(buff);
         })
@@ -30,7 +30,7 @@ router.get('/general_ledger/:term', is_authenticated, (req, res, next) => {
 });
 router.get('/subsidiary_ledger/:term', is_authenticated, (req, res, next) => {
 	if (( req.session.user.accounting ) ||
-        ( req.session.user.fiscal_browsing )) {
+        ( req.session.user.fiscalBrowsing )) {
         subsidiary_ledger(parseInt(req.params.term)).then((buff) => {
             res.send(buff);
         })
@@ -40,7 +40,7 @@ router.get('/subsidiary_ledger/:term', is_authenticated, (req, res, next) => {
 });
 router.get('/trial_balance/:term', is_authenticated, (req, res, next) => {
 	if (( req.session.user.accounting ) ||
-      ( req.session.user.fiscal_browsing )) {
+      ( req.session.user.fiscalBrowsing )) {
     trial_balance(parseInt(req.params.term)).then((buff) => {
       res.send(buff);
     })
@@ -50,7 +50,7 @@ router.get('/trial_balance/:term', is_authenticated, (req, res, next) => {
 });
 router.get('/trial_balance/:term/:month', is_authenticated, (req, res, next) => {
 	if (( req.session.user.accounting ) ||
-      ( req.session.user.fiscal_browsing )) {
+      ( req.session.user.fiscalBrowsing )) {
     trial_balance(parseInt(req.params.term), req.params.month).then((buff) => {
       res.send(buff);
     })
@@ -61,7 +61,7 @@ router.get('/trial_balance/:term/:month', is_authenticated, (req, res, next) => 
 
 router.get('/closing/:term', is_authenticated,(req, res, next) => {
 	if (( req.session.user.accounting ) ||
-        ( req.session.user.fiscal_browsing )) {
+        ( req.session.user.fiscalBrowsing )) {
         closing(parseInt(req.params.term)).then(() => {
             res.redirect('/');
         })
@@ -71,7 +71,7 @@ router.get('/closing/:term', is_authenticated,(req, res, next) => {
 });
 router.get('/financial_statement/:term', is_authenticated,(req, res, next) => {
 	if (( req.session.user.accounting ) ||
-        ( req.session.user.fiscal_browsing )) {
+        ( req.session.user.fiscalBrowsing )) {
         financial_statement(parseInt(req.params.term)).then((buff) => {
             res.send(buff);
         })

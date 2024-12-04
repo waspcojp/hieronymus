@@ -5,8 +5,8 @@ import models from '../models/index.js';
 const Op = models.Sequelize.Op;
 
 const home =  async (req, res, next) => {
-	if ( req.session.user.customer_management )	{
-		res.render('customer', {
+	if ( req.session.user.customerManagement )	{
+		res.render('customer.spy', {
 						title: 'Customer',
 						msg_type: '',
 						message: '',

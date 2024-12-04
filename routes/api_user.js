@@ -36,17 +36,17 @@ export default {
         if  ( req.body.accounting !== undefined )   {
           user.accounting = req.body.accounting;
         }
-        if  ( req.body.fiscal_browsing !== undefined )   {
-          user.fiscal_browsing = req.body.fiscal_browsing;
+        if  ( req.body.fiscalBrowsing !== undefined )   {
+          user.fiscalBrowsing = req.body.fiscalBrowsing;
         }
         if  ( req.body.approvable !== undefined )   {
           user.approvable = req.body.approvable;
         }
-        if  ( req.body.inventory_management !== undefined )    {
-          user.inventory_management = req.body.inventory_management;
+        if  ( req.body.inventoryManagement !== undefined )    {
+          user.inventoryManagement = req.body.inventoryManagement;
         }
-        if  ( req.body.customer_management !== undefined )    {
-          user.customer_management = req.body.customer_management;
+        if  ( req.body.customerManagement !== undefined )    {
+          user.customerManagement = req.body.customerManagement;
         }
         if  ( req.body.deauthorizedAt !== undefined )    {
           user.deauthorizedAt = req.body.deauthorizedAt;
@@ -108,17 +108,19 @@ export default {
           if	( count === 0 )	{
             user.administrable = true;
             user.accounting = true;
-            user.fiscal_browsing = true;
+            user.fiscalBrowsing = true;
             user.approvable = true;
-            user.customer_management = true;
-            user.inventory_management = true;
+            user.customerManagement = true;
+            user.inventoryManagement = true;
+            user.personnelManagement = true;
           } else {
             user.administrable = false;
             user.accounting = false;
-            user.fiscal_browsing = false;
+            user.fiscalBrowsing = false;
             user.approvable = false;
-            user.customer_management = false;
-            user.inventory_management = false;
+            user.customerManagement = false;
+            user.inventoryManagement = false;
+            user.personnelManagement = false;
           }
           //console.log('user--', user);
           user.save().then((ret) => {
@@ -137,9 +139,9 @@ export default {
   },
   login:  (req, res, next) => {
     passport.authenticate('local', (error, user, info) => {
-      //console.log('error', error);
+      console.log('error', error);
       console.log('login user', user);
-      //console.log('info', info);
+      console.log('info', info);
       if (error) {
         return next(error);
       }
@@ -154,7 +156,7 @@ export default {
       } else {
         req.login(user, (error, next) => {
           console.log('/login user', user);
-          //console.log("error", error);
+          console.log("error", error);
           if (error) {
             //console.log("error");
             res.json({

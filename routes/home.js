@@ -44,7 +44,7 @@ const home =  async (req, res, next) => {
 		  }
 		  //console.log('term', req.session.term);
 		  console.log('user', req.session.user);
-		  res.render('home', {
+		  res.render('home.spy', {
 							title: 'Home',
 							msg_type: '',
 							message: '',
@@ -64,7 +64,7 @@ const home =  async (req, res, next) => {
 const setup  =  async (req, res, next) => {
   const countFy = await models.FiscalYear.count();
   if ( countFy === 0 ){
-    res.render('setup', {
+    res.render('setup.spy', {
       title: 'Setup'
     });
   }else{
@@ -76,14 +76,14 @@ router.get('/setup', is_authenticated, setup);
 router.get('/home/:term', is_authenticated, home);
 router.get('/home', is_authenticated, home);
 router.get('/login', (req, res, next) => {
-	res.render('index', {
+	res.render('index.spy', {
 		title: '',
 		msg_type: '',
 		message: ''
 	});
 });
 router.get('/signup', (req, res, next) => {
-	res.render('index', {
+	res.render('index.spy', {
 		title: '',
 		msg_type: '',
 		message: ''

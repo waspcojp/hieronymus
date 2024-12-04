@@ -9,7 +9,9 @@ import FiscalYear from './fiscalyear.js';
 import Invoice from './invoice.js';
 import InvoiceDetail from './invoicedetail.js';
 import MonthlyLog from './monthlylog.js';
-import Product from './product.js';
+import Item from './item.js';
+import ItemClass from './itemclass.js';
+import ItemFile from './itemfile.js';
 import Sticky from './sticky.js';
 import StickyStatus from './stickystatus.js';
 import SubAccount from './subaccount.js';
@@ -42,8 +44,10 @@ const models = {
   FiscalYear: FiscalYear(sequelize, DataTypes),
   Invoice: Invoice(sequelize, DataTypes),
   InvoiceDetail: InvoiceDetail(sequelize, DataTypes),
+  Item: Item(sequelize, DataTypes),
+  ItemClass: ItemClass(sequelize, DataTypes),
+  ItemFile: ItemFile(sequelize, DataTypes),
   MonthlyLog: MonthlyLog(sequelize, DataTypes),
-  Product: Product(sequelize, DataTypes),
   Sticky: Sticky(sequelize, DataTypes),
   StickyStatus: StickyStatus(sequelize, DataTypes),
   SubAccount: SubAccount(sequelize, DataTypes),

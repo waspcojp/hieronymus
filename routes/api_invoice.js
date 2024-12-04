@@ -4,12 +4,17 @@ import company from '../config/company.js';
 
 export default {
   get: async (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     let id =  req.params.id;
     console.log('/api/invoice/', id);
     let include = [
       {
         model: models.Customer,
-        as: 'Customer'
+        as: 'customer'
+      },
+      {
+        model: models.InvoiceDetail,
+        as: 'lines'
       }
     ];
     
@@ -30,53 +35,9 @@ export default {
           [ "issueDate", "ASC" ]
         ]
       }
-      if	( req.query.date )	{
-        let date = new Date(req.query.date);
-        where = {
-          [Op.or]: [
-            {
-              issueDate: {
-                [Op.eq]: date
-              }
-            },
-            {
-              paymentDate: {
-                [Op.eq]: date
-              }
-            }
-          ]
-        };
-      } else {
-        let fy = await models.FiscalYear.findOne({
-          where: {
-            term: req.session.term
-          }
-        });
-        where = {
-            [Op.and]: [
-              {
-                issueDate: {
-                  [Op.gte]: new Date(fy.startDate)
-                }
-              },
-              {
-                issueDate: {
-                  [Op.lte]: new Date(fy.endDate)
-                }
-              }
-            ]
-          };
-      }
-      if	( req.query.type )	{
-        where = {
-          [Op.and]: [
-            where,
-            {
-              type: parseInt(req.query.type)
-            }
-          ]
-        };
-      }
+      where = {
+        term: parseInt(req.query.term)
+      };
       if	( req.query.customer )	{
         where = {
           [Op.and]: [
@@ -87,107 +48,112 @@ export default {
           ]
         };
       }
-      if	( req.query.upper )	{
-        if	( req.query.lower )	{
-          where = {
-            [Op.and]: [
-              where,
-              {
-                amount: {
-                  [Op.gte]: parseInt(req.query.lower)
-                }
-              },
-              {
-                amount: {
-                  [Op.lte]: parseInt(req.query.upper)
-                }
-              }
-            ]
-          };
-        } else {
-          where = {
-            [Op.and]: [
-              where,
-              {
-                amount: {
-                  [Op.lte]: parseInt(req.query.upper)
-                }
-              }
-            ]
-          };
-        }
-      } else
-      if	( req.query.lower )	{
-        where = {
-          [Op.and]: [
-            where,
-            {
-              amount: {
-                [Op.gte]: parseInt(req.query.lower)
-              }
-            }
-          ]
-        };
-
-      }
+      //console.log({where});
+      //console.log({order});
+      //console.log({include});
       models.Invoice.findAll({
         where: where,
         order: order,
-        include: include,
-        distinct: true
-      }).then( async(vouchers) => {
-        res.json(vouchers);
+        include: include
+      }).then((invoice) => {
+        res.json(invoice);
       });
     } else {
-      models.Invoice.findOne({
-        where: {
-          id: id
-        },
+      models.Invoice.findByPk(id, {
         include: include
       }).then((invoice) => {
         res.json(invoice);
       });
     }
   },
-    post: (req, res, next) => {
-        if  ( req.session.user.customer_management )    {
-            models.Invoice.findByPk(id).then((invoice) => {
-                invoice.save().then(()=> {
-                    res.json({ code: 0 });
-                }).catch (() => {
-                    res.json({ code: -1 });
-                });
-            })
-        } else {
-            res.json({ code: -2 });
+  post: async (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if  ( req.session.user.customerManagement )    {
+      let body = req.body;
+      body.createdBy = req.session.user.id;
+      body.updatedBy = req.session.user.id;
+      body.term = req.session.term;
+      let fy = await models.FiscalYear.findOne({
+        where: {
+          term: req.session.term
         }
-    },
-    update: (req, res, next) => {
-        let id = parseInt(req.params.id);
-        if  ( req.session.user.customer_management )    {
-            models.Invoice.findByPk(id).then((invoice) => {
-                invoice.save().then(()=> {
-                    res.json({ code: 0 });
-                }).catch (() => {
-                    res.json({ code: -1 });
-                });
-            })
-        } else {
-            res.json({ code: -2 });
+      });
+      fy.invoiceCount += 1;
+      fy.save();
+      body.no = `${fy.year}-${fy.invoiceCount}`;
+      body.id = undefined;
+      console.log(JSON.stringify(body, ' ', 2 ));
+      models.Invoice.create(body).then(async (invoice)=> {
+        let lines = [];
+        for ( let i = 0 ; i < body.lines.length ; i ++ )  {
+          let line = body.lines[i];
+          line.invoiceId = invoice.id;
+          line.lineNo = i;
+          line.id = undefined;
+          line = await models.InvoiceDetail.create(line);
+          lines.push(line.dataValues);
         }
-    },
-    delete: (req, res, next) => {
-        let id = parseInt(req.params.id);
-        if  ( req.session.user.customer_management )   {
-            models.Invoice.findByPk(id).then((invoice) => {
-                invoice.destroy().then(() => {
-                    res.json({ code: 0});
-                }).catch (()=> {
-                    res.json({ code: -1});
-                })
-            })
-        } else {
-            res.json({ code: -2});
-        }
-    },
+        console.log(lines);
+        let _invoice = invoice.dataValues;
+        _invoice.lines = lines;
+        console.log(JSON.stringify(_invoice, ' ', 2 ));
+        res.json(_invoice);
+      }).catch ((e) => {
+        console.log(e);
+        res.json({ code: -1 });
+      });
+    } else {
+      res.json({ code: -2 });
+    }
+  },
+  update: (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
+		let body = req.body;
+		body.updatedBy = req.session.user.id;
+		let id = req.params.id ? parseInt(req.params.id) : body.id;
+    if  ( req.session.user.customerManagement )    {
+      models.Invoice.findByPk(id).then(async (invoice) => {
+        invoice.set(body);
+        await invoice.save();
+        await models.InvoiceDetail.destroy({
+          where: {
+            invoiceId: invoice.id
+          }
+        });
+        let lines = [];
+        for ( let i = 0 ; i < body.lines.length ; i ++ )  {
+          let line = body.lines[i];
+          line.invoiceId = invoice.id;
+          line.lineNo = i;
+          line.id = undefined;
+          let _line = await models.InvoiceDetail.create(line);
+          lines.push(_line.dataValues);
+        };
+        let _invoice = invoice.dataValues;
+        _invoice.lines = lines;
+        console.log(JSON.stringify(_invoice, ' ', 2 ));
+        res.json(_invoice);
+      }).catch ((e) => {
+        console.log(e);
+        res.json({ code: -1 });
+      });
+    } else {
+      res.json({ code: -2 });
+    }
+  },
+  delete: (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    let id = parseInt(req.params.id);
+    if  ( req.session.user.customerManagement )   {
+      models.Invoice.findByPk(id).then((invoice) => {
+        invoice.destroy().then(() => {
+          res.json({ code: 0});
+        }).catch (()=> {
+          res.json({ code: -1});
+        })
+      })
+    } else {
+      res.json({ code: -2});
+    }
+  }
 }

@@ -15,6 +15,7 @@ import invoice from './api_invoice.js';
 import admin from './api_admin.js';
 import changes from './api_changes.js';
 import setup from './api_setup.js';
+import item from './api_item.js';
 
 //import account_classes from './api_account_classes';
 import cross_slip from './api_cross_slip.js';
@@ -100,6 +101,21 @@ router.delete('/voucher', voucher.delete);
 router.delete('/voucher/file', voucher.deleteFile);
 router.delete('/voucher/:id', voucher.delete);
 router.get('/voucher/files/:id', voucher.files);
+
+router.get('/item/classes', item.classes);
+router.get('/item', item.get);
+router.get('/item/:id', item.get);
+router.post('/item', item.post);
+router.post('/item/upload/:id', item.upload);
+router.post('/item/upload',item.upload);
+router.put('/item', item.update);
+router.put('/item/bind', item.bind);
+router.put('/item/:id', item.update);
+router.delete('/item', item.delete);
+router.delete('/item/file', item.deleteFile);
+router.delete('/item/:id', item.delete);
+router.get('/item/files/:id', item.files);
+
 
 router.get('/term/:year/:month', async (req, res, next) => {
 	let year = req.params.year;

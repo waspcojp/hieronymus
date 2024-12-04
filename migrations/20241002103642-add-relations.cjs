@@ -80,17 +80,6 @@ module.exports = {
       onDelete: 'RESTRICT',
       onUpdate: 'CASCADE'
     });
-    await queryInterface.addConstraint('InvoiceDetails', {
-      fields: ['productId'],
-      type: 'foreign key',
-      name: 'InvoiceDetails_ProductId_fkey',
-      references: {
-        table: 'Products',
-        field: 'id'
-      },
-      onDelete: 'SET NULL',
-      onUpdate: 'RESTRICT'
-    });
     await queryInterface.addConstraint('StickyStatuses', {
       fields: ['stickyId'],
       type: 'foreign key',
@@ -218,7 +207,6 @@ module.exports = {
     await queryInterface.removeConstraint('CrossSlips', 'CrossSlips_createdBy_fkey');
     await queryInterface.removeConstraint('CrossSlips', 'CrossSlips_updatedBy_fkey');
     await queryInterface.removeConstraint('CrossSlips', 'CrossSlips_approvedBy_fkey');
-    await queryInterface.removeConstraint('InvoiceDetails', 'InvoiceDetails_ProductId_fkey');
     await queryInterface.removeConstraint('StickyStatuses', 'StickyStatuses_stickyId_fkey');
     await queryInterface.removeConstraint('StickyStatuses', 'StickyStatuses_receiverId_fkey');
     await queryInterface.removeConstraint('SubAccounts', 'SubAccounts_accountId_fkey');

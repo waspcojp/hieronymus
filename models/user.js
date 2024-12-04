@@ -17,10 +17,10 @@ export default (sequelize, DataTypes) => {
       // associations can be defined here
     }
     set password(p) {
-      this.hash_password = bcrypt.hashSync(p, SALT_ROUNDS);
+      this.hashPassword = bcrypt.hashSync(p, SALT_ROUNDS);
     }
     get password() {
-      return (this.hash_password);
+      return (this.hashPassword);
     }
     get is_live() {
       console.log('is_live', this.deauthorizedAt);
@@ -42,14 +42,15 @@ export default (sequelize, DataTypes) => {
   }
   User.init({
     name: DataTypes.STRING,
-    hash_password: DataTypes.STRING,
+    hashPassword: DataTypes.STRING,
     deauthorizedAt: DataTypes.DATE,
     accounting: DataTypes.BOOLEAN,
-    fiscal_browsing: DataTypes.BOOLEAN,
+    fiscalBrowsing: DataTypes.BOOLEAN,
     approvable: DataTypes.BOOLEAN,
     administrable: DataTypes.BOOLEAN,
-    customer_management: DataTypes.BOOLEAN,
-    inventory_management: DataTypes.BOOLEAN
+    customerManagement: DataTypes.BOOLEAN,
+    inventoryManagement: DataTypes.BOOLEAN,
+    personnelManagement: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User'

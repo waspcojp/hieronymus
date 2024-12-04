@@ -14,24 +14,23 @@ export default (sequelize, DataTypes) => {
 				as: 'invoice',
 				onDelete: 'CASCADE'
 			});
-			this.hasOne(models.Product, {
-				sourceKey: 'productId',
+			this.hasOne(models.Item, {
+				sourceKey: 'itemId',
 				foreignKey: 'id',
-				as: 'product'
+				as: 'item'
 			});
     }
   }
   InvoiceDetail.init({
     invoiceId: DataTypes.INTEGER,
     lineNo: DataTypes.INTEGER,
-    productId: DataTypes.INTEGER,
-    productName: DataTypes.TEXT,
-    productDetail: DataTypes.TEXT,
+    itemId: DataTypes.INTEGER,
+    itemName: DataTypes.TEXT,
+    itemSpec: DataTypes.TEXT,
     unitPrice: DataTypes.DECIMAL(12),
-    itemNumber: DataTypes.DECIMAL(12),
+    itemNumber: DataTypes.DECIMAL(8,2),
+    unit: DataTypes.STRING,
     amount: DataTypes.DECIMAL(12),
-    tax: DataTypes.DECIMAL(12),
-    taxClass: DataTypes.INTEGER,
     description: DataTypes.TEXT
   }, {
     sequelize,
