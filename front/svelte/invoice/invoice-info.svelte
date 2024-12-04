@@ -1,89 +1,168 @@
 <input type="hidden" id="id" bind:value={invoice.id}>
 <div class="container-fluid">
   <div class="row mb-3">
-    <div class="col-3">
+    <div class="col-1">進捗</div>
+    <div class="col-11">
       <div class="row">
-        <label for="type" class="col-4 col-form-label">状態</label>
-        <div class="col-8">
-          <select class="form-select" id="type" bind:value={invoice.status}>
-            <option value="-1">未設定</option>
-            <option value="11">見積</option>
-            <option value="21">受注</option>
-            <option value="31">請求</option>
-            <option value="32">回収</option>
-            <option value="99">その他</option>
-          </select>
+        <div class="col-3">
+          <div class="row">
+            <label for="issueDate" class="col-4 col-form-label">発生日</label>
+            <div class="col-8">
+              <input type="date" class="form-control" id="issueDate"
+                bind:value={invoice.issueDate}>
+            </div>
+          </div>
+          {#if ( invoice.id && invoice.issueDate )}
+          <div class="row">
+            <div class="col-12">
+              <a class="btn btn-info" href="/invoice/invoice/{invoice.id}" target="_brank">
+                見積書出力
+              </a>
+            </div>
+          </div>
+          {/if}
         </div>
-      </div>
-    </div>
-    <div class="col-4">
-      <div class="row">
-        <label for="issueDate" class="col-4 col-form-label">発生日</label>
-        <div class="col-sm-8">
-          <input type="date" class="form-control" id="issueDate" bind:value={invoice.issueDate}>
-        </div>
-      </div>
-    </div>
-    <div class="col-1">
-      <button type="button" class="btn btn-sm btn-light"
-        on:click={copy_down}>
-        <i class="fas fa-angle-right"></i>
-      </button>
-    </div>
-    <div class="col-4">
-      <div class="row">
-        <label for="paymentDate" class="col-4 col-form-label">支払日</label>
-        <div class="col-sm-8">
-          <input type="date" class="form-control" id="paymentDate" bind:value={invoice.paymentDate}>
+        <div class="col-3">
+          <div class="row">
+            <label for="expiringDate" class="col-4 col-form-label">有効期限</label>
+            <div class="col-8">
+              <input type="date" class="form-control" id="expiringDate"
+                bind:value={invoice.expiringDate}>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="row">
-    <label for="customerName" class="col-2 col-form-label">相手先</label>
-    <div class="col-sm-10">
+  <div class="row mb-3">
+    <div class="col-1"></div>
+    <div class="col-2">
+      <button type="button" class="btn btn-sm btn-light"
+        on:click={copy_down}>
+        <i class="fas fa-angle-down"></i>
+      </button>
+      <button type="button" class="btn btn-sm btn-light"
+        on:click={copy_up}>
+        <i class="fas fa-angle-up"></i>
+      </button>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-1"></div>
+    <div class="col-11">
+      <div class="row">
+        <div class="col-3">
+          <div class="row">
+            <label for="orderedDate" class="col-4 col-form-label">受注日</label>
+            <div class="col-8">
+              <input type="date" class="form-control" id="orderedDate"
+                bind:value={invoice.orderedDate}>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="row">
+            <label for="deliveryDate" class="col-4 col-form-label">納期</label>
+            <div class="col-8">
+              <input type="date" class="form-control" id="deliveryDate"
+                bind:value={invoice.deriveryDate}>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="row">
+            <label for="billingDate" class="col-4 col-form-label">請求日</label>
+            <div class="col-8">
+              <input type="date" class="form-control" id="billingDate"
+                bind:value={invoice.billingDate}>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="row">
+            <label for="paymentDate" class="col-4 col-form-label">領収日</label>
+            <div class="col-8">
+              <input type="date" class="form-control" id="paymentDate"
+                bind:value={invoice.paymentDate}>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label class="col-1 col-form-label">相手先</label>
+    <div class="col-11">
       <CustomerSelect
         on:startregister
         on:endregister
         register="true"
-        style="width:100%;"
-        bind:cutomerId={invoice.customerId}/>
-      </div>
-  </div>
-  <div class="row mb-3">
-    <label for="amount" class="col-2 col-form-label">金額</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control number" id="amount"
-        on:focusout={focusout}
-        on:focusin={focusin}
-        bind:value={invoice.amount}>
+        input="input"
+        bind:customerId={invoice.customerId}
+        bind:customerName={invoice.customerName}
+        bind:chargeName={invoice.chargeName}
+        bind:zip={invoice.zip}
+        bind:address1={invoice.address1}
+        bind:address2={invoice.address2}
+      />
     </div>
   </div>
   <div class="row mb-3">
-    <label for="taxClass" class="col-2 col-form-label">消費税</label>
-    <div class="col-sm-2">
+    <label for="subject" class="col-1 col-form-label">件名</label>
+    <div class="col-sm-11">
+      <input type="text" class="form-control" id="subject"
+        bind:value={invoice.subject} />
+    </div>
+  </div>
+  <div class="row mb-3">
+    <InvoiceDetails
+      bind:details={invoice.lines}
+      bind:sum={sum}
+      on:sum={computeTax}
+    ></InvoiceDetails>
+  </div>
+  <div class="row mb-3">
+    <label for="paymentMethod" class="col-1 col-form-label">支払方法</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" id="paymentMethod"
+        bind:value={invoice.paymentMethod} />
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="taxClass" class="col-1 col-form-label">消費税</label>
+    <div class="col-sm-1">
       <select class="form-control" id="taxClass"
         bind:value={invoice.taxClass}>
-        <option value="-1">未選択</option>
-        <option value="0">非課税</option>
-        <option value="1">内税</option>
-        <option value="2">外税</option>
-        <option value="9">別計算</option>
+        {#each TAX_CLASS as ent}
+        <option value={ent[1]}>{ent[0]}</option>
+        {/each}
       </select>
     </div>
     <div class="col-sm-2">
-      <input type="text" class="form-control number" id="tax" bind:value={invoice.tax}>
+      {#if ( parseInt(invoice.taxClass) === 9 )}
+      <input type="text" class="form-control number" id="tax"
+        bind:value={invoice.tax}>
+      {:else}
+      <input type="text" class="form-control number" id="tax" disabled="true"
+        value={invoice.tax.toLocaleString()}>
+      {/if}
     </div>
   </div>
   <div class="row mb-3">
-    <label for="description" class="col-2 col-form-label">備考</label>
+    <label for="amount" class="col-1 col-form-label">金額</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control number" id="amount" disabled="true"
+        value={invoice.amount.toLocaleString()}>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="description" class="col-1 col-form-label">備考</label>
     <div class="col-sm-10">
       <textarea class="form-control" id="description"
         bind:value={invoice.description} />
     </div>
   </div>
 </div>
-
 <style>
 .file-item {
   width:90px;
@@ -100,39 +179,47 @@
 </style>
 
 <script>
-import {numeric} from '../../javascripts/cross-slip';
+import {numeric, TAX_CLASS} from '../../javascripts/cross-slip';
 import axios from 'axios';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import CustomerSelect from '../components/customer-select.svelte';
-export	let	invoice;
+import InvoiceDetails from './invoice-details.svelte';
+
+export let invoice;
 
 let	original_customers;
 let customerKey;
+let sum = 0;
 
 beforeUpdate(() => {
   console.log('invoice-info beforeUpdate',invoice);
   computeTax();
 });
 
-const copy_up = (event) => {
-  invoice.issueDate = invoice.paymentDate;
-}
 const copy_down = (event) => {
-  invoice.paymentDate = invoice.issueDate;
+  invoice.orderedDate = invoice.issueDate;
+}
+const copy_up = (event) => {
+  invoice.issueDate = invoice.orderedDate;
 }
 
 const computeTax = (event) => {
   console.log('computeTax');
   switch	(parseInt(invoice.taxClass))	{
     case	0:
-    invoice.tax = 0;
-    break;
+      invoice.tax = 0;
+      break;
     case	1:
-    invoice.tax = (Math.round(numeric(invoice.amount) / 110 * 10)).toLocaleString();
-    break;
+      invoice.tax = Math.round(sum / 110 * 10);
+      invoice.amount = sum;
+      break;
     case	2:
-    invoice.tax = (Math.round(numeric(invoice.amount) * 0.1)).toLocaleString();
-    break;
+      invoice.tax = Math.round(sum * 0.1);
+      invoice.amount = sum + invoice.tax;
+      break;
+    case  9:
+      invoice.amount = sum + parseInt(invoice.tax);
+      break;
   }
 }
 const focusout = (event) => {
@@ -146,14 +233,12 @@ const focusin = (event) => {
 }
 
 onMount(() => {
-  console.log('invoice-info onMount');
+  console.log('invoice-info onMount', invoice);
   if	( invoice.id )	{
-      customerKey = invoice.Customer.name;
-      invoice.amount = numeric(invoice.amount).toLocaleString();
-      invoice.tax = numeric(invoice.tax).toLocaleString();
-    } else {
-      customerKey = '';
-    }
+    customerKey = invoice.customerName;
+  } else {
+    customerKey = '';
+  }
   axios.get(`/api/customer/`).then((result) => {
     original_customers = result.data;
     console.log('customer update', original_customers);

@@ -26,6 +26,9 @@
         {:else if ( current === 'invoices' || current === 'invoice')}
         <Invoices
           term={term}></Invoices>
+        {:else if ( current === 'items' || current === 'item')}
+        <Items
+          user={user}></Items>
         {/if}
       </div>
     </div>
@@ -48,6 +51,7 @@ import Login from './login/login.svelte';
 import SignUp from './login/signup.svelte';
 import Users from './users/users.svelte';
 import Invoices from './invoice/invoice.svelte';
+import Items from './items/item.svelte';
 
 export let term;
 

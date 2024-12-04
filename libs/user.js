@@ -12,8 +12,8 @@ _passport.use(new Local({
     passReqToCallback: true,
     session: true,
   }, (req, user_name, password, done) => {
-    //console.log('user_name', user_name);
-    //console.log('password', password);
+    console.log('user_name', user_name);
+    console.log('password', password);
     //console.log('done', done);
 
     process.nextTick(() => {
@@ -56,22 +56,24 @@ export	const	is_authenticated = (req, res, next) => {
 }
 
 export	const	auth_user = (name, password) => {
+  console.log('auth_user', {name}, {password})
   return new Promise((done, fail) => {
     models.User.findOne({
       where: {
         name: name },
     }).then((user) => {
-      //console.log(user);
+      console.log(user);
       if ( user ) {
-        if  ( bcrypt.compareSync(password, user.hash_password) ) {
-          //console.log("auth ok");
+        console.log(user.hashPassword)
+        if  ( !user.hashPassword  ||  bcrypt.compareSync(password, user.hashPassword) ) {
+          console.log("auth ok");
           done(user);
         } else {
-          //console.log("auth fail");
+          console.log("auth fail");
           fail(user);
         }
       } else {
-        //console.log("user none");
+        console.log("user none");
         fail(null);
       }
     });
@@ -81,7 +83,7 @@ export const   passwd = (name, old_pass, new_pass) => {
     //console.log('passwd', user.name, old_pass, new_pass);
     return new Promise((done, fail) => {
       auth_user(name, old_pass).then((user) => {
-        user.hash_password = bcrypt.hashSync(new_pass, SALT_ROUNDS);
+        user.hashPassword = bcrypt.hashSync(new_pass, SALT_ROUNDS);
         user.save().then(() => {
         done(true);
       }).catch(() => {

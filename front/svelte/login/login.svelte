@@ -59,6 +59,7 @@ const Login = () => {
         user_name: user_name,
         password: password
       }).then((_env) => {
+        console.log('result', _env.data);
         if  ( _env.data.result === 'OK') {
           window.location = '/home';
         } else {

@@ -1,28 +1,74 @@
 {#if ( status === 'select' )}
-<div style={style}>
-  <input type="text" autocomplete="off" id="customerName"
-    style={ ( register === 'true' ) ? "width:80%;" : "width:100%;"}
-    bind:value={customerKey}
-    on:change={changeKey}
-    on:keyup={changeKey}
-    on:focusout={leaveKey}
-    on:focusin={enterKey}
-    />
+<div class="row mb-3">
+  <div class={ ( register === 'true' ) ? "col-11" : "col-12"}>
+    <input type="text" autocomplete="off"
+      class="form-control"
+      placeholder="検索キー"
+      bind:value={customerKey}
+      on:change={changeKey}
+      on:keyup={changeKey}
+      on:focusout={leaveKey}
+      on:focusin={enterKey}
+      />
+  </div>
   {#if (register === 'true') }
-  <button type="button" class="btn btn-primary"
-    on:click={openEntry}>登録</button>
-  {/if}
-  {#if ( customers && customers.length > 0 ) }
-  <select id="customerId" style="width:100%;"
-    bind:value={customerId}>
-    {#each customers as customer}
-    <option value={customer.id}>
-      {customer.name}
-    </option>
-    {/each}
-  </select>
+  <div class="col-1">
+    <button type="button" class="btn btn-primary"
+      on:click={openEntry}>
+      登録
+      </button>
+  </div>
   {/if}
 </div>
+{#if ( customers && customers.length > 0 ) }
+  <div class="row mb-3">
+    <select id="customerId" class="col-12 form-control"
+      bind:value={customerId}>
+      {#each customers as customer}
+      <option value={customer.id}>
+        {customer.name}
+      </option>
+      {/each}
+    </select>
+  </div>
+{/if}
+{#if ( input === 'view' || input === 'input') }
+  <div class="row mb-2">
+    <label for="customerName" class="col-1 col-form-label">相手先名</label>
+    <div class="col-11">
+      <input type="text" id="customerName" class="form-control"
+        bind:value={customerName} disabled={( input === 'view' ) ? true : false}/>
+      </div>
+    </div>
+  <div class="row mb-2">
+    <label for="zip" class="col-1 col-form-label">郵便番号</label>
+    <div class="col-2">
+      <input type="text" id="zip" class="form-control"
+        bind:value={zip} disabled={( input === 'view' ) ? true : false}>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <label for="address1" class="col-1 col-form-label">住所</label>
+    <div class="col-11">
+      <input type="text" id="address1" class="form-control"
+        bind:value={address1} disabled={( input === 'view' ) ? true : false}>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <label for="address2" class="col-1 col-form-label" style="height:38px;"></label>
+    <div class="col-11">
+      <input type="text" id="address2" class="form-control"
+        bind:value={address2} disabled={( input === 'view' ) ? true : false}>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <label for="chargeName" class="col-1 col-form-label">担当者</label>
+    <div class="col-11">
+      <input type="text" id="chargeName" class="form-control"
+        bind:value={chargeName} disabled={( input === 'view' ) ? true : false}>
+    </div>
+  </div>
+{/if}
 {:else}
 <CustomerEntry
 	modal={modal}
@@ -40,7 +86,13 @@ import CustomerEntry from '../customer/customer-entry.svelte';
 
 export let customerId;
 export let register;
+export let input;
 export let style;
+export let customerName;
+export let chargeName;
+export let zip;
+export let address1;
+export let address2;
 
 let	original_customers;
 let	field_value;
@@ -93,19 +145,26 @@ const changeKey = (event) =>{
         customers.push(original_customers[i]);
       }
     }
-        customerId = ( customers.length > 0 ) ? customers[0].id : undefined;
+    customerId = ( customers.length > 0 ) ? customers[0].id : undefined;
     let select = document.getElementById('customerId');
     if	( select )	{
       select.addEventListener('focusout', customerSelect);
     }
   }
 }
-const customerName = (id) => {
+const customerDecide = (id) => {
   if  ( customers )   {
     for	( let i = 0; i < customers.length; i ++ )	{
       if	( customers[i].id == id )	{
-        customerId = customers[i].id;
-        customerKey = customers[i].name;
+        let customer = customers[i];
+        //console.log(customer)
+        customerId = customer.id;
+        customerName = customer.name;
+        chargeName = customer.chargeName;
+        zip = customer.zip;
+        address1 = customer.address1;
+        address2 = customer.address2;
+        customerKey = customerName;
         break;
       }
     }
@@ -114,8 +173,7 @@ const customerName = (id) => {
   }
 }
 const	customerSelect = (event)	=> {
-  customerId = undefined;
-  customerName(event.target.value);
+  customerDecide(event.target.value);
   customers = [];
   dispatch('input', customerId);
 }
@@ -128,7 +186,7 @@ onMount(() => {
     original_customers = result.data;
     customers = original_customers;
     //console.log('customer update', original_customers);
-    customerName(customerId);
+    customerDecide(customerId);
     customers = undefined;
   });
 })

@@ -1,27 +1,41 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <h5 class="entry-title">見積請求情報</h5>
-  </div> 
-</nav>
-<div class="row full-height fontsize-12pt">
-  <div class="entry-content">
-    <div class="entry-body">
-      <InvoiceInfo
-        on:startregister={() => { disabled = true}}
-        on:endregister={() => { disabled = false}}
-        bind:invoice={invoice}></InvoiceInfo>
-    </div>
-    <div class="entry-footer">
-      <button type="button" class="btn btn-secondary" disabled={disabled}
-        on:click={close_}>もどる</button>
-      {#if ( invoice && invoice.id && invoice.id > 0 )}
-      <button type="button" class="btn btn-danger" disabled={disabled}
-        on:click={delete_}
-        id="delete-button">Delete</button>
+<div class="entry">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <h5 class="entry-title">見積請求情報</h5>
+      {#if invoice.no}
+      <span>管理番号:&nbsp;{invoice.no}</span>
+      {:else}
+      <span>新規</span>
       {/if}
-      <button type="button" class="btn btn-primary" disabled={disabled}
-        on:click={save}
-        id="save-button">Save</button>
+    </div> 
+  </nav>
+  <div class="row full-height fontsize-12pt">
+    <div class="entry-content">
+      <div class="entry-body">
+        <InvoiceInfo
+          on:startregister={() => { disabled = true}}
+          on:endregister={() => { disabled = false}}
+          bind:invoice={invoice}></InvoiceInfo>
+      </div>
+      <div class="entry-footer">
+        <button type="button" class="btn btn-secondary" disabled={disabled}
+          on:click={back}>もどる</button>
+        {#if ( invoice && invoice.id && invoice.id > 0 )}
+        <button type="button" class="btn btn-danger" disabled={disabled}
+          on:click={delete_}
+          id="delete-button">削除</button>
+        <button type="button" class="btn btn-info" disabled={disabled}
+          on:click={() => {
+              invoice.id = undefined;
+              save()
+            }
+          }
+          id="create-button">複製</button>
+        {/if}
+        <button type="button" class="btn btn-primary" disabled={disabled}
+          on:click={save}
+          id="save-button">保存</button>
+      </div>
     </div>
   </div>
 </div>
@@ -35,7 +49,6 @@ import InvoiceInfo from './invoice-info.svelte';
 
 export	let	invoice;
 
-let	files;
 let update;
 let disabled = false;
 
@@ -53,19 +66,12 @@ const update_invoice = async (_invoice) => {
 }
 const delete_invoice = async (invoice) => {
   console.log('delete_invoice', invoice);
-  let result = await axios.delete('/api/invoice', {
-    data: {
-      id: invoice.id
-    }
-  });
+  let result = await axios.delete(`/api/invoice/${invoice.id}`);
   console.log(result);
 }
 
-const save = (event) => {
-  console.log('invoice', invoice);
-  if	( invoice.type )	{
-    invoice.type = parseInt(invoice.type);
-  }
+const save = () => {
+  //console.log('input', invoice);
   if	( invoice.customerId )	{
     invoice.customerId = parseInt(invoice.customerId);
   }
@@ -76,7 +82,6 @@ const save = (event) => {
     invoice.tax = numeric(invoice.tax);
   }
   invoice.taxClass = parseInt(invoice.taxClass);
-  console.log('input', invoice);
   try {
     let	pr;
     if ( invoice.id  ) {
@@ -87,9 +92,10 @@ const save = (event) => {
     }
     pr.then((result) => {
       update = true;
+      if  ( !result.data.code ) {
+        invoice = result.data;
+      }
       console.log('result', result);
-      console.log('files', files.length);
-      close_();
     });
   }
   catch(e) {
@@ -99,34 +105,41 @@ const save = (event) => {
   }
 };
 
-
-const clean_popup = () => {
+const clean = () => {
   invoice = null;
-  files = [];
 }
 
-const	close_ = (event) => {
-  clean_popup();
+const	back = (event) => {
+  clean();
   dispatch('close', update);
 }
 
 beforeUpdate(() => {
-  console.log('invoice-entry beforeUpdate', invoice);
+  //console.log('invoice-entry beforeUpdate', invoice);
   update = false;
   if	( !invoice )	{
     invoice = {
+      no: null,
       issueDate: formatDate(new Date()),
+      expiringDate: null,
+      orderedDate: null,
+      deliveryDate: null,
+      billingDate: null,
       paymentDate: null,
       amount: "0",
-      taxClass: "-1",
+      taxClass: 2,
       tax: "0",
-      type: "-1"
+      subject: '',
+      paymentMethod: '',
+      lines: [{
+        itemName: '',
+        itemSpec: '',
+        unitPrice: 0,
+        itemNumber: 0,
+        amount: 0,
+        description: ''
+      }]
     };
-  } else {
-    if	( invoice.type )	{
-      invoice.type = invoice.type.toString();
-    }
-    invoice.taxClass = invoice.taxClass.toString();
   }
 });
 
@@ -134,7 +147,7 @@ const	delete_ = (event) => {
   try {
     console.log('delete');
     delete_invoice(invoice).then(() => {
-      clean_popup();
+      back();
     });
   }
   catch(e) {

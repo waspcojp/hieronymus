@@ -1,4 +1,5 @@
 <input type="hidden" id="id" bind:value={voucher.id} />
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="container-fluid"
   on:drop={onDrop}
   on:dragover={onDragOver}>
@@ -42,12 +43,12 @@
   <div class="row mb-3">
     <label for="zip" class="col-2 col-form-label">相手先</label>
 
-    <div class="col-sm-5">
+    <div class="col-10">
       <CustomerSelect
-        style="width:100%;"
         on:startregister
         on:endregister
         register=true
+        input="view"
         bind:customerId={voucher.customerId}/>
     </div>
   </div>
@@ -214,18 +215,17 @@ const upload = (file) => {
       url = `/api/voucher/upload`;
     }
     axios.post( url,
-          body,
-          {
-            "content-type": "multipart/form-data"
-          }).
-      then(result => {
-        console.log('result', result);
-        done(result.data);
-      }).catch(err => {
-        fail(err);
-      });
+      body,
+      {
+        "content-type": "multipart/form-data"
+      }
+    ).then(result => {
+      console.log('result', result);
+      done(result.data);
+    }).catch(err => {
+      fail(err);
+    });
   });
-
 }
 
 onMount(() => {

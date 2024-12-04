@@ -207,3 +207,7 @@ ul.nav {
 .entry-content {
     padding-top: 20px;
 }
+
+.markdown img {
+    max-width: 100%;
+}

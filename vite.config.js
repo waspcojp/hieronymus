@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 const realPath = (name) => {
   return  path.resolve(__dirname, path.resolve('front/javascripts', name));
@@ -48,6 +49,14 @@ export default defineConfig({
       compilerOptions: {
         dev: process.env.NODE_ENV !== 'production'
       }
+    }),
+    viteStaticCopy({
+      targets: [
+        {
+          src: '../../node_modules/tinymce/**/*', // コピー元
+          dest: 'tinymce', // コピー先 (dist/tinymce)
+        },
+      ],
     })
   ],
   resolve: {

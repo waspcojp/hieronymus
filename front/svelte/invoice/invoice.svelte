@@ -1,12 +1,12 @@
 {#if ( state === 'list' )}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <span class="navbar-brand">請求書一覧</span>
+    <span class="navbar-brand">見積 / 請求書一覧</span>
     <ul class="navbar-nav me-auto mb-2">
       <li class="nav-item">
         <button type="button" class="btn btn-primary"
           on:click={openEntry}
-          id="invoice-info">請求書入力</button>
+          id="invoice-info">新規入力&nbsp;<i class="bi bi-pencil-square"></i></button>
       </li>
     </ul>
   </div> 
@@ -16,12 +16,11 @@
     term={term}
     invoices={invoices}
     on:open={openEntry}
-    on:selectInvoiceType={selectInvoiceType}
     on:selectCustomerId={selectCustomer}
     on:selectAmount={selectAmount}
     ></InvoiceList>
 </div>
-{:else}
+{:else if ( state === 'entry' || state === 'new' )}
   <InvoiceEntry
     term={term}
     bind:invoice={invoice}
@@ -44,13 +43,6 @@ let dates;
 let current_params = new Map();
 let state = 'list';
 
-const selectInvoiceType = (event) => {
-  let	invoiceType = event.detail;
-  console.log({invoiceType});
-  updateInvoices({
-    type: invoiceType
-  });
-}
 const selectCustomer = (event) => {
   let	customerId = event.detail;
   console.log({customerId});
@@ -77,7 +69,7 @@ const updateInvoices = (_params) => {
       }
     });
   }
-  console.log('current_params', current_params);
+  //console.log('current_params', current_params);
   let _array = [];
   current_params.forEach((value, key) => {
     console.log('key, value', key, value);
@@ -102,26 +94,26 @@ const	openEntry = (event)	=> {
     invoice = null;
     state = 'new';
     window.history.pushState(
-      {}, "", `/invoice/${term}/new`);
+      null, "", `/invoice/${term}/new`);
   } else {
     state = 'entry';
     window.history.pushState(
-      {}, "", `/invoice/${term}/entry/${invoice.id}`);
+      null, "", `/invoice/${term}/entry/${invoice.id}`);
   }
-  console.log('invoice', invoice)
+  //console.log('invoice', invoice)
 };
 
 const closeEntry = (event) => {
-  console.log('close', event.detail);
+  //console.log('close', event.detail);
   state = 'list';
   window.history.pushState(
-      {}, "", `/invoices/${term}/`);
+      null, "", `/invoice/${term}/`);
   updateInvoices();
 }
 
 const checkPage = () => {
   let args = location.pathname.split('/');
-  console.log({args});
+  //console.log({args});
   if  (( !args[3] ) ||
        ( args[3] === '') ||
        ( args[3] === 'list' ))  {
@@ -139,7 +131,7 @@ const checkPage = () => {
   if  ( args[3] === 'new' ) {
     state = 'new';
   }
-  console.log({state});
+  //console.log({state});
   term = parseInt(args[2]);
 }
 

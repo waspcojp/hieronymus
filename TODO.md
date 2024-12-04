@@ -8,6 +8,7 @@
 
 ## TODO
 
+* 品目一覧にサムネ
 * beforeUpdateとonMountを最適化する
 * APIにも権限管理を入れる
 * 税込会計の時に消費税欄を消す

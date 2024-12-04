@@ -2,14 +2,23 @@
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th scope="col" style="width:100px;">
-          種別
+        <th scope="col" style="width: 150px;">
+          相手先
         </th>
         <th scope="col" style="width: 200px;">
-          相手先
+          件名
         </th>
         <th scope="col" style="width: 100px;">
           発生日
+        </th>
+        <th scope="col" style="width: 100px;">
+          受注日
+        </th>
+        <th scope="col" style="width: 100px;">
+          納期
+        </th>
+        <th scope="col" style="width: 100px;">
+          請求日
         </th>
         <th scope="col" style="width: 100px;">
           支払日
@@ -17,39 +26,30 @@
         <th scope="col" style="width: 100px;">
           金額
         </th>
-        <th scope="col" style="width: 400px;">
-          説明
-        </th>
       </tr>
     </thead>
     <tbody>
-      <tr style="height:25px;">
-        <td>
-          <select
-              on:input={changeInvoiceStatus}
-              bind:value={selectInvoiceStatus}>
-            <option></option>
-            <option value="11">見積</option>
-            <option value="21">受注</option>
-            <option value="31">請求</option>
-            <option value="32">回収</option>
-            <option value="99">その他</option>
-          </select>
-        </td>
-        <td style="padding:5px;">
+      <tr>
+        <td style="padding:10px 20px;">
           <CustomerSelect
-            style="width:100%;"
+            register=false
             bind:value={customerId}
             on:input={changeCustomer}>
           </CustomerSelect>
         </td>
         <td>
-
         </td>
         <td>
-
         </td>
         <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td style="text-align:right;">
           <input type="text" class="number" placeholder="下限" size="12" maxlength="13"
               bind:value={lowerAmount}
               on:keypress={changeAmount} />
@@ -57,71 +57,34 @@
               bind:value={upperAmount}
               on:keypress={changeAmount} />
         </td>
-        <td>
-
-        </td>
-        <td>
-
-        </td>
       </tr>
       {#each invoices as line}
       <tr>
         <td>
+          {line.customerName}
+        </td>
+        <td>
           <a href="#" data-no={line.id} on:click={openInvoice}>
-            {invoiceStatus(line.status)}
+            {line.subject ? line.subject : '__'}
           </a>
         </td>
         <td>
-          {line.Customer.name}
+          {formatDate(line.issueDate)}
         </td>
         <td>
-          {#if (  line.issueDate &&
-              ( line.details.length > 0 ) &&
-              compDate(line.issueDate,
-                line.details[0].CrossSlip.year,
-                line.details[0].CrossSlip.month,
-                line.details[0].CrossSlip.day) ) }
-          <a href="#" class="link-primary"
-            data-year={line.details[0].CrossSlip.year}
-            data-month={line.details[0].CrossSlip.month}
-            data-no={line.details[0].CrossSlip.no}
-            on:click={openSlip}>
-            {formatDate(line.issueDate)}
-          </a>
-          {:else}
-          <a href="#" class="link-danger"
-            data-year={new Date(line.issueDate).getFullYear()}
-            data-month={new Date(line.issueDate).getMonth()+1}
-            data-day={new Date(line.issueDate).getDate()}
-            data-id={line.id}
-            on:click={openSlip}>
-            {formatDate(line.issueDate)}
-          </a>
-          {/if}
+          {formatDate(line.orderdDate)}
         </td>
         <td>
-          {#if (	line.paymentDate &&
-              ( line.details.length > 0 ) &&
-              compDate(line.paymentDate,
-              line.details[0].CrossSlip.year,
-              line.details[0].CrossSlip.month,
-              line.details[0].CrossSlip.day) ) }
-          <a href="#"
-            data-year={line.details[0].CrossSlip.year}
-            data-month={line.details[0].CrossSlip.month}
-            data-no={line.details[0].CrossSlip.no}
-            on:click={openSlip}>
-            {formatDate(line.paymentDate)}
-          </a>
-          {:else}
+          {formatDate(line.deliveryDate)}
+        </td>
+        <td>
+          {formatDate(line.billingDate)}
+        </td>
+        <td>
           {formatDate(line.paymentDate)}
-          {/if}
         </td>
         <td class="number">
           {numeric(line.amount).toLocaleString()}
-        </td>
-        <td>
-          {line.description || ''}
         </td>
       </tr>
       {/each}
@@ -149,7 +112,7 @@ th {
 import axios from 'axios';
 import CustomerSelect from '../components/customer-select.svelte';
 
-import {numeric, formatDate} from '../../javascripts/cross-slip';
+import {numeric, formatDate, invoiceStatus} from '../../javascripts/cross-slip';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();
 
@@ -173,11 +136,6 @@ beforeUpdate(() => {
   console.log('invoice-list beforeUpdate', term);
 });
 
-const changeInvoiceStatus = (event) => {
-  let value = event.currentTarget.value;
-  console.log({value});
-  dispatch('selectInvoiceStatus', value);
-}
 const changeCustomer = (event) => {
   let customerId = event.detail;
   console.log({customerId});
@@ -192,38 +150,6 @@ const changeAmount = (event) => {
   }
 }
 
-const openSlip = (event) => {
-    event.preventDefault();
-  let year = event.target.dataset.year;
-  let month = event.target.dataset.month;
-  let day = event.target.dataset.day;
-  let no = event.target.dataset.no;
-  if	( no )	{
-    axios.get(`/api/cross_slip/${year}/${month}/${no}`).then((result) => {
-      let slip = result.data;
-      console.log('slip', slip);
-      dispatch('openSlip', slip);
-    })
-  } else {
-    let slip = {
-      year: parseInt(year),
-      month: parseInt(month),
-      day: parseInt(day),
-      lines: [{
-        debitAccount: "",
-        debitSubAccount: 0,
-        debitAmount: "",
-        debitTax: "",
-        creditAccount: "",
-        creditSubAccount: 0,
-        creditAmount: "",
-        creditTax: "",
-      }]
-    };
-    console.log('slip', slip);
-    dispatch('openSlip', slip);
-  }
-}
 const openInvoice = (event) => {
     event.preventDefault();
   let id = event.target.dataset.no;

@@ -68,9 +68,16 @@
 			</li>
     	<li class="nav-item">
 				<a class={pathname.match(/\/invoice/)  ? 'nav-link active': 'nav-link'}
-            href="/invoices/{term}">
+            href="/invoice/{term}">
           <i class="nav-icon fas fa-circle"></i>
           請求管理
+        </a>
+			</li>
+    	<li class="nav-item">
+				<a class={pathname.match(/\/item/)  ? 'nav-link active': 'nav-link'}
+            href="/item">
+          <i class="nav-icon fas fa-circle"></i>
+          品目管理
         </a>
 			</li>
       {/if}
@@ -100,14 +107,14 @@ let endDate;
 
 onMount(() => {
 	if	( !pathname )	{
-    	pathname = location.pathname;
-      //console.log('term', term);
-      //console.log(pathname);
-    	axios.get(`/api/term/${term}`).then((res) => {
-        	let fy = res.data;
-        	startDate = new Date(fy.startDate);
-        	endDate = new Date(fy.endDate);
-    	});
+    pathname = location.pathname;
+    //console.log('term', term);
+    //console.log(pathname);
+    axios.get(`/api/term/${term}`).then((res) => {
+      let fy = res.data;
+      startDate = new Date(fy.startDate);
+      endDate = new Date(fy.endDate);
+    });
 	}
 })
 

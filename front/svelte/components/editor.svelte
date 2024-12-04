@@ -1,0 +1,1 @@
+../../../../cms_v4/front/svelte/components/editor.svelte
