@@ -2,6 +2,9 @@
   <table class="table table-bordered">
     <thead>
       <tr>
+        <th scope="col" style="width: 100px;">
+          種別
+        </th>
         <th scope="col" style="width: 150px;">
           相手先
         </th>
@@ -30,6 +33,16 @@
     </thead>
     <tbody>
       <tr>
+        <td>
+          <select class="form-select" id="kind"
+            on:input={(event) => { dispatch('selectKind', event.currentTarget.value) }}
+            bind:value={kind}>
+            <option value={-1}>未設定</option>
+            {#each DOCUMENT_KIND as line}
+            <option value={line[0]}>{line[1]}</option>
+            {/each}
+          </select>
+        </td>
         <td style="padding:10px 20px;">
           <CustomerSelect
             register=false
@@ -61,10 +74,21 @@
       {#each invoices as line}
       <tr>
         <td>
-          {line.customerName}
+          {line.kind ? (DOCUMENT_KIND.find((el) => el[0] === line.kind))[1]: '_'}
         </td>
         <td>
-          <a href="#" data-no={line.id} on:click={openInvoice}>
+          {#if (line.customerId)}
+          <a href="/customer/{line.customerId}">
+            {line.customerName ? line.customerName : line.customer.name}
+          </a>
+          {:else}
+          {line.customerName ? line.customerName : '__' }
+          {/if}
+        </td>
+        <td>
+          <a href="#" on:click|preventDefault={() => {
+              openInvoice(line.id)
+            }}>
             {line.subject ? line.subject : '__'}
           </a>
         </td>
@@ -109,17 +133,16 @@ th {
 </style>
 
 <script>
-import axios from 'axios';
 import CustomerSelect from '../components/customer-select.svelte';
 
-import {numeric, formatDate, invoiceStatus} from '../../javascripts/cross-slip';
+import {numeric, formatDate} from '../../../libs/utils.js';
+import {DOCUMENT_KIND} from '../../../libs/transaction-documents';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();
 
-export	let	term;
 export	let	invoices;
 
-let selectInvoiceStatus;
+let kind;
 let customerId;
 let upperAmount;
 let lowerAmount;
@@ -133,7 +156,7 @@ const compDate = (date, year, month, day) => {
 }
 
 beforeUpdate(() => {
-  console.log('invoice-list beforeUpdate', term);
+  //sconsole.log('invoice-list beforeUpdate');
 });
 
 const changeCustomer = (event) => {
@@ -150,13 +173,11 @@ const changeAmount = (event) => {
   }
 }
 
-const openInvoice = (event) => {
-    event.preventDefault();
-  let id = event.target.dataset.no;
+const openInvoice = (id) => {
   let	invoice;
 
-  console.log('openInvoice', id);
-  console.log('invoices', invoices);
+  //console.log('openInvoice', id);
+  //console.log('invoices', invoices);
 
   for ( let i = 0; i < invoices.length; i ++ ) {
     if ( invoices[i].id == id ) {

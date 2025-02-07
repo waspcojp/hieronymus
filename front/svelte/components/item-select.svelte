@@ -1,8 +1,8 @@
   <input type="text" autocomplete="off"
     class="form-control"
     placeholder="検索キー"
-    bind:value={itemKey}
-    on:input={keyInput}
+    value={itemKey}
+    on:keyup={keyInput}
     />
 {#if ( items && items.length > 0 ) }
     <select id="itemId" class="form-control"
@@ -27,11 +27,12 @@ export let itemSpec;
 export let unitPrice;
 export let unit;
 export let product;
+export let dummy1;
+export let dummy2;
 
 let itemKey;
 let	items
 let current_params = new Map();
-let once;
 
 const updateItems = (_params) => {
   if	( _params )	{
@@ -59,7 +60,11 @@ const updateItems = (_params) => {
   });
 };
 
+
 const keyInput = (event) => {
+  itemName = event.target.value;
+  console.log('keyInput', itemName);
+  itemKey = itemName;
   updateItems({
     key: itemKey
   });
@@ -93,16 +98,13 @@ const	itemSelect = (event)	=> {
 }
 beforeUpdate(() => {
   //console.log({itemId});
-  console.log({itemKey});
-  if  ( !once )  {
+  //console.log('item-select beforeUpdate', itemId, itemKey, itemName);
+  if  ( itemId )  {
     itemKey = itemName;
-    once = true;
   }
 })
 onMount(() => {
-  if  ( itemId && itemId > 0 )  {
-    //itemDecide(itemId);
-  }
-  once = false;
+  itemKey = '';
+  console.log('onMount', itemName);
 });
 </script>

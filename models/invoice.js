@@ -10,13 +10,25 @@ export default (sequelize, DataTypes) => {
     static associate(models) {
 			this.hasMany(models.InvoiceDetail, {
 				foreignKey: 'invoiceId',
-				sourceKey: 'id',
 				as: 'lines'
 			});
-			this.hasOne(models.Customer, {
-				foreignKey: 'id',
+			this.belongsTo(models.Task, {
+				sourceKey: 'taskId',
+        as: 'task'
+			});
+			this.belongsTo(models.Customer, {
 				sourceKey: 'customerId',
         as: 'customer'
+			});
+			this.hasOne(models.Document, {
+				foreignKey: 'id',
+				sourceKey: 'documentId',
+        as: 'document'
+			});
+			this.hasOne(models.Voucher, {
+				foreignKey: 'id',
+				sourceKey: 'voucherId',
+        as: 'voucher'
 			});
 			this.hasOne(models.User, {
 				foreignKey: 'id',
@@ -37,14 +49,12 @@ export default (sequelize, DataTypes) => {
   }
   Invoice.init({
     no: DataTypes.STRING,
-    term: DataTypes.INTEGER,
+    kind: DataTypes.INTEGER,
     issueDate: DataTypes.DATEONLY,
-    expiringDate: DataTypes.DATEONLY,
-    orderedDate: DataTypes.DATEONLY,
-    deliveryDate: DataTypes.DATEONLY,
-    billingDate: DataTypes.DATEONLY,
-    paymentDate: DataTypes.DATEONLY,
+    deliveryLimit: DataTypes.DATEONLY,
     customerId: DataTypes.INTEGER,
+    taskId: DataTypes.INTEGER,
+    voucherId: DataTypes.INTEGER,
     customerName: DataTypes.STRING,
     chargeName: DataTypes.STRING,
     zip: DataTypes.STRING,
@@ -55,6 +65,7 @@ export default (sequelize, DataTypes) => {
     amount: DataTypes.DECIMAL(12),
     tax: DataTypes.DECIMAL(12),
     taxClass: DataTypes.INTEGER,
+    documentId: DataTypes.INTEGER,
     description: DataTypes.TEXT,
     handledBy: DataTypes.INTEGER,
     createdBy: DataTypes.INTEGER,

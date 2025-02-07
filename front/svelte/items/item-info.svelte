@@ -1,13 +1,14 @@
-<input type="hidden" id="id" value={item.id}>
+<input type="hidden" id="id" value={status.item.id}>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="container-fluid">
   <div class="row mb-3">
     <label for="itemClass" class="col-2 col-form-label">種別</label>
     <div class="col-sm-3">
-      <select class="form-select" id="itemClass" bind:value={item.itemClassId}>
+      <select class="form-select" id="itemClass"
+      	bind:value={status.item.itemClassId}>
         <option value="-1">未設定</option>
-        {#if classes}
-        {#each classes as line}
+        {#if status.classes}
+        {#each status.classes as line}
         <option value="{line.id}">{line.name}</option>
         {/each}
         {/if}
@@ -17,63 +18,73 @@
   <div class="row mb-3">
     <label for="name" class="col-2 col-form-label">名前</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="name" bind:value={item.name}>
+      <input type="text" class="form-control" id="name"
+      	bind:value={status.item.name}>
     </div>
   </div>
   <div class="row mb-3">
     <label for="normalName" class="col-2 col-form-label">正式名前</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="normalName" bind:value={item.normalName}>
+      <input type="text" class="form-control" id="normalName"
+      	bind:value={status.item.normalName}>
     </div>
   </div>
   <div class="row mb-3">
     <label for="key" class="col-2 col-form-label">呼び出しキー</label>
     <div class="col-sm-3">
-      <input type="text" class="form-control" id="key" bind:value={item.key}>
+      <input type="text" class="form-control" id="key"
+      	bind:value={status.item.key}>
     </div>
   </div>
   <div class="row mb-3">
     <label for="" class="col-2 col-form-label">コード</label>
     <div class="col-3">
       <label for="globalCode" class="col-form-label">公的コード</label>
-      <input type="text" class="form-control" id="globalCode" bind:value={item.globalCode}>
+      <input type="text" class="form-control" id="globalCode"
+      	bind:value={status.item.globalCode}>
     </div>
     <div class="col-3">
       <label for="strageCode" class="col-form-label">倉庫コード</label>
-      <input type="text" class="form-control" id="storageCode" bind:value={item.storateCode}>
+      <input type="text" class="form-control" id="storageCode"
+      	bind:value={status.item.storateCode}>
     </div>
     <div class="col-3">
       <label for="strageCode" class="col-form-label">社内コード</label>
-      <input type="text" class="form-control" id="localCode" bind:value={item.localCode}>
+      <input type="text" class="form-control" id="localCode"
+      	bind:value={status.item.localCode}>
     </div>
   </div>
 
   <div class="row mb-3">
     <label for="spec" class="col-2 col-form-label">規格</label>
     <div class="col-10">
-      <input type="text" class="form-control" id="spec" bind:value={item.spec}>
+      <input type="text" class="form-control" id="spec"
+      	bind:value={status.item.spec}>
     </div>
   </div>
   <div class="row mb-3">
     <label for="unit" class="col-2 col-form-label">単位</label>
     <div class="col-sm-3">
-      <input type="text" class="form-control" id="unit" bind:value={item.unit}>
+      <input type="text" class="form-control" id="unit"
+      	bind:value={status.item.unit}>
     </div>
   </div>
   <div class="row mb-3">
     <label for="unit_price" class="col-2 col-form-label">単価</label>
     <div class="col-2">
       <label for="standardPrice" class="col-form-label">標準価格</label>
-      <input type="text" class="form-control number" id="globalCode" bind:value={item.standardPrice}>
+      <input type="text" class="form-control number" id="globalCode"
+      	bind:value={status.item.standardPrice}>
     </div>
     <div class="col-2">
       <label for="costPrice" class="col-form-label">原価</label>
-      <input type="text" class="form-control number" id="costPrice" bind:value={item.costPrice}>
+      <input type="text" class="form-control number" id="costPrice"
+      	bind:value={status.item.costPrice}>
     </div>
     <div class="col-2">
       <label for="taxClass" class="col-form-label">消費税</label>
       <select class="form-control" id="taxClass"
-          bind:value={item.taxClass}>
+          bind:value={status.item.taxClass}>
         {#each TAX_CLASS as ent}
         <option value={ent[1]}>{ent[0]}</option>
         {/each}
@@ -84,29 +95,23 @@
     <label for="description" class="col-2 col-form-label">説明</label>
     <div class="col-sm-10">
       <div class="row mb-3">
-        <label for="top" class="col-12 form-label">文書フォーマット</label>
-        <div class="col-2">
-          <select bind:value={item.descriptionType}>
-            {#each DOC_FORMAT as opt}
-            <option value={opt[0]}>{opt[1]}</option>
-            {/each}
-          </select>
-        </div>
+        <DocumentFormat
+          bind:type={status.item.descriptionType}></DocumentFormat>
       </div>
       <div class="row mb-3">
         <Editor
-          type={item.descriptionType}
-          bind:value={item.description}
+          type={status.item.descriptionType}
+          bind:value={status.item.description}
         />
       </div>
     </div>
   </div>
-  <div class="row mb-3" style="min-height:200px;"
-    on:drop={onDrop}
-    on:dragover={onDragOver}>
+  <div class="row mb-3" style="min-height:200px;">
     <label class="col-2 col-form-label">ファイル</label>
     <div class="col-10">
-      <div class="row h-100">
+      <div class="row h-100"
+        on:drop={onDrop}
+        on:dragover={onDragOver}>
         {#if !files || files.length === 0}
         <div class="mt-3 p-3 border rounded h-100">
           アップロードされた画像はありません。
@@ -128,7 +133,7 @@
           </a>
         </div>
         {/each}
-      {/if}
+        {/if}
     </div>
     </div>
   </div>
@@ -152,20 +157,14 @@
 import axios from 'axios';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import Editor from '../components/editor.svelte';
-import {TAX_CLASS} from '../../javascripts/cross-slip';
+import DocumentFormat from '../components/document-format.svelte';
+import {TAX_CLASS} from '../../../libs/utils.js';
 
-export	let	item;
+export	let	status;
 export  let	files;
-export  let classes;
-
-const DOC_FORMAT = [
-  ["text",      "Text"],
-  ["markdown",  "Markdown"],
-  ["html",      "HTML"]
-];
 
 onMount(() => {
-  console.log('item-info onMount', item);
+  console.log('item-info onMount', status);
 })
 
 const onDragOver = (event) => {
@@ -220,7 +219,7 @@ const delete_file = (event) => {
 const upload = (file) => {
   return new Promise((done, fail) => {
     console.log(file);
-    let id = item.id;
+    let id = status.item.id;
     const body = new FormData();
     body.append('file', file);
     let url;

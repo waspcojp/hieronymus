@@ -44,6 +44,7 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
+    await queryInterface.removeConstraint('InvoiceDetails', 'InvoiceDetails_ProductId_fkey');
     await queryInterface.dropTable('Products');
   }
 };

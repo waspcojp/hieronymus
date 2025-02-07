@@ -60,8 +60,8 @@ import Modal from 'bootstrap/js/dist/modal';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import JournalList from './journal-list.svelte';
 import CrossSlipModal from '../cross-slip/cross-slip-modal.svelte';
-import {set_accounts, find_account, find_sub_account_by_code, numeric} from '../../javascripts/cross-slip';
-
+import {set_accounts, find_account, find_sub_account_by_code} from '../../javascripts/cross-slip';
+import {numeric} from '../../../libs/utils.js';
 export let user;
 export let term;
 

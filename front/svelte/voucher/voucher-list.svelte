@@ -164,7 +164,8 @@ th {
 import axios from 'axios';
 import CustomerSelect from '../components/customer-select.svelte';
 
-import {numeric, formatDate, voucherType} from '../../javascripts/cross-slip';
+import {numeric, formatDate} from '../../../libs/utils';
+import {voucherType} from '../../../libs/voucher';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();
 

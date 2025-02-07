@@ -14,6 +14,7 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, 'dist'),
     cssUrl: 'relative',
+    sourcemap: true,
     rollupOptions: {
       input: {
         common: realPath('common.js'),

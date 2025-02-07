@@ -5,6 +5,21 @@
 気がついたら直すこと
 
 * `term`は極力`req.session.term`を使うべきである(パラメータにしない)
+* `User`, `Member`を使う時には余分なものを取得しない
+```
+      {
+        model: models.User,
+        as: 'handleUser',
+        attributes: ['name'],
+        include: [
+          {
+            model: models.Member,
+            as: 'member',
+            attributes: ['legalName', 'tradingName']
+          }
+        ]
+      }
+```
 
 ## TODO
 

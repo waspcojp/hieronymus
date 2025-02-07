@@ -16,8 +16,10 @@ import admin from './api_admin.js';
 import changes from './api_changes.js';
 import setup from './api_setup.js';
 import item from './api_item.js';
+import member from './api_member.js';
+import document from './api_document.js';
+import task from './api_task.js';
 
-//import account_classes from './api_account_classes';
 import cross_slip from './api_cross_slip.js';
 import cross_slip_detail from './api_cross_slip_detail.js';
 
@@ -38,6 +40,7 @@ router.post('/user/login', user.login);
 router.post('/user/signup', user.signup);
 router.put('/user/:id', user.update);
 router.delete('/user/:id', user.delete);
+router.get('/users/member', user.members);
 router.get('/users', user.list);
 
 router.get('/invoice', invoice.get);
@@ -46,6 +49,13 @@ router.post('/invoice', invoice.post);
 router.put('/invoice', invoice.update);
 router.put('/invoice/:id', invoice.update);
 router.delete('/invoice/:id', invoice.delete);
+
+router.get('/task', task.get);
+router.get('/task/:id', task.get);
+router.post('/task', task.post);
+router.put('/task', task.update);
+router.put('/task/:id', task.update);
+router.delete('/task/:id', task.delete);
 
 router.get('/journal/:year/:month', journal.get);
 
@@ -116,6 +126,28 @@ router.delete('/item/file', item.deleteFile);
 router.delete('/item/:id', item.delete);
 router.get('/item/files/:id', item.files);
 
+router.get('/document', document.get);
+router.get('/document/:id', document.get);
+router.get('/document/file/:id', document.file);
+router.post('/document', document.post);
+router.post('/document/upload/:id', document.upload);
+router.post('/document/upload', document.upload);
+router.put('/document', document.update);
+router.put('/document/bind', document.bind);
+router.put('/document/:id', document.update);
+router.delete('/document', document.delete);
+router.delete('/document/file', document.deleteFile);
+router.delete('/document/:id', document.delete);
+router.get('/document/files/:id', document.files);
+
+router.get('/member/classes', member.classes);
+router.get('/member', member.get);
+router.get('/member/:id', member.get);
+router.post('/member', member.post);
+router.put('/member', member.update);
+router.put('/member/:id', member.update);
+router.delete('/member', member.delete);
+router.delete('/member/:id', member.delete);
 
 router.get('/term/:year/:month', async (req, res, next) => {
 	let year = req.params.year;

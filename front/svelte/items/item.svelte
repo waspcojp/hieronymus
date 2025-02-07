@@ -1,4 +1,4 @@
-{#if ( state === 'list' )}
+{#if ( status.state === 'list' )}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <span class="navbar-brand">品目一覧</span>
@@ -14,16 +14,15 @@
 <div class="row body-height">
   <ItemList
     items={items}
-    classes={classes}
+    bind:status={status}
     on:selectItemClass={selectItemClass}
     on:keyInput={keyInput}
     on:open={openEntry}
     ></ItemList>
 </div>
-{:else if ( state === 'entry' || state === 'new' )}
+{:else if ( status.state === 'entry' || status.state === 'new' )}
   <ItemEntry
-    classes={classes}
-    bind:item={item}
+    bind:status={status}
     on:close={closeEntry}>
   </ItemEntry>
 {/if}
@@ -34,12 +33,10 @@ import ItemEntry from './item-entry.svelte';
 import ItemList from './item-list.svelte';
 
 export let user;
+export let status;
 
-let	item;
 let items;
 let current_params = new Map();
-let state = 'list';
-let classes;
 
 const selectItemClass = (event) => {
   updateItems({
@@ -78,31 +75,31 @@ const updateItems = (_params) => {
   });
   if	( _params )	{
     window.history.pushState(
-      current_params, "", `${location.pathname}?${param}`);
+      status, "", `${location.pathname}?${param}`);
   }
 };
 
 const	openEntry = (event)	=> {
   console.log('open', event.detail);
-  item = event.detail;
-  if ( !item.id )	{
-    item = null;
-    state = 'new';
+  status.item = event.detail;
+  if ( !status.item.id )	{
+    status.item = null;
+    status.state = 'new';
     window.history.pushState(
-      null, "", `/item/new`);
+      status, "", `/item/new`);
   } else {
-    state = 'entry';
+    status.state = 'entry';
     window.history.pushState(
-      null, "", `/item/entry/${item.id}`);
+      status, "", `/item/entry/${status.item.id}`);
   }
-  console.log('item', item)
+  console.log({status})
 };
 
 const closeEntry = (event) => {
   console.log('close', event.detail);
-  state = 'list';
+  status.state = 'list';
   window.history.pushState(
-      null, "", `/item/`);
+      status, "", `/item/`);
   updateItems();
 }
 
@@ -112,21 +109,21 @@ const checkPage = () => {
   if  (( !args[2] ) ||
        ( args[2] === '') ||
        ( args[2] === 'list' ))  {
-    state = 'list';
+    status.state = 'list';
   } else
   if  ( args[2] === 'entry' ) {
-    state = 'entry';
-    if  ( !item ) {
+    status.state = 'entry';
+    if  ( !status.item ) {
       axios(`/api/item/${args[3]}`).then((result) => {
-        item = result.data;
-        console.log({item});
+        status.item = result.data;
+        console.log({status});
       });
     }
   } else
   if  ( args[2] === 'new' ) {
-    state = 'new';
+    status.state = 'new';
   }
-  //console.log({state});
+  //console.log({status});
 }
 
 onMount(() => {
@@ -141,16 +138,16 @@ beforeUpdate(()	=> {
   //console.log('_params', _params);
   let params = [];
   if  ( _params )	{
-    _params.split('&').map((item) => {
-      let kv = item.split('=');
+    _params.split('&').map((_item) => {
+      let kv = _item.split('=');
       params[decodeURI(kv[0])] = decodeURI(kv[1]);
     });
     console.log({params});
   }
-  if  ( !classes )  {
+  if  ( !status.classes )  {
     axios.get('/api/item/classes').then((result) => {
       console.log(result);
-      classes = result.data;
+      status.classes = result.data;
     })
   }
   if	( !items )	{

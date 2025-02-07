@@ -111,7 +111,7 @@
 <script>
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import  InputNumber from '../components/input-number.svelte';
-import {TAX_CLASS} from '../../javascripts/cross-slip';
+import {TAX_CLASS} from '../../../libs/utils';
 
 export  let account;
 export  let sub_account;

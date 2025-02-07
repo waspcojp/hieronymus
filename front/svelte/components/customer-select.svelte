@@ -1,81 +1,86 @@
 {#if ( status === 'select' )}
-<div class="row mb-3">
-  <div class={ ( register === 'true' ) ? "col-11" : "col-12"}>
-    <input type="text" autocomplete="off"
-      class="form-control"
-      placeholder="検索キー"
-      bind:value={customerKey}
-      on:change={changeKey}
-      on:keyup={changeKey}
-      on:focusout={leaveKey}
-      on:focusin={enterKey}
-      />
-  </div>
-  {#if (register === 'true') }
-  <div class="col-1">
-    <button type="button" class="btn btn-primary"
-      on:click={openEntry}>
-      登録
-      </button>
-  </div>
-  {/if}
-</div>
-{#if ( customers && customers.length > 0 ) }
   <div class="row mb-3">
-    <select id="customerId" class="col-12 form-control"
-      bind:value={customerId}>
-      {#each customers as customer}
-      <option value={customer.id}>
-        {customer.name}
-      </option>
-      {/each}
-    </select>
+    <div class="col-10">
+      <input type="text" autocomplete="off"
+        class="form-control"
+        placeholder="検索キー"
+        bind:value={customerKey}
+        on:change={changeKey}
+        on:keyup={changeKey}
+        on:focusin={enterKey}
+        />
+      {#if ( customers && customers.length > 0 ) }
+        <select id="customerId" class="col-12 form-control" style="margin-top:5px;"
+          bind:value={_customerId}
+          on:focusout={(e) => {
+            customerDecide(_customerId);
+          }}>
+          {#each customers as customer}
+            <option value={customer.id}>
+              {customer.name}
+            </option>
+          {/each}
+        </select>
+      {/if}
+    </div>
+    <div class="col-2">
+      {#if (register === 'true') }
+        <button type="button" class="btn btn-primary"
+          on:click={openEntry}>
+          登録
+        </button>
+      {#if (!customerId)}
+      <button type="button" class="btn btn-danger" disabled=true>
+        未登録
+      </button>
+    	{/if}
+      {/if}
+    </div>
   </div>
-{/if}
-{#if ( input === 'view' || input === 'input') }
-  <div class="row mb-2">
-    <label for="customerName" class="col-1 col-form-label">相手先名</label>
-    <div class="col-11">
-      <input type="text" id="customerName" class="form-control"
-        bind:value={customerName} disabled={( input === 'view' ) ? true : false}/>
+  {#if ( input === 'view' || input === 'input') }
+    <div class="row mb-2">
+      <label for="customerName" class="col-1 col-form-label">相手先名</label>
+      <div class="col-11">
+        <input type="text" id="customerName" class="form-control"
+          bind:value={customerName} disabled={( input === 'view' ) ? true : false}/>
+        </div>
+      </div>
+    <div class="row mb-2">
+      <label for="zip" class="col-1 col-form-label">郵便番号</label>
+      <div class="col-2">
+        <input type="text" id="zip" class="form-control"
+          bind:value={zip} disabled={( input === 'view' ) ? true : false}>
       </div>
     </div>
-  <div class="row mb-2">
-    <label for="zip" class="col-1 col-form-label">郵便番号</label>
-    <div class="col-2">
-      <input type="text" id="zip" class="form-control"
-        bind:value={zip} disabled={( input === 'view' ) ? true : false}>
+    <div class="row mb-2">
+      <label for="address1" class="col-1 col-form-label">住所</label>
+      <div class="col-11">
+        <input type="text" id="address1" class="form-control"
+          bind:value={address1} disabled={( input === 'view' ) ? true : false}>
+      </div>
     </div>
-  </div>
-  <div class="row mb-2">
-    <label for="address1" class="col-1 col-form-label">住所</label>
-    <div class="col-11">
-      <input type="text" id="address1" class="form-control"
-        bind:value={address1} disabled={( input === 'view' ) ? true : false}>
+    <div class="row mb-2">
+      <label for="address2" class="col-1 col-form-label" style="height:38px;"></label>
+      <div class="col-11">
+        <input type="text" id="address2" class="form-control"
+          bind:value={address2} disabled={( input === 'view' ) ? true : false}>
+      </div>
     </div>
-  </div>
-  <div class="row mb-2">
-    <label for="address2" class="col-1 col-form-label" style="height:38px;"></label>
-    <div class="col-11">
-      <input type="text" id="address2" class="form-control"
-        bind:value={address2} disabled={( input === 'view' ) ? true : false}>
+    <div class="row mb-2">
+      <label for="chargeName" class="col-1 col-form-label">担当者</label>
+      <div class="col-11">
+        <input type="text" id="chargeName" class="form-control"
+          bind:value={chargeName} disabled={( input === 'view' ) ? true : false}>
+      </div>
     </div>
-  </div>
-  <div class="row mb-2">
-    <label for="chargeName" class="col-1 col-form-label">担当者</label>
-    <div class="col-11">
-      <input type="text" id="chargeName" class="form-control"
-        bind:value={chargeName} disabled={( input === 'view' ) ? true : false}>
-    </div>
-  </div>
-{/if}
+  {/if}
 {:else}
-<CustomerEntry
-	modal={modal}
-	on:save={update}
-  on:close={closeEntry}
-	customer={customer}>
-</CustomerEntry>
+  <CustomerEntry
+    inline=true
+	  on:save={update}
+    on:close={closeEntry}
+	  bind:customer={customer}>
+  </CustomerEntry>
 {/if}
 
 <script>
@@ -98,33 +103,43 @@ let	original_customers;
 let	field_value;
 let customerKey;
 let	customers;
-let	modal;
 let customer = {};
 let status = 'select';
+let _customerId;
 
 const update = (event) => {
-
+  //console.log('update', customer);
+  customerId = customer.id;
+  customerName = customer.name;
+  chargeName = customer.chargeName;
+  zip = customer.zip;
+  address1 = customer.address1;
+  address2 = customer.address2;
 }
 const enterKey = (event) =>	{
   field_value = event.target.value;
-}
-
-const leaveKey = (event) =>	{
-    let key = event.target.value;
-    if  ( key.length == 0 ) {
-        customerSelect(event);
-    }
 }
 
 const closeEntry = (event) => {
   status = 'select';
   dispatch('endregister');
 }
-const	openEntry = (event)	=> {
-	//console.log('open', event.detail);
-	if	( typeof event.detail === 'object' )	{
-		customer = event.detail;
-	}
+const	openEntry = async (event)	=> {
+	console.log('open', customerId);
+  customer = {
+    name: customerName,
+    chargeName: chargeName,
+    zip: zip,
+    address1: address1,
+    address2: address2
+  };
+  if  ( customerId )  {
+    let result = await axios.get(`/api/customer/${customerId}`);
+    console.log({result});
+    if  ( result.data ) {
+      customer = result.data.customer;
+    }
+  }
   dispatch('startregister');
 	//console.log('customer', customer)
 	status = 'entry';
@@ -132,10 +147,10 @@ const	openEntry = (event)	=> {
 
 const changeKey = (event) =>{
   let target = event.target;
-    let key = target.value;
-    if  ( !key || ( key == '' ))    {
-        customers = [];
-    } else
+  let key = target.value;
+  if  ( !key || ( key == '' ))    {
+      customers = [];
+  } else
   if	( key != field_value )	{
     customers = [];
     for	( let i = 0; i < original_customers.length; i ++ )	{
@@ -145,14 +160,12 @@ const changeKey = (event) =>{
         customers.push(original_customers[i]);
       }
     }
-    customerId = ( customers.length > 0 ) ? customers[0].id : undefined;
-    let select = document.getElementById('customerId');
-    if	( select )	{
-      select.addEventListener('focusout', customerSelect);
-    }
+    console.log({customers});
+    console.log({customerId});
   }
 }
 const customerDecide = (id) => {
+  console.log('customerDecide', id);
   if  ( customers )   {
     for	( let i = 0; i < customers.length; i ++ )	{
       if	( customers[i].id == id )	{
@@ -165,6 +178,8 @@ const customerDecide = (id) => {
         address1 = customer.address1;
         address2 = customer.address2;
         customerKey = customerName;
+        dispatch('input', customerId);
+        customers = [];
         break;
       }
     }

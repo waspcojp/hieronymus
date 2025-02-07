@@ -1,9 +1,9 @@
-{#if ( current === 'login') }
+{#if ( status.current === 'login') }
 <Login
-  bind:current={current}></Login>
-{:else if ( current === 'signup' ) }
+  bind:current={status.current}></Login>
+{:else if ( status.current === 'signup' ) }
 <SignUp
-  bind:current={current}></SignUp>
+  bind:current={status.current}></SignUp>
 {:else}
 <div class="wrapper">
   <nav class="main-header navbar navbar-expand-lg navbar-light bg-light p-3">
@@ -14,6 +14,7 @@
   <aside 
     class="main-sidebar sidebar-bg-dark sidebar-color-primary shadow">
     <SideBar
+    	status={status}
       user={user}
       term={term}></SideBar>
   </aside>
@@ -21,14 +22,20 @@
     <div class="content">
       <div class="container-fluid">
         <Alert bind:alert={alert} {alert_level}></Alert>
-        {#if ( current == 'users' )}
+        {#if ( status.current == 'users' )}
         <Users></Users>
-        {:else if ( current === 'invoices' || current === 'invoice')}
+        {:else if ( status.current === 'invoices' || status.current === 'invoice')}
         <Invoices
-          term={term}></Invoices>
-        {:else if ( current === 'items' || current === 'item')}
+          bind:status={status}></Invoices>
+        {:else if ( status.current === 'items' || status.current === 'item')}
         <Items
+        	bind:status={status}
           user={user}></Items>
+        {:else if ( status.current === 'members' || status.current === 'member')}
+        <Member></Member>
+        {:else if ( status.current === 'tasks' || status.current === 'task')}
+        <Task
+        	bind:status={status}></Task>
         {/if}
       </div>
     </div>
@@ -52,24 +59,34 @@ import SignUp from './login/signup.svelte';
 import Users from './users/users.svelte';
 import Invoices from './invoice/invoice.svelte';
 import Items from './items/item.svelte';
+import Member from './member/member.svelte';
+import Task from './task/task.svelte';
 
 export let term;
 
 let alert;
 let alert_level;
 let user ={};
-let current = 'login';
+
+let status = {
+  term: term,
+  current: 'login'
+}
 
 onMount(() => {
   user = axios.get('/api/user').then((res) => {
-    console.log('user', res);
     user = res.data;
   });
+	window.onpopstate = (event) => {
+    console.log('maybe back', event);
+    let args = location.pathname.split('/');
+    status.current = args[1];
+	}
 })
 
 beforeUpdate(() => {
   let args = location.pathname.split('/');
-    current = args[1];
+  status.current = args[1];
 })
 
 </script>

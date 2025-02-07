@@ -11,7 +11,7 @@ export default (sequelize, DataTypes) => {
       this.hasMany(models.Item, {
         foreignKey: 'itemClassId',
         sourceKey: 'id',
-        as: 'accounts',
+        as: 'items',
         onDelete: 'cascade',
         onUpdate: 'cascade'
       });

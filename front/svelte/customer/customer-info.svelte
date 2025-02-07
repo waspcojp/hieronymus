@@ -76,10 +76,10 @@
         </div>
         <div class="col-2">
           <select class="form-control" id="accountType" bind:value={customer.accountType}>
-            <option value="">未設定</option>
-            <option value="1">普通</option>
-            <option value="2">当座</option>
-            <option value="9">その他</option>
+            <option value={null}>未設定</option>
+            <option value={1}>普通</option>
+            <option value={2}>当座</option>
+            <option value={9}>その他</option>
           </select>
         </div>
         <div class="col-3">

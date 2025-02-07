@@ -64,7 +64,7 @@ import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte'
 const dispatch = createEventDispatcher();
 import CrossSlipModal from '../cross-slip/cross-slip-modal.svelte';
 import Modal from 'bootstrap/js/dist/modal';
-import {set_accounts, find_account, find_sub_account_by_code, numeric} from '../../javascripts/cross-slip';
+import {set_accounts} from '../../javascripts/cross-slip';
 
 export let term;
 export let toast;

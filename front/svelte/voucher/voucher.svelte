@@ -74,8 +74,8 @@ import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte'
 import VoucherEntry from './voucher-entry.svelte';
 import VoucherList from './voucher-list.svelte';
 import CrossSlipModal from '../cross-slip/cross-slip-modal.svelte';
-import {numeric, set_accounts} from '../../javascripts/cross-slip';
-
+import {set_accounts} from '../../javascripts/cross-slip';
+import {numeric} from '../../../libs/utils.js';
 export let term;
 export let user;
 

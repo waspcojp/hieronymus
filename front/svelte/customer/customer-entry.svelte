@@ -21,7 +21,7 @@
       </div>
       <div class="entry-footer">
         <button type="button" class="btn btn-secondary"
-          on:click={close_}>もどる</button>
+          on:click={back}>もどる</button>
         {#if (customer && customer.id && customer.id > 0)}
         <button type="button" class="btn btn-danger"
           on:click={delete_}>Delete</button>
@@ -41,6 +41,8 @@ const dispatch = createEventDispatcher();
 import CustomerInfo from './customer-info.svelte';
 
 export	let	customer;
+export  let inline;
+
 let ok = true;
 let errorMessages = [];
 
@@ -135,7 +137,7 @@ const save = (event) => {
     }
     pr.then(() => {
       dispatch('save');
-      close_();
+      back();
     });
   } catch(e) {
     console.log(e);
@@ -144,14 +146,17 @@ const save = (event) => {
   }
 }
 
-const clean_popup = () => {
+const clean = () => {
   customer = undefined;
   ok = true;
   errorMessages = [];
 }
 
-const close_ = (event) => {
-  clean_popup();
+const back = (event) => {
+  clean();
+  if  ( !inline ) {
+    window.history.back();
+  }
   dispatch('close');
 }
 
@@ -167,7 +172,7 @@ const delete_ = (event) => {
     console.log('delete');
     delete_customer(customer).then(() => {
       dispatch('save');
-      clean_popup();
+      clean();
     });
   }
   catch(e) {

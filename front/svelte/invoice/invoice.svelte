@@ -1,11 +1,13 @@
-{#if ( state === 'list' )}
+{#if ( status.state === 'list' )}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <span class="navbar-brand">見積 / 請求書一覧</span>
     <ul class="navbar-nav me-auto mb-2">
       <li class="nav-item">
         <button type="button" class="btn btn-primary"
-          on:click={openEntry}
+          on:click={() => {
+            openEntry(null);
+          }}
           id="invoice-info">新規入力&nbsp;<i class="bi bi-pencil-square"></i></button>
       </li>
     </ul>
@@ -13,17 +15,19 @@
 </nav>
 <div class="row body-height">
   <InvoiceList
-    term={term}
     invoices={invoices}
     on:open={openEntry}
+    on:selectKind={selectKind}
     on:selectCustomerId={selectCustomer}
     on:selectAmount={selectAmount}
     ></InvoiceList>
 </div>
-{:else if ( state === 'entry' || state === 'new' )}
+{:else if ( status.state === 'entry' || status.state === 'new' )}
   <InvoiceEntry
-    term={term}
+    bind:status={status}
     bind:invoice={invoice}
+    bind:users={users}
+    on:open={openEntry}
     on:close={closeEntry}>
   </InvoiceEntry>
 {/if}
@@ -32,17 +36,21 @@ import axios from 'axios';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import InvoiceEntry from './invoice-entry.svelte';
 import InvoiceList from './invoice-list.svelte';
-import {numeric} from '../../javascripts/cross-slip';
+import {numeric} from '../../../libs/utils.js';
+import {currentInvoice, currentTask, getStore} from '../../javascripts/current-record.js'
 
-export let term;
-export let user;
+export let status;
 
-let	invoice;
+let invoice;
 let invoices;
-let dates;
-let current_params = new Map();
-let state = 'list';
+let users;
 
+const selectKind = (event) => {
+  let kind = event.detail;
+  updateInvoices({
+    kind: kind
+  });
+}
 const selectCustomer = (event) => {
   let	customerId = event.detail;
   console.log({customerId});
@@ -60,130 +68,152 @@ const selectAmount = (event) => {
 }
 
 const updateInvoices = (_params) => {
+  if	( !status.current_params )	{
+    status.current_params = new Map();
+  }
   if	( _params )	{
     Object.keys(_params).map((key) => {
       if	( !_params[key] )	{
-        current_params.delete(key);
+        status.current_params.delete(key);
       } else {
-        current_params.set(key,_params[key]);
+        status.current_params.set(key,_params[key]);
       }
     });
   }
-  //console.log('current_params', current_params);
+  //console.log('current_params', status.current_params);
   let _array = [];
-  current_params.forEach((value, key) => {
+  status.current_params.forEach((value, key) => {
     console.log('key, value', key, value);
     _array.push(encodeURI(`${key}=${value}`));
   });
-  let param = _array.join('&') + `&term=${term}`;
-  console.log('param', param);
+  let param = _array.join('&');
+  //console.log('param', param);
   axios.get(`/api/invoice?${param}`).then((result) => {
     invoices = result.data;
-    console.log('invoices', invoices);
+    //console.log('invoices', invoices);
   });
   if	( _params )	{
     window.history.pushState(
-        current_params, "", `${location.pathname}?${param}`);
+        status, "", `${location.pathname}?${param}`);
   }
 };
 
 const	openEntry = (event)	=> {
-  console.log('open', event.detail);
-  invoice = event.detail;
-  if ( !invoice.id )	{
+  if  ( !event )  {
     invoice = null;
-    state = 'new';
-    window.history.pushState(
-      null, "", `/invoice/${term}/new`);
+    status.state = 'new';
+      window.history.pushState(
+        status, "", `/invoice/new`);
   } else {
-    state = 'entry';
-    window.history.pushState(
-      null, "", `/invoice/${term}/entry/${invoice.id}`);
+    console.log('open', event.detail);
+    invoice = event.detail;
+    if ( !invoice.id )	{
+      status.state = 'new';
+      window.history.pushState(
+        status, "", `/invoice/new`);
+    } else {
+      status.state = 'entry';
+      axios(`/api/invoice/${invoice.id}`).then((result) => {
+        invoice = result.data.invoice;
+      	window.history.pushState(
+        	status, "", `/invoice/entry/${invoice.id}`);
+      });
+    }
   }
   //console.log('invoice', invoice)
 };
-
 const closeEntry = (event) => {
-  //console.log('close', event.detail);
-  state = 'list';
-  window.history.pushState(
-      null, "", `/invoice/${term}/`);
+  status.state = 'list';
   updateInvoices();
 }
-
 const checkPage = () => {
   let args = location.pathname.split('/');
-  //console.log({args});
-  if  (( !args[3] ) ||
-       ( args[3] === '') ||
-       ( args[3] === 'list' ))  {
-    state = 'list';
-  } else
-  if  ( args[3] === 'entry' ) {
-    state = 'entry';
-    if  ( !invoice ) {
-      axios(`/api/invoice/${args[4]}`).then((result) => {
-        invoice = result.data;
-        //console.log({invoice});
-      });
+  // /invoice/14
+  // /invoice/entry/23
+  //console.log('checkPage', {args});
+  if  ( ( args[2] === 'entry' ) ||
+			  ( args[2] === 'new'   )) {
+    status.state = args[2];
+    if	 ( !invoice )	{
+      invoice = {
+        issueDate: new Date(),
+        tax: 0,
+        amount: 0,
+        lines: [{
+          itemId: null,
+          itemName: '',
+          itemSpec: '',
+          unitPrice: 0,
+          itemNumber: 0,
+          unit: '',
+          amount: 0,
+          description: ''
+        }]};
+      let task = getStore(currentTask);
+      if	( task )	{
+        invoice.taskId = task.id;
+				invoice.customerId = task.customerId;
+        invoice.customerName = task.customerName;
+        invoice.chargeName = task.chargeName;
+        invoice.zip = task.zip;
+        invoice.address1 = task.address1;
+        invoice.address2 = task.address2;
+        invoice.subject = task.subject;
+        invoice.lines = [...task.lines];
+        invoice.taxClass = task.taxClass;
+        invoice.tax = task.tax;
+        invoice.amount = task.amount;
+      }
+    	let value = getStore(currentInvoice);
+    	console.log({value});
+    	if	( value )	{
+	      invoice = value;
+	    } else {
+      	if	( status.state === 'entry' )	{
+      		axios(`/api/invoice/${args[3]}`).then((result) => {
+        		console.log('new load', result.data);
+        		invoice = result.data.invoice;
+        		currentInvoice.set(invoice);
+          });
+      	} else {
+          currentInvoice.set(invoice);
+      	}
+      }
     }
-  } else
-  if  ( args[3] === 'new' ) {
-    state = 'new';
+    //console.log({invoice});
+  } else {
+    status.state = 'list';
   }
-  //console.log({state});
-  term = parseInt(args[2]);
 }
 
 onMount(() => {
-  checkPage();
-  console.log('invoice onMount')
+  console.log('invoice onMount');
 })
 
 beforeUpdate(()	=> {
-  console.log('invoice beforeUpdate', term);
   checkPage();
   let _params = location.search.substr(1);
-  console.log('_params', _params);
+  //console.log('_params', _params);
   let params = [];
   if  ( _params )	{
     _params.split('&').map((item) => {
       let kv = item.split('=');
       params[decodeURI(kv[0])] = decodeURI(kv[1]);
     });
-    console.log({params});
-  }
-  if	( !dates )	{
-    window.onpopstate = (event) => {
-      if	( window.history.state )	{
-        current_params = window.history.state;
-        console.log({current_params});
-        current_month = current_params.get('month');
-        updateInvoices();
-      }
-    }
-    dates = [];
-    axios.get(`/api/term/${term}`).then((result) => {
-      let fy = result.data;
-      term = fy.term;
-      for ( let mon = new Date(fy.startDate); mon < new Date(fy.endDate); ) {
-        dates.push({
-          year: mon.getFullYear(),
-          month: mon.getMonth()+1,
-          ym: `${mon.getFullYear()}-${mon.getMonth()+1}`
-        });
-        mon.setMonth(mon.getMonth() + 1);
-      }
-      dates = dates;
-    });
-    console.log('dates', dates);
+  	//console.log({params});
+	}
+  if  ( !users )  {
+  	users = [];
+    axios.get('/api/users/member').then((result) => {
+      users = result.data;
+    })
   }
   if	( !invoices )	{
     invoices = [];
-    updateInvoices();
+  	updateInvoices();
   }
 });
 afterUpdate(() => {
-  console.log('invoices afterUpdate');
+  //console.log('invoices afterUpdate');
 })
 </script>

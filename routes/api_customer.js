@@ -15,12 +15,14 @@ export default {
         res.json(customers);
       });
     } else {
-      models.Cusomer.findOne({
+      models.Customer.findOne({
         where: {
           id: id
         }
       }).then((customer) => {
-        res.json(customer);
+        res.json({
+          customer: customer
+        });
       });
     }
   },

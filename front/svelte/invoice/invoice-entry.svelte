@@ -1,7 +1,7 @@
 <div class="entry">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <h5 class="entry-title">見積請求情報</h5>
+      <h5 class="entry-title">取引文書(見積/請求/取引情報)</h5>
       {#if invoice.no}
       <span>管理番号:&nbsp;{invoice.no}</span>
       {:else}
@@ -12,10 +12,14 @@
   <div class="row full-height fontsize-12pt">
     <div class="entry-content">
       <div class="entry-body">
+        <FormError
+        	messages={errorMessages}></FormError>
         <InvoiceInfo
           on:startregister={() => { disabled = true}}
           on:endregister={() => { disabled = false}}
-          bind:invoice={invoice}></InvoiceInfo>
+          users={users}
+          bind:invoice={invoice}
+          bind:status={status}></InvoiceInfo>
       </div>
       <div class="entry-footer">
         <button type="button" class="btn btn-secondary" disabled={disabled}
@@ -41,16 +45,22 @@
 </div>
 <script>
 import axios from 'axios';
-import {numeric, formatDate} from '../../javascripts/cross-slip';
+import {numeric, formatDate} from '../../../libs/utils.js';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();
 import InvoiceInfo from './invoice-info.svelte';
+import FormError from '../common/form-error.svelte';
+import {currentInvoice} from '../../javascripts/current-record.js'
+import {bindFile} from '../../javascripts/document';
 
-
-export	let	invoice;
+export	let	status;
+export	let invoice;
+export	let users;
 
 let update;
 let disabled = false;
+let errorMessages = [];
+let files;
 
 const create_invoice = async (_invoice) => {
   let result = await axios.post('/api/invoice', _invoice);
@@ -71,7 +81,9 @@ const delete_invoice = async (invoice) => {
 }
 
 const save = () => {
-  //console.log('input', invoice);
+  errorMessages = [];
+  let ok = true;
+  console.log('input', invoice);
   if	( invoice.customerId )	{
     invoice.customerId = parseInt(invoice.customerId);
   }
@@ -82,65 +94,63 @@ const save = () => {
     invoice.tax = numeric(invoice.tax);
   }
   invoice.taxClass = parseInt(invoice.taxClass);
-  try {
-    let	pr;
-    if ( invoice.id  ) {
-      invoice.id = parseInt(invoice.id);
-      pr = update_invoice(invoice);
-    } else {
-      pr = create_invoice(invoice);
-    }
-    pr.then((result) => {
-      update = true;
-      if  ( !result.data.code ) {
-        invoice = result.data;
-      }
-      console.log('result', result);
-    });
+  console.log('kind', invoice.kind);
+  if  ( (!invoice.kind) || (invoice.kind == 0) )	{
+    ok = false;
+    errorMessages.push('種別を入力してください。');
   }
-  catch(e) {
-    console.log(e);
-    // can't save
-    //	TODO alert
+  if  ( !invoice.handledBy )	{
+    ok = false;
+    errorMessages.push('弊社担当を入力してください。');
+  }
+  console.log({ok}, {errorMessages});
+  if	( ok )	{
+  	try {
+    	let	pr;
+    	let create = false;
+    	if ( invoice.id  ) {
+      	invoice.id = parseInt(invoice.id);
+      	pr = update_invoice(invoice);
+    	} else {
+      	pr = create_invoice(invoice);
+      	create = true;
+    	}
+    	pr.then((result) => {
+      	console.log('result', result);
+      	update = true;
+      	if  ( !result.data.code ) {
+        	invoice = result.data;
+          bindFile(files,invoice.documentId);
+      	}
+				if	( create )	{
+        	window.history.replaceState(
+          	status, "", `/invoice/entry/${invoice.id}`);
+          axios(`/api/invoice/${invoice.id}`).then((result) => {
+        		console.log('new load', result.data);
+        		invoice = result.data.invoice;
+        		currentInvoice.set(invoice);
+          });
+      	}
+    	});
+  	}
+  	catch(e) {
+    	console.log(e);
+    	// can't save
+    	//	TODO alert
+  	}
   }
 };
 
-const clean = () => {
-  invoice = null;
-}
-
 const	back = (event) => {
-  clean();
-  dispatch('close', update);
+  dispatch('close');
+  currentInvoice.set(null);
+  errorMessages = [];
+  window.history.back();
 }
 
 beforeUpdate(() => {
   //console.log('invoice-entry beforeUpdate', invoice);
   update = false;
-  if	( !invoice )	{
-    invoice = {
-      no: null,
-      issueDate: formatDate(new Date()),
-      expiringDate: null,
-      orderedDate: null,
-      deliveryDate: null,
-      billingDate: null,
-      paymentDate: null,
-      amount: "0",
-      taxClass: 2,
-      tax: "0",
-      subject: '',
-      paymentMethod: '',
-      lines: [{
-        itemName: '',
-        itemSpec: '',
-        unitPrice: 0,
-        itemNumber: 0,
-        amount: 0,
-        description: ''
-      }]
-    };
-  }
 });
 
 const	delete_ = (event) => {

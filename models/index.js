@@ -5,6 +5,8 @@ import AccountRemaining from './accountremaining.js';
 import CrossSlip from './crossslip.js';
 import CrossSlipDetail from './crossslipdetail.js';
 import Customer from './customer.js';
+import Document from './document.js';
+import DocumentFile from './document-file.js';
 import FiscalYear from './fiscalyear.js';
 import Invoice from './invoice.js';
 import InvoiceDetail from './invoicedetail.js';
@@ -16,9 +18,13 @@ import Sticky from './sticky.js';
 import StickyStatus from './stickystatus.js';
 import SubAccount from './subaccount.js';
 import SubAccountRemaining from './subaccountremaining.js';
+import Task from './task.js';
+import TaskDetail from './taskdetail.js';
 import User from './user.js';
 import Voucher from './voucher.js';
 import VoucherFile from './voucherfile.js';
+import Member from './member.js';
+import MemberClass from './memberclass.js';
 import {Sequelize, DataTypes} from 'sequelize';
 import fs from 'fs';
 
@@ -41,17 +47,23 @@ const models = {
   CrossSlip: CrossSlip(sequelize, DataTypes),
   CrossSlipDetail: CrossSlipDetail(sequelize, DataTypes),
   Customer: Customer(sequelize, DataTypes),
+  Document: Document(sequelize, DataTypes),
+  DocumentFile: DocumentFile(sequelize, DataTypes),
   FiscalYear: FiscalYear(sequelize, DataTypes),
   Invoice: Invoice(sequelize, DataTypes),
   InvoiceDetail: InvoiceDetail(sequelize, DataTypes),
   Item: Item(sequelize, DataTypes),
   ItemClass: ItemClass(sequelize, DataTypes),
   ItemFile: ItemFile(sequelize, DataTypes),
+  Member: Member(sequelize, DataTypes),
+  MemberClass: MemberClass(sequelize, DataTypes),
   MonthlyLog: MonthlyLog(sequelize, DataTypes),
   Sticky: Sticky(sequelize, DataTypes),
   StickyStatus: StickyStatus(sequelize, DataTypes),
   SubAccount: SubAccount(sequelize, DataTypes),
   SubAccountRemaining: SubAccountRemaining(sequelize, DataTypes),
+  Task: Task(sequelize, DataTypes),
+  TaskDetail: TaskDetail(sequelize, DataTypes),
   User: User(sequelize, DataTypes),
   Voucher: Voucher(sequelize, DataTypes),
   VoucherFile: VoucherFile(sequelize, DataTypes)

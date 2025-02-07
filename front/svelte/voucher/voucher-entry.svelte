@@ -45,7 +45,7 @@
   voucher_fileに関する処理もここに移した方が良いかも知れない。
 */
 import axios from 'axios';
-import {numeric, formatDate} from '../../javascripts/cross-slip';
+import {numeric, formatDate} from '../../../libs/utils';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();
 import VoucherInfo from './voucher-info.svelte';

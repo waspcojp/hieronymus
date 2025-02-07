@@ -67,10 +67,9 @@
       <select class="form-control" id="taxClass"
         bind:value={voucher.taxClass}>
         <option value="-1">未選択</option>
-        <option value="0">非課税</option>
-        <option value="1">内税</option>
-        <option value="2">外税</option>
-        <option value="9">別計算</option>
+        {#each TAX_CLASS as ent}
+        <option value={ent[1]}>{ent[0]}</option>
+        {/each}
       </select>
     </div>
     <div class="col-sm-2">
@@ -133,7 +132,7 @@
 </style>
 
 <script>
-import {numeric} from '../../javascripts/cross-slip';
+import {numeric, TAX_CLASS} from '../../../libs/utils';
 import axios from 'axios';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();

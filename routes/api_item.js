@@ -32,6 +32,7 @@ const getFiles = async (id) => {
 
 export default {
   get: async (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     let id =  req.params.id;
     //console.log('/api/item/', id);
     if	( !id )	{
@@ -91,6 +92,7 @@ export default {
     }
   },
   post: (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     let body = req.body;
     models.Item.create(body).then((item) => {
       //console.log(item);
@@ -98,6 +100,7 @@ export default {
     });
   },
   update: async(req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     let body = req.body;
     let id = req.params.id ? req.params.id : body.id;
 
@@ -110,6 +113,7 @@ export default {
     }
   },
   delete: async(req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     let body = req.body;
     let id = req.params.id ? req.params.id : body.id;
 
@@ -122,6 +126,7 @@ export default {
     }
   },
   upload: (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     let item_id = req.params.id ? parseInt(req.params.id) : null;
     let name = req.files.file.name;
     let tmp_name = req.files.file.path;
@@ -147,6 +152,7 @@ export default {
     });
   },
   files: async (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     let id =  req.params.id ? parseInt(req.params.id): null;
     console.log('/api/item/files', id);
     if	( id )	{
@@ -155,6 +161,7 @@ export default {
     }
   },
   bind: (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     let	body = req.body;
     models.ItemFile.findByPk(body.id).then((file) => {
       file.itemId = body.itemId;
@@ -171,6 +178,7 @@ export default {
     })
   },
   deleteFile: (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     let id = parseInt(req.body.id);
     console.log('deleteFile', id);
     models.ItemFile.findByPk(id).then((file) => {
@@ -190,6 +198,7 @@ export default {
     });
   },
   classes: (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     models.ItemClass.findAll().then((result) => {
       res.json(result)
     }).catch((e) => {

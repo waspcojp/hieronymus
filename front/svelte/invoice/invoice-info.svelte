@@ -1,98 +1,72 @@
 <input type="hidden" id="id" bind:value={invoice.id}>
 <div class="container-fluid">
   <div class="row mb-3">
-    <div class="col-1">進捗</div>
-    <div class="col-11">
-      <div class="row">
-        <div class="col-3">
-          <div class="row">
-            <label for="issueDate" class="col-4 col-form-label">発生日</label>
-            <div class="col-8">
-              <input type="date" class="form-control" id="issueDate"
-                bind:value={invoice.issueDate}>
-            </div>
-          </div>
-          {#if ( invoice.id && invoice.issueDate )}
-          <div class="row">
-            <div class="col-12">
-              <a class="btn btn-info" href="/invoice/invoice/{invoice.id}" target="_brank">
-                見積書出力
-              </a>
-            </div>
-          </div>
-          {/if}
-        </div>
-        <div class="col-3">
-          <div class="row">
-            <label for="expiringDate" class="col-4 col-form-label">有効期限</label>
-            <div class="col-8">
-              <input type="date" class="form-control" id="expiringDate"
-                bind:value={invoice.expiringDate}>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row mb-3">
-    <div class="col-1"></div>
+    <label for="kind" class="col-1 col-form-label">種別</label>
     <div class="col-2">
-      <button type="button" class="btn btn-sm btn-light"
-        on:click={copy_down}>
-        <i class="fas fa-angle-down"></i>
-      </button>
-      <button type="button" class="btn btn-sm btn-light"
-        on:click={copy_up}>
-        <i class="fas fa-angle-up"></i>
-      </button>
+      <select class="form-control" id="kind"
+        bind:value={invoice.kind}
+        on:change={() => {
+          if	( invoice.kind < 10 )	{
+            viewDetail = true;
+          } else {
+            documentEditting = true;
+            viewDetail = false;
+      			viewDescription = true;
+      			viewFiles = true;
+          }
+        }}>
+        {#each DOCUMENT_KIND as ent}
+        <option value={ent[0]}>{ent[1]}</option>
+        {/each}
+      </select>
+    </div>
+    <div class="col-9">
+      {#if ( invoice.id && invoice.issueDate )}
+        {#if ( invoice.kind === 1 )}
+          <a class="btn btn-info" href="/invoice/estimate/{invoice.id}" target="_blank">
+            見積書出力
+          </a>
+        {:else if ( invoice.kind === 4 )}
+          <a class="btn btn-info" href="/invoice/invoice/{invoice.id}" target="_blank">
+            請求書出力
+          </a>
+        {/if}
+      {/if}
     </div>
   </div>
   <div class="row mb-3">
-    <div class="col-1"></div>
-    <div class="col-11">
-      <div class="row">
-        <div class="col-3">
-          <div class="row">
-            <label for="orderedDate" class="col-4 col-form-label">受注日</label>
-            <div class="col-8">
-              <input type="date" class="form-control" id="orderedDate"
-                bind:value={invoice.orderedDate}>
-            </div>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="row">
-            <label for="deliveryDate" class="col-4 col-form-label">納期</label>
-            <div class="col-8">
-              <input type="date" class="form-control" id="deliveryDate"
-                bind:value={invoice.deriveryDate}>
-            </div>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="row">
-            <label for="billingDate" class="col-4 col-form-label">請求日</label>
-            <div class="col-8">
-              <input type="date" class="form-control" id="billingDate"
-                bind:value={invoice.billingDate}>
-            </div>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="row">
-            <label for="paymentDate" class="col-4 col-form-label">領収日</label>
-            <div class="col-8">
-              <input type="date" class="form-control" id="paymentDate"
-                bind:value={invoice.paymentDate}>
-            </div>
-          </div>
-        </div>
-      </div>
+    <label for="issueDate" class="col-1 col-form-label">発行日</label>
+    <div class="col-2">
+      <input type="date" class="form-control" id="issueDate"
+        bind:value={invoice.issueDate}>
+    </div>
+    <label for="deliveryLimit" class="col-1 col-form-label">納期</label>
+    <div class="col-2">
+      <input type="date" class="form-control" id="deliveryLimit"
+        bind:value={invoice.deliveryLimit}>
     </div>
   </div>
   <div class="row mb-3">
-    <label class="col-1 col-form-label">相手先</label>
+    <div class="col-1">
+      <label class="col-form-label">相手先</label>
+      {#if ( invoice.customerId )}
+      {#if (customerEditting)}
+      <a href="#" on:click|preventDefault={() => {
+        customerEditting = false
+      }}>
+        <i class="bi bi-check"></i>
+      </a>
+      {:else}
+      <a href="#" on:click|preventDefault={() => {
+        customerEditting = true
+      }}>
+        <i class="bi bi-pencil"></i>
+      </a>
+      {/if}
+      {/if}
+    </div>
     <div class="col-11">
+      {#if (customerEditting || !invoice.customerId )}
       <CustomerSelect
         on:startregister
         on:endregister
@@ -105,21 +79,76 @@
         bind:address1={invoice.address1}
         bind:address2={invoice.address2}
       />
+      {:else}
+      <span>{invoice.customerName}</span>
+      <button type="button" class="btn btn-danger"
+      	on:click={() => {
+          invoice.customerId = null;
+        }}>
+      	変更
+    	</button>
+  		{/if}
     </div>
   </div>
   <div class="row mb-3">
     <label for="subject" class="col-1 col-form-label">件名</label>
-    <div class="col-sm-11">
+    <div class="col-6">
       <input type="text" class="form-control" id="subject"
         bind:value={invoice.subject} />
     </div>
+    <div class="col-5">
+      {#if ( invoice.taskId )}
+      <button type="button" class="btn btn-info"
+      	on:click={() => {
+          openTask(invoice.taskId);
+        }}>
+        案件参照
+      </button>
+      {:else}
+      <button type="button" class="btn btn-primary"
+      	on:click={() => {
+          openTask(null);
+        }}>
+        案件作成
+      </button>
+      {/if}
+      <label for="handler" class="col-form-label">弊社担当</label>
+      <select id="handler" class="form-control" style="display:inline;margin:0 10px;width:200px;"
+        bind:value={invoice.handledBy}>
+        <option value={0}></option>
+        {#each users as user}
+        <option value={user.id}>{user.name}</option>
+        {/each}
+      </select>
+    </div>
   </div>
+  {#if ( invoice.kind < 10 )}
   <div class="row mb-3">
-    <InvoiceDetails
-      bind:details={invoice.lines}
-      bind:sum={sum}
-      on:sum={computeTax}
-    ></InvoiceDetails>
+    <div class="col-1">
+      <label class="col-form-label">詳細</label>
+      {#if (viewDetail)}
+      <a href="#" on:click|preventDefault={() => {
+        viewDetail = false
+      }}>
+    	  <i class="bi bi-arrows-collapse"></i>
+      </a>
+      {:else}
+      <a href="#" on:click|preventDefault={() => {
+        viewDetail = true
+      }}>
+        <i class="bi bi-arrows-expand"></i>
+      </a>
+      {/if}
+    </div>
+    <div class="col-11">
+      {#if ( viewDetail)}
+      <InvoiceDetails
+      	bind:details={invoice.lines}
+      	bind:sum={sum}
+      	on:sum={computeTax}
+    	></InvoiceDetails>
+      {/if}
+    </div>
   </div>
   <div class="row mb-3">
     <label for="paymentMethod" class="col-1 col-form-label">支払方法</label>
@@ -162,6 +191,71 @@
         bind:value={invoice.description} />
     </div>
   </div>
+  {/if}
+  <div class="row mb-3">
+    <div class="col-1">
+    	<label for="description" class="col-form-label">記録</label>
+    	{#if ( documentEditting )}
+    	<a href="#" on:click|preventDefault={() => {
+      	documentEditting = false
+    	}}>
+      	<i class="bi bi-check"></i>
+    	</a>
+    	{:else}
+    	<a href="#" on:click|preventDefault={() => {
+      	documentEditting = true;
+      	viewDescription = true;
+      	viewFiles = true;
+    	}}>
+      	<i class="bi bi-pencil"></i>
+    	</a>
+    	{#if ( viewDescription )}
+    	<a href="#" on:click|preventDefault={() => {
+      	viewDescription = false;
+    	}}>
+      	<i class="bi bi-arrows-collapse"></i>
+    	</a>
+    	{:else}
+    	<a href="#" on:click|preventDefault={() => {
+      	viewDescription = true;
+    	}}>
+      	<i class="bi bi-arrows-expand"></i>
+    	</a>
+    	{/if}
+    	{/if}
+  	</div>
+  	<div class="col-11">
+    	<Document
+      editting={documentEditting}
+      {viewDescription}
+      bind:document={invoice.document}></Document>
+		</div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-1">
+      ファイル
+      {#if ( viewFiles )}
+      <a href="#" on:click|preventDefault={() => {
+        viewFiles = false;
+      }}>
+        <i class="bi bi-arrows-collapse"></i>
+      </a>
+      {:else}
+      <a href="#" on:click|preventDefault={() => {
+        viewFiles = true;
+      }}>
+        <i class="bi bi-arrows-expand"></i>
+      </a>
+      {/if}
+    </div>
+    <div class="col-11">
+      {#if ( viewFiles )}
+    	<DocumentFiles
+    		document={invoice.document}
+    		bind:files={files}></DocumentFiles>
+      {/if}
+		</div>
+  </div>
 </div>
 <style>
 .file-item {
@@ -179,61 +273,94 @@
 </style>
 
 <script>
-import {numeric, TAX_CLASS} from '../../javascripts/cross-slip';
+import {numeric, TAX_CLASS} from '../../../libs/utils.js';
+import {DOCUMENT_KIND} from '../../../libs/transaction-documents.js';
 import axios from 'axios';
-import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
+import {onMount, beforeUpdate, afterUpdate, createEventDispatcher, onDestroy} from 'svelte';
 import CustomerSelect from '../components/customer-select.svelte';
 import InvoiceDetails from './invoice-details.svelte';
+import Document from '../components/document.svelte';
+import DocumentFiles from '../components/document-files.svelte';
+const dispatch = createEventDispatcher();
+import eventBus from '../../javascripts/event-bus.js';
+import {currentInvoice, getStore} from '../../javascripts/current-record.js'
 
+export let status;
 export let invoice;
+export let users;
+export let files;
 
 let	original_customers;
 let customerKey;
+let customerEditting = false;
+let documentEditting = false;
+let viewDescription = false;
+let viewDetail = true;
+let viewFiles = false;
 let sum = 0;
 
-beforeUpdate(() => {
-  console.log('invoice-info beforeUpdate',invoice);
-  computeTax();
-});
+//$: computeTax();
 
-const copy_down = (event) => {
-  invoice.orderedDate = invoice.issueDate;
-}
-const copy_up = (event) => {
-  invoice.issueDate = invoice.orderedDate;
+beforeUpdate(() => {
+  computeTax();
+})
+
+const	openTask = (id)	=> {
+  console.log('openTask', id);
+  if  ( !id )  {
+    status.task = {
+      issueDate: invoice.issueDate,
+      deliveryLimit: invoice.deliveryLimit,
+      subject: invoice.subject,
+      customerId: invoice.customerId,
+      customerName: invoice.customerName,
+      chargeName: invoice.chargeName,
+      zip: invoice.zip,
+      address1: invoice.address1,
+      address2: invoice.address2,
+      lines: [...invoice.lines],
+      taxClass: invoice.taxClass,
+      tax: invoice.tax,
+      amount: invoice.amount
+    };
+    window.history.pushState(
+      status, "", `/task/new`);
+  } else {
+    console.log('open', id);
+    if ( !id )	{
+      status.state = 'new';
+      window.history.pushState(
+        status, "", `/task/new`);
+    } else {
+      status.state = 'entry';
+      window.history.pushState(
+        status, "", `/task/entry/${id}`);
+    }
+  }
 }
 
 const computeTax = (event) => {
   console.log('computeTax');
   switch	(parseInt(invoice.taxClass))	{
     case	0:
-      invoice.tax = 0;
+    	invoice.tax = 0;
       break;
     case	1:
-      invoice.tax = Math.round(sum / 110 * 10);
-      invoice.amount = sum;
+    	invoice.tax = Math.round(sum / 110 * 10);
+    	invoice.amount = sum;
       break;
     case	2:
-      invoice.tax = Math.round(sum * 0.1);
-      invoice.amount = sum + invoice.tax;
+    	invoice.tax = Math.round(sum * 0.1);
+    	invoice.amount = sum + invoice.tax;
       break;
     case  9:
-      invoice.amount = sum + parseInt(invoice.tax);
-      break;
+    	invoice.amount = sum + parseInt(invoice.tax);
+    	break;
   }
-}
-const focusout = (event) => {
-  console.log('focusout');
-  invoice.amount = numeric(invoice.amount).toLocaleString();
-  computeTax();
-}
-const focusin = (event) => {
-  console.log('focusin');
-  invoice.amount = numeric(invoice.amount);
 }
 
 onMount(() => {
-  console.log('invoice-info onMount', invoice);
+  console.log('invoice-info onMount', status);
   if	( invoice.id )	{
     customerKey = invoice.customerName;
   } else {
@@ -243,6 +370,16 @@ onMount(() => {
     original_customers = result.data;
     console.log('customer update', original_customers);
   });
+  eventBus.on('taskSelected', (task) => {
+    console.log('taskSelected', {task});
+    invoice = getStore(currentInvoice);
+    if	( invoice )	{
+    	invoice.task = task;
+    	invoice.taskId = task.id;
+      currentInvoice.set(invoice);
+    }
+    console.log('invoice', invoice);
+	})
 });
 
 </script>

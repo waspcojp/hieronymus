@@ -19,6 +19,7 @@
 </style>
 
 <script>
+import axios from 'axios';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import CustomerEntry from './customer-entry.svelte';
 import CustomerList from './customer-list.svelte';
@@ -34,32 +35,68 @@ const	update = (event) => {
 }
 
 const	openEntry = (event)	=> {
-	console.log('open', event.detail);
-	if	( typeof event.detail === 'object' )	{
-		customer = event.detail;
-	} else {
-    customer = {};
+  if  ( !event )  {
+    customer = null;
+    state = 'new';
+      window.history.pushState(
+        null, "", `/customer/new`);
+  } else {
+    console.log('open', event.detail);
+    customer = event.detail;
+    if ( !customer.id )	{
+      state = 'new';
+      window.history.pushState(
+        null, "", `/customer/new`);
+    } else {
+      state = 'entry';
+      window.history.pushState(
+        null, "", `/customer/entry/${customer.id}`);
+    }
   }
-	console.log('customer', customer)
-  state = 'entry';
+  //console.log('invoice', invoice)
 };
+
 const closeEntry = (event) => {
   console.log('close');
   state = 'list';
 }
 
 beforeUpdate(()	=> {
+  checkPage();
 });
 afterUpdate(() => {
 })
-onMount(() => {
+const checkPage = () => {
   let args = location.pathname.split('/');
+  // /customer/26
+  // /customer/
+  console.log('checkPage', {args});
   if  (( args[2] === '') ||
        ( args[2] === 'list' ))  {
     state = 'list';
+  } else
+  if  ( args[2] === 'new' ) {
+    customer = {};
+    state = 'new';
   } else {
     state = 'entry';
+    if  ( !customer ) {
+      customer = {};
+      axios(`/api/customer/${args[2]}`).then((result) => {
+        customer = result.data.customer;
+        console.log({customer});
+      });
+    }
   }
-  console.log('customer onMount')
+}
+
+onMount(() => {
+  console.log('customer onMount');
+	window.onpopstate = (event) => {
+    console.log('maybe back');
+    customer = null;
+    checkPage();
+	}
+
 })
 </script>

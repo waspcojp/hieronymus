@@ -25,6 +25,9 @@
 						在庫管理
 					</th>
 					<th scope="col">
+						人事管理
+					</th>
+					<th scope="col">
 						停止
 					</th>
 					<th scope="col">
@@ -51,7 +54,7 @@
 							on:change={change}>
 					</td>
 					<td class="checkbox">
-						<input type="checkbox" bind:checked={line.fiscal_browsing}
+						<input type="checkbox" bind:checked={line.fiscalBrowsing}
 							data-index={i}
 							on:change={change}>
 					</td>
@@ -61,12 +64,17 @@
 							on:change={change}>
 					</td>
 					<td class="checkbox">
-						<input type="checkbox" bind:checked={line.customer_management}
+						<input type="checkbox" bind:checked={line.customerManagement}
 							data-index={i}
 							on:change={change}>
 					</td>
 					<td class="checkbox">
-						<input type="checkbox" bind:checked={line.inventory_management}
+						<input type="checkbox" bind:checked={line.inventoryManagement}
+							data-index={i}
+							on:change={change}>
+					</td>
+					<td class="checkbox">
+						<input type="checkbox" bind:checked={line.personnelManagement}
 							data-index={i}
 							on:change={change}>
 					</td>

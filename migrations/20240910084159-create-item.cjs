@@ -147,24 +147,6 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-    /*  product -> item */
-    await queryInterface.renameColumn('InvoiceDetails', 'productId', 'itemId');
-    await queryInterface.changeColumn('InvoiceDetails', 'itemNumber', {
-      type: Sequelize.DECIMAL(8,2)
-    });
-    await queryInterface.removeColumn('InvoiceDetails', 'tax');
-    await queryInterface.removeColumn('InvoiceDetails', 'taxClass');
-    await queryInterface.removeColumn('InvoiceDetails', 'productName');
-    await queryInterface.addColumn('InvoiceDetails', 'itemName', {
-      type: Sequelize.STRING
-    });
-    await queryInterface.removeColumn('InvoiceDetails', 'productDetail');
-    await queryInterface.addColumn('InvoiceDetails', 'itemSpec', {
-      type: Sequelize.STRING
-    });
-    await queryInterface.addColumn('InvoiceDetails', 'unit', {
-      type: Sequelize.STRING
-    });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.createTable('Products', {
@@ -210,19 +192,5 @@ module.exports = {
     await queryInterface.dropTable('ItemFiles');
     await queryInterface.dropTable('Items');
     await queryInterface.dropTable('ItemClasses');
-    /*  item -> product */
-    await queryInterface.renameColumn('InvoiceDetails', 'itemId', 'productId');
-    await queryInterface.changeColumn('InvoiceDetails', 'itemNumber', {
-      type: Sequelize.DECIMAL(12)
-    });
-    await queryInterface.renameColumn('InvoiceDetails', 'itemName', 'productName');
-    await queryInterface.renameColumn('InvoiceDetails', 'itemSpec', 'productDetail');
-    await queryInterface.removeColumn('InvoiceDetails', 'unit');
-    await queryInterface.addColumn('InvoiceDetails', 'tax', {
-      type: Sequelize.DECIMAL(12)
-    });
-    await queryInterface.addColumn('InvoiceDetails', 'taxClass', {
-      type: Sequelize.INTEGER
-    });
-}
+  }
 };

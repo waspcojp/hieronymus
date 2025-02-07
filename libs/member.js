@@ -1,4 +1,4 @@
-export const OFFICIAL_SEX = [
+export const LEGAL_SEX = [
   [ 0, '未設定'],
   [ 1, '男' ],
   [ 2, '女' ]

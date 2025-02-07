@@ -30,7 +30,6 @@
 
 <script>
 import axios from 'axios';
-import {numeric, formatDate} from '../../javascripts/cross-slip';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();
 import MemberInfo from './member-info.svelte';

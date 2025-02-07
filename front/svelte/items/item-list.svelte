@@ -60,7 +60,7 @@
           {line.key}
         </td>
         <td>
-          {#if line.files.length > 0 }
+          {#if line.files && line.files.length > 0 }
           <a data-no={line.id} on:click={openItem} href="#">
             <img src="/item/file/{line.files[0].id}" style="width:180px;" alt="thumb">
           </a>
@@ -105,7 +105,7 @@ th {
 </style>
 
 <script>
-import {numeric} from '../../javascripts/cross-slip';
+import {numeric} from '../../../libs/utils.js';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();
 

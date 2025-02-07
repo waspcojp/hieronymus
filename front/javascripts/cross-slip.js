@@ -7,36 +7,6 @@ export const element_dc = (element) => {
 
 let accounts;
 
-export const numeric = (s) => {
-  let ret;
-  let sign;
-
-  if ( s ) {
-    if ( typeof s == 'number' ) {
-      ret = s;
-    } else {
-      if ( s.length > 0 ) {
-        if ( s[0] == '-' ) {
-          sign = -1;
-        } else {
-          sign = 1;
-        }
-        let ss = s.replace(/[\D,\s]/g,'');
-        if ( ss.length > 0 ) {
-          ret = parseInt(ss) * sign;
-        } else {
-          ret = 0;
-        }
-      } else {
-      ret = 0;
-      }
-    }
-  } else {
-    ret = 0;
-  }
-  return ret;
-}
-
 export const find_account = (code) => {
   //console.log(`account [${code}]`);
   let account = { name: '', key: ''};
@@ -104,43 +74,8 @@ export const find_tax_class = (ac, sub) => {
   return tax;
 }
 
-
 export const set_accounts = (arg) => {
   accounts = arg;
-}
-
-export const formatDate = (_date) => {
-  let date;
-  if ( _date )	{
-    date = new Date(_date);
-    return	`${date.getFullYear()}-${('0' + (date.getMonth()+1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
-  } else {
-    return	('');
-  }
-}
-
-export const voucherType = (code) => {
-  if	( code )	{
-    switch	(code)	{
-      case	1:
-      return	('受取請求書');
-      break;
-      case	2:
-      return	('受取領収書');
-      break;
-      case	11:
-      return	('差出請求書');
-      break;
-      case	12:
-      return	('差出領収書');
-      break;
-      default:
-      return	('その他');
-      break;
-    }
-  } else {
-    return	('未設定');
-  }
 }
 
 export const invoiceStatus = (code) => {
@@ -185,14 +120,6 @@ export const salesTax = (tax_class, _amount) => {
   return	(tax)
 }
 
-export const TAX_CLASS = [
-  [ '未選択', -1],
-  [ '非課税', 0],
-  [ '内税',   1],
-  [ '外税',   2],
-  [ '別計算', 9]
-];
-
 export const tax_class = (taxClass) => {
   switch(taxClass) {
     case 0:
@@ -214,12 +141,8 @@ export default {
   find_tax_class: find_tax_class,
   element_index: element_index,
   element_dc: element_dc,
-  numeric: numeric,
-  formatDate: formatDate,
-  voucherType: voucherType,
   invoiceStatus: invoiceStatus,
   sales_tax: salesTax,
   tax_class: tax_class,
-  TAX_CLASS: TAX_CLASS
 }
 

@@ -10,7 +10,6 @@ export default (sequelize, DataTypes) => {
 		static associate(models) {
 			this.hasMany(models.CrossSlipDetail, {
 				foreignKey: 'crossSlipId',
-				sourceKey: 'id',
 				as: 'lines'
 			});
 			this.hasOne(models.User, {

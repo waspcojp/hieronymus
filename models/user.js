@@ -14,7 +14,11 @@ import {Model} from 'sequelize';
 export default (sequelize, DataTypes) => {
 	class User extends Model  {
     static  associate(models) {
-      // associations can be defined here
+      this.hasOne(models.Member, {
+        foreignKey: 'userId',
+        sourceKey: 'id',
+        as: 'member'
+      })
     }
     set password(p) {
       this.hashPassword = bcrypt.hashSync(p, SALT_ROUNDS);

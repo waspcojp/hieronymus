@@ -1,8 +1,10 @@
 import models from '../models/index.js';
 const Op = models.Sequelize.Op;
+import {create as createCrossSlip, update as updateCrossSlip} from '../libs/cross_slip.js';
 
 export default {
   list: async(req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     switch  ( req.params.type)  {
       case  'not_approved':
         let where;
@@ -49,6 +51,7 @@ export default {
     }
   },
   get: async(req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     let year = req.params.year;
     let month = req.params.month;
     let no = req.params.no;
@@ -80,73 +83,19 @@ export default {
     res.json(cross_slip);
   },
   post: async(req, res, next) => {
-    let body = req.body;
-    //console.log('body:', body);
-
-    let fy = await models.FiscalYear.findOne({
-      where: {
-        startDate: {
-          [Op.lte]: new Date(body.year, body.month - 1, 2)
-        },
-        endDate: {
-          [Op.gte]: new Date(body.year, body.month - 1, 2)
-        }
-      }
-    });
-    //console.log('fy', fy);
-    let ml = await models.MonthlyLog.findOne({
-      where: {
-        term: fy.term,
-        month: body.month
-      }
-    });
-    if	( !ml )	{
-      ml = await models.MonthlyLog.create({
-        term: fy.term,
-        month: body.month,
-        slipCount: 0,
-        voucharCount: 0
-      })
+    res.set('Access-Control-Allow-Origin', '*');
+    if	( req.session.user.accounting )  {
+      let body = req.body;
+      //console.log('body:', body);
+      let slip = await createCrossSlip(body, req.session.user);
+   
+      res.json(slip);
+    } else {
+      res.json({
+        code: -10,
+        message: 'this account can not create'
+      });
     }
-    //console.log('ml', ml);
-    ml.slipCount += 1;
-
-    let approvedAt;
-    let approvedBy;
-    if	( req.session.user.approvable )	{
-      approvedAt = new Date();
-      approvedBy = req.session.user.id;
-    }
-    let slip = await models.CrossSlip.create({
-      year: body.year,
-      month: body.month,
-      day: body.day,
-      no: ml.slipCount,
-      lineCount: body.lines.length,
-      createdBy: req.session.user.id,
-      approvedAt: approvedAt,
-      approvedBy: approvedBy,
-      term: body.term
-    });
-    ml.save();
-
-    let lines = [];
-    for ( let i = 0; i < body.lines.length ; i ++ ) {
-      let line = body.lines[i];
-      line.crossSlipId = slip.id;
-      line.lineNo = i;
-      //console.log(line);
-      await models.CrossSlipDetail.create(line);
-      lines.push(line);
-    }
-    
-    res.json({
-      year: body.year,
-      month: body.month,
-      day: body.day,
-      no: slip.no,
-      lines: lines
-    });
   },
   update: async(req, res, next) => {
     let body = req.body;
@@ -161,44 +110,16 @@ export default {
       if	( !slip.approvedAt )	{
         if	(( req.session.user.accounting ) ||
            ( req.session.user.id == slip.createdBy )) {
-            slip.lineCount = body.lines.length;
-            slip.day = body.day;
-            slip.updatedBy = req.session.user.id;
-            if	( req.session.user.approvable )	{
-              slip.approvedAt = new Date();
-              slip.approvedBy = req.session.user.id;
-            }
-            slip.save();
-    
-            let details = await models.CrossSlipDetail.findAll({
-              where: {
-                crossSlipId: slip.id
-              }
-            });
-            for ( let i = 0; i < details.length; i ++ ) {
-              //console.log('delete', details[i]);
-              await details[i].destroy();
-            }
-            for ( let i = 0; i < body.lines.length ; i ++ ) {
-              let line = body.lines[i];
-              line.crossSlipId = slip.id;
-              line.lineNo = i;
-              //console.log(line);
-              await models.CrossSlipDetail.create(line);
-            }
+            await updateCrossSlip(slip, body, req.session.user);
             res.json({
               code: 0
             });
         } else {
-          res.json({
-            code: -10,
-            message: 'this account can not update'
-          });
         }
       } else {
         res.json({
           code: -2,
-          message: 'thid slip was approved'
+          message: 'this slip was approved'
         });
       }
     } else {
@@ -209,6 +130,7 @@ export default {
     }
   },
   delete: async(req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     if	( req.session.user.approvable )	{
       let body = req.body;
       //console.log('body:', body);
@@ -239,6 +161,7 @@ export default {
     }
   },
   approve: (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
     if	( req.session.user.approvable )	{
       let body = req.body;
       //console.log('update body:', body);

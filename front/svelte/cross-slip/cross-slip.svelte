@@ -155,7 +155,8 @@
 
 <script>
 import axios from 'axios';
-import {numeric, salesTax, find_tax_class} from '../../javascripts/cross-slip';
+import {salesTax, find_tax_class} from '../../javascripts/cross-slip';
+import {numeric} from '../../../libs/utils';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import Account from './account.svelte';
 import {field} from '../../../libs/parse_account_code';

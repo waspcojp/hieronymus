@@ -34,7 +34,7 @@
             <label for="legalName" class="col-3 col-form-label">戸籍名</label>
             <div class="col-9">
               <input type="text" class="form-control" id="legalName"
-                bind:value={member.legaalName}>
+                bind:value={member.legalName}>
             </div>
           </div>
           <div class="row">

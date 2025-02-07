@@ -34,8 +34,7 @@ import Modal from 'bootstrap/js/dist/modal';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import AccountsList from './accounts-list.svelte';
 import AccountModal from './account-modal.svelte';
-import {set_accounts, numeric} from '../../javascripts/cross-slip';
-
+import {set_accounts} from '../../javascripts/cross-slip';
 let	term;
 let fy;
 let dates;

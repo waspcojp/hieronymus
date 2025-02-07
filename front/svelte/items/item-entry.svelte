@@ -8,14 +8,13 @@
     <div class="entry-content">
       <div class="entry-body">
         <ItemInfo
-          classes={classes}
           bind:files={files}
-          bind:item={item} />
+          bind:status={status} />
       </div>
       <div class="entry-footer">
         <button type="button" class="btn btn-secondary" disabled={disabled}
           on:click={back}>もどる</button>
-        {#if ( item && item.id && item.id > 0 )}
+        {#if ( status.item && status.item.id && status.item.id > 0 )}
         <button type="button" class="btn btn-danger" disabled={disabled}
           on:click={delete_}
           id="delete-button">削除</button>
@@ -30,20 +29,19 @@
 
 <script>
 import axios from 'axios';
-import {numeric, formatDate} from '../../javascripts/cross-slip';
+import {numeric, formatDate} from '../../../libs/utils.js';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();
 import ItemInfo from './item-info.svelte';
 
-export  let item;
-export  let classes;
+export  let status;
 
 let disabled = false;
 let update;
 let files;
 
 onMount(() => {
-  console.log('item-entry onMount', item);
+  console.log('item-entry onMount', status);
 })
 
 const create_item = async (_item) => {
@@ -58,11 +56,11 @@ const update_item = async (_item) => {
   console.log(result);
   return	(result);
 }
-const delete_item = async (item) => {
-  console.log('delete_item', item);
+const delete_item = async (_item) => {
+  console.log('delete_item', _item);
   let result = await axios.delete('/api/item', {
     data: {
-      id: item.id
+      id: _item.id
     }
   });
   console.log(result);
@@ -76,6 +74,7 @@ const bind_file = async(file) => {
   return	(result);
 }
 const save = () => {
+  let item = status.item;
   console.log('item', item);
   if	( item.itemClassId )	{
     item.itemClassId = parseInt(item.itemClassId);
@@ -115,8 +114,9 @@ const save = () => {
       }
       //console.log({create});
       if  ( create )  {
+        status.item = item;
         window.history.pushState(
-          null, "", `/item/entry/${item.id}`);
+          status, "", `/item/entry/${item.id}`);
       }
     });
   }
@@ -129,7 +129,7 @@ const save = () => {
 
 
 const clean = () => {
-  item = null;
+  status.item = null;
   files = null;
 }
 
@@ -141,8 +141,8 @@ const	back = (event) => {
 beforeUpdate(() => {
   //console.log('item-entry beforeUpdate', item);
   update = false;
-  if	( !item )	{
-    item = {
+  if	( !status.item )	{
+    status.item = {
       name: '',
       normalName: '',
       key: '',
@@ -158,8 +158,8 @@ beforeUpdate(() => {
       description: ''
     };
   } else {
-    if  ( !files && item.id )  {
-		  axios.get(`/api/item/files/${item.id}`).then((result) => {
+    if  ( !files && status.item.id )  {
+		  axios.get(`/api/item/files/${status.item.id}`).then((result) => {
 			  files = result.data;
 		  })
     }

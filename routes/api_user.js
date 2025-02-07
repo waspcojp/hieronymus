@@ -3,6 +3,33 @@ const Op = models.Sequelize.Op;
 import {passwd, passport, is_authenticated} from '../libs/user.js';
 
 export default {
+  members: (req, res, next) => {
+    models.Member.findAll({
+      where: {
+        userId: {
+          [Op.ne]: null
+        }
+      },
+      oeder: [
+        ["officialName", "ASC"]
+      ],
+      include: [
+        {
+          model: models.User,
+          as: 'user'
+        }
+      ]
+    }).then((members) => {
+      let users = [];
+      for ( let member of members ) {
+        users.push({
+          id: member.userId,
+          name: member.tradingName ? member.tradingName : member.officialName
+        })
+      }
+      res.json(users);
+    })
+  },
   list: (req, res, next) => {
     models.User.findAll({
       order: [
@@ -47,6 +74,9 @@ export default {
         }
         if  ( req.body.customerManagement !== undefined )    {
           user.customerManagement = req.body.customerManagement;
+        }
+        if  ( req.body.personnelManagement !== undefined )    {
+          user.personnelManagement = req.body.personnelManagement;
         }
         if  ( req.body.deauthorizedAt !== undefined )    {
           user.deauthorizedAt = req.body.deauthorizedAt;

@@ -52,7 +52,7 @@ import axios from 'axios';
 
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 import TrialBalanceList from './trial-balance-list.svelte';
-import {numeric} from '../../javascripts/cross-slip';
+import {numeric} from '../../../libs/utils.js';
 import {dc} from '../../../libs/parse_account_code';
 
 export let term;

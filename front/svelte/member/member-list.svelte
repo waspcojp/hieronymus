@@ -70,7 +70,6 @@ th {
 </style>
 
 <script>
-import {numeric} from '../../javascripts/cross-slip';
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();
 import {age} from '../../../libs/utils';

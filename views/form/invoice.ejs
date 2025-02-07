@@ -5,118 +5,47 @@
     <meta http-equiv="Content-Language" content="ja" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
-    <style>
-body {
-  font-family: "Yu Gothic", "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
-}
-  .invoice {
-    width: 210mm;
-    height: 297mm;
-    max-width: 100%;
-    margin: 0mm auto;
-    padding: 2mm;
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  .invoice-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 10mm;
-  }
-  .recipient-info {
-    margin-top: 50px;
-    margin-left: 100px;
-    width: 300px;
-    font-size: 16px;
-  }
-  .recipient-info p {
-    margin: 0;
-  }
-  .title-info {
-    margin-top: 5px;
-    margin-right:30px;
-    width: 320px;
-  }
-  .title-info h1 {
-    margin: 0;
-    font-size: 24px;
-    width: 120px;
-    height: 34px;
-    padding: 0 40px;
-    text-align: justify;
-    vertical-align: middle;
-    font-weight: bold;
-    border: 1px solid #000;
-    background-color: #CCC
-  }
-  .title-info h1::after {
-    content: ""; /* 空の疑似要素 */
-    display: inline-block;
-    width: 100%; /* 行末にスペースを作る */
-  }
-  .title-info p {
-    margin: 4px 0;
-    font-size: 14px;
-  }
-  .company-info {
-    line-height: 16px;
-    font-size: 14px;
-    margin-top: 10px;
-  }
-  .company-info p.name {
-    font-weight: bold;
-    font-size: 18px;
-  }
-  .company-info p.zip {
-  }
-  .company-info p.address {
-  }
-  .company-info p.tel {
-    margin-top: 10px;
-  }
-  .company-info p.homepage {
-  }
-  .compay-info p.handler {
-    margin-top: 10px;
-  }
-@media print{
-}
-    </style>
+    <link rel="stylesheet" href="/style/invoice.css">
   </head>
   <body class="layout-fixed" id="body">
     <div class="invoice">
       <!-- ヘッダー（鑑部分） -->
       <header class="invoice-header">
-        <div class="recipient-info">
+        <div class="window-recipient-info">
           <p>〒<%= invoice.zip %></p>
           <p><%= invoice.address1 %></p>
           <p><%= invoice.address2 %></p>
           <p><%= invoice.customerName %> 御中</p>
         </div>
-        <div class="title-info">
-          <div style="display:flex;">
-            <h1>請 求 書</h1>
-            <div style="margin-left:20px;margin-top:10px;font-size:14px;">
-              <span>No. <%= invoice.no %></span>
+        <div class="">
+          <div class="title-info">
+            <div class="title-line">
+              <h1>請 求 書</h1>
+              <div style="margin-left:20px;margin-top:10px;font-size:14px;">
+                <span>No. <%= invoice.no %></span>
+              </div>
             </div>
+            <p> <% let date = new Date(invoice.issueDate) %>
+              発行日:&nbsp;
+              <%= date.getFullYear()%>年
+              <%= date.getMonth() + 1%>月
+              <%= date.getDate()%>日
+            </p>
           </div>
-          <p> <% let date = new Date(invoice.billingDate) %>
-            発行日:&nbsp;
-            <%= date.getFullYear()%>年
-            <%= date.getMonth() + 1%>月
-            <%= date.getDate()%>日
-          </p>
           <div class="company-info">
+            <% if ( company.logo ) { %>
+              <div class="company-name-with-logo">
+                <img src="<%= company.logo%>" style="max-height:50px;">
+                <p class="name"><%= company.name %></p>
+              </div>
+              <% } else { %>
             <p class="name"><%= company.name %></p>
+            <% }  %>
             <p class="zip">〒<%= company.zip%></p>
             <% for ( let address of company.address ) { %>
               <p class="address"><%= address%></p>
             <% } %>
-            <p class="tel"%>
+            <p class="tel">
             <% if ( company.tel ) { %>
               <span>TEL <%= company.tel%></span>
             <% } %>
@@ -127,11 +56,113 @@ body {
             <% if ( company.homepage ) { %>
               <p class="homepage"><%= company.homepage %></p>
             <% } %>
-            <p class="handler"><%= invoice.handleUser %></p>
+            <p class="handler">
+              担当: &nbsp; <% let member = invoice.handleUser.member %>
+              <%= member.tradingName ? member.tradingName : member.officialName %>
+            </p>
+            <p class="account">
+              [振込先]
+              <%= company.account %>
+            </p>
           </div>
         </div>
       </header>
-      </div>
-    <%- JSON.stringify(invoice, ' ', 2).replaceAll(/\n/g, '<br/>').replaceAll(/\s/g, '&nbsp;') %>
+      <main>
+        <div class="salutation">
+          <p>毎度ありがとうございます。</p>
+          <p>下記のとおり御請求申し上げます。</p>
+        </div>
+        <div class="total-amount">
+          <div class="title">
+            合計金額
+          </div>
+          <div class="amount">
+            ￥<%= (parseInt(invoice.tax) + parseInt(invoice.amount)).toLocaleString() %>
+          </div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:250px;">品名・規格</th>
+              <th style="width:100px;">単価</th>
+              <th style="width:50px;">数量</th>
+              <th style="width:50px;">単位</th>
+              <th style="width:100px;">金額</th>
+              <th>備考</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for ( let line of invoice.lines) { %>
+            <tr>
+              <td class="item" <%= ( line.itemId === 0 ) ? 'colspan=4' : ''%>>
+                <% if ( line.itemId !== 0 )  { %>
+                <%= line.itemName %><br/>
+                <%= line.itemSpec %>
+                <% } else { %>
+                ※小計※
+                <% } %>
+              </td>
+              <% if ( line.itemId !== 0 )  { %>
+              <td class="number">
+                @<%= parseInt(line.unitPrice).toLocaleString() %>
+              </td>
+              <td class="number">
+                <%= line.itemNumber.toLocaleString() %>
+              </td>
+              <td>
+                <%= line.unit %>
+              </td>
+              <% } %>
+              <td class="number">
+                ¥<%= parseInt(line.amount).toLocaleString() %>
+              </td>
+              <td class="description">
+                <%= line.description %>
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2" <%= ( invoice.taxClass !== 0 ) ? 'rowspan=3' : 'rowspan=2'%>></td>
+              <td colspan="2" class="sums">小&nbsp;&nbsp;&nbsp;計</td>
+              <td class="number">
+                ¥<%= parseInt(invoice.amount).toLocaleString() %>
+              </td>
+              <td <%= ( invoice.taxClass !== 0 ) ? 'rowspan=3' : 'rowspan=2'%>></td>
+            </tr>
+            <% if ( invoice.taxClass !== 0 ) { %>
+            <tr>
+              <% if ( invoice.taxClass === 2 || invoice.taxClass === 9 ) { %>
+              <td colspan="2" class="sums">消費税</td>
+              <td class="number">
+                ¥<%= invoice.tax.toLocaleString() %>
+              </td>
+              <% } else { %>
+              <td colspan="2" class="sums">消費税</td>
+              <td class="number" style="padding:2px 4px;">
+                  (¥<%= invoice.tax.toLocaleString() %>)
+              <% } %>
+              </td>
+            </tr>
+            <% } %>
+            <tr>
+              <td colspan="2" class="sums">
+                <strong>合&nbsp;&nbsp;&nbsp;計</strong>
+              </td>
+              <td class="number">
+                <strong>
+                  <% if ( invoice.taxClass === 2 || invoice.taxClass === 9 ) { %>
+                  ¥<%= (parseInt(invoice.tax) + parseInt(invoice.amount)).toLocaleString() %>
+                  <% } else { %>
+                  ¥<%= parseInt(invoice.amount).toLocaleString() %>
+                  <% } %>
+                </strong>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </main>
+    </div>
   </body>
 </html>

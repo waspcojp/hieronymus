@@ -21,6 +21,8 @@ import customerRouter from './routes/customer.js';
 import voucherRouter from './routes/voucher.js';
 import invoiceRouter from './routes/invoice.js';
 import itemRouter from './routes/item.js';
+import memberRouter from './routes/member.js';
+import taskRouter from './routes/task.js';
 import {is_authenticated} from './libs/user.js';
 
 import env from './config/env.js';
@@ -179,7 +181,9 @@ app.use('/customer', customerRouter);
 app.use('/voucher', voucherRouter);
 app.use('/invoice', invoiceRouter);
 app.use('/item', itemRouter);
+app.use('/member', memberRouter);
 app.use('/forms', formsRouter);
+app.use('/task', taskRouter);
 app.use('/api', apiRouter);
 app.use('/', homeRouter);
 

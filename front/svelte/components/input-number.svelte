@@ -6,7 +6,7 @@
 <script>
 import {onMount, beforeUpdate, afterUpdate, createEventDispatcher} from 'svelte';
 const dispatch = createEventDispatcher();
-import {numeric} from '../../javascripts/cross-slip';
+import {numeric} from '../../../libs/utils.js';
 /*
     on:focusout={focusout}
     on:focusin={focusin}
