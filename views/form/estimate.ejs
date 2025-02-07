@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>見積書::Hieronymus</title>
+    <meta http-equiv="Content-Language" content="ja" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/style/invoice.css">
+  </head>
+  <body class="layout-fixed" id="body">
+    <div class="invoice">
+      <!-- ヘッダー（鑑部分） -->
+      <header class="estimate-header">
+        <div class="info">
+          <p class="strong"><%= invoice.customerName %> 御中</p>
+          <p class="strong"><span>件名</span>&nbsp;<%= invoice.subject %></p>
+          <div class="salutation">
+            <p>下記の通り御見積申し上げます。</p>
+          </div>
+          <div class="condition">
+            <p class="title">納入場所</p>
+            <p class="item">お打ち合わせ通り</p>
+          </div>
+          <div class="condition">
+            <p class="title">支払条件</p>
+            <p class="item"><%= invoice.paymentMethod %></p>
+          </div>
+          <div class="condition">
+            <p class="title">納期</p>
+            <p class="item">
+              <% if ( invoice.deliveryLimit ) { %>
+                <% let date = new Date(invoice.deliveryLimit) %>
+                <%= date.getFullYear()%>年
+                <%= date.getMonth() + 1%>月
+                <%= date.getDate()%>日
+              <% } else { %>
+                お打ち合わせ通り
+              <% } %>
+            </p>
+          </div>
+          <div class="condition">
+            <p class="title">有効期限</p>
+            <p class="item">
+              <% if ( invoice.expiringDate ) { %>
+                <% let date = new Date(invoice.expiringDate) %>
+                <%= date.getFullYear()%>年
+                <%= date.getMonth() + 1%>月
+                <%= date.getDate()%>日
+              <% } else { %>
+                御見積後１ヶ月以内
+              <% } %>
+            </p>
+          </div>
+        </div>
+        <div class="">
+          <div class="title-info">
+            <div class="title-line">
+              <h1>御見積書</h1>
+              <div style="margin-left:20px;margin-top:10px;font-size:14px;">
+                <span>No. <%= invoice.no %></span>
+              </div>
+            </div>
+            <p> <% let date = new Date(invoice.issueDate) %>
+              発行日:&nbsp;
+              <%= date.getFullYear()%>年
+              <%= date.getMonth() + 1%>月
+              <%= date.getDate()%>日
+            </p>
+          </div>
+          <div class="company-info">
+            <% if ( company.logo ) { %>
+              <div class="company-name-with-logo">
+                <img src="<%= company.logo%>" style="max-height:50px;">
+                <p class="name"><%= company.name %></p>
+              </div>
+              <% } else { %>
+            <p class="name"><%= company.name %></p>
+            <% }  %>
+            <p class="zip">〒<%= company.zip%></p>
+            <% for ( let address of company.address ) { %>
+              <p class="address"><%= address%></p>
+            <% } %>
+            <p class="tel"%>
+            <% if ( company.tel ) { %>
+              <span>TEL <%= company.tel%></span>
+            <% } %>
+            <% if ( company.fax ) { %>
+              <span>FAX <%= company.fax%></span>
+            <% } %>
+            </p>
+            <% if ( company.homepage ) { %>
+              <p class="homepage"><%= company.homepage %></p>
+            <% } %>
+            <p class="handler">
+              担当: &nbsp; <% let member = invoice.handleUser.member %>
+              <%= member.tradingName ? member.tradingName : member.officialName %>
+            </p>
+          </div>
+        </div>
+      </header>
+      <main>
+        <div class="total-amount">
+          <div class="title">
+            合計金額
+          </div>
+          <div class="amount">
+            ￥<%= (parseInt(invoice.tax) + parseInt(invoice.amount)).toLocaleString() %>
+          </div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:250px;">品名・規格</th>
+              <th style="width:100px;">単価</th>
+              <th style="width:50px;">数量</th>
+              <th style="width:50px;">単位</th>
+              <th style="width:100px;">金額</th>
+              <th>備考</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for ( let line of invoice.lines) { %>
+            <tr>
+              <td class="item" <%= ( line.itemId === 0 ) ? 'colspan=4' : ''%>>
+                <% if ( line.itemId !== 0 )  { %>
+                <%= line.itemName %><br/>
+                <%= line.itemSpec %>
+                <% } else { %>
+                ※小計※
+                <% } %>
+              </td>
+              <% if ( line.itemId !== 0 )  { %>
+              <td class="number">
+                @<%= parseInt(line.unitPrice).toLocaleString() %>
+              </td>
+              <td class="number">
+                <%= line.itemNumber.toLocaleString() %>
+              </td>
+              <td>
+                <%= line.unit %>
+              </td>
+              <% } %>
+              <td class="number">
+                ¥<%= parseInt(line.amount).toLocaleString() %>
+              </td>
+              <td class="description">
+                <%= line.description %>
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2" <%= ( invoice.taxClass !== 0 ) ? 'rowspan=3' : 'rowspan=2'%>></td>
+              <td colspan="2" class="sums">小&nbsp;&nbsp;&nbsp;計</td>
+              <td class="number">
+                ¥<%= parseInt(invoice.amount).toLocaleString() %>
+              </td>
+              <td <%= ( invoice.taxClass !== 0 ) ? 'rowspan=3' : 'rowspan=2'%>></td>
+            </tr>
+            <% if ( invoice.taxClass !== 0 ) { %>
+            <tr>
+              <% if ( invoice.taxClass === 2 || invoice.taxClass === 9 ) { %>
+              <td colspan="2" class="sums">消費税</td>
+              <td class="number">
+                ¥<%= invoice.tax.toLocaleString() %>
+              </td>
+              <% } else { %>
+              <td colspan="2" class="sums">消費税</td>
+              <td class="number" style="padding:2px 4px;">
+                  (¥<%= invoice.tax.toLocaleString() %>)
+              <% } %>
+              </td>
+            </tr>
+            <% } %>
+            <tr>
+              <td colspan="2" class="sums">
+                <strong>合&nbsp;&nbsp;&nbsp;計</strong>
+              </td>
+              <td class="number">
+                <strong>
+                  <% if ( invoice.taxClass === 2 || invoice.taxClass === 9 ) { %>
+                  ¥<%= (parseInt(invoice.tax) + parseInt(invoice.amount)).toLocaleString() %>
+                  <% } else { %>
+                  ¥<%= parseInt(invoice.amount).toLocaleString() %>
+                  <% } %>
+                </strong>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </main>
+    </div>
+    <% JSON.stringify(invoice, ' ', 2).replaceAll(/\n/g, '<br/>').replaceAll(/\s/g, '&nbsp;') %>
+  </body>
+</html>

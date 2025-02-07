@@ -1,0 +1,216 @@
+body {
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+.invoice {
+  width: 210mm;
+  height: 297mm;
+  max-width: 100%;
+  margin: 0mm auto;
+  padding: 2mm;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: absolute;
+  top: 20px;
+  left: 40px;
+  width: 730px;
+}
+.estimate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: absolute;
+  top: 80px;
+  left: 40px;
+  width: 730px;
+  span {
+    font-size: 16px;
+    font-weight: normal;
+  }
+  .info {
+    margin-top: 20px;
+    width: 350px;
+    line-height: 30px;
+    p.strong {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+      border-bottom: #000 solid 2px;
+    }
+    .salutation {
+      line-height: 20px;
+      font-size: 14px;
+      margin-left: 50px;
+      p {
+        margin: 0;
+      }
+    }
+    .condition {
+      display: flex;
+      height: 20px;
+      font-size: 14px;
+      p {
+        margin: 0;
+      }
+      p.title {
+        width: 70px;
+        text-align: justify;
+      }
+      p.title::after {
+        content: ""; /* 空の疑似要素 */
+        display: inline-block;
+        width: 100%; /* 行末にスペースを作る */
+      }
+      p.item {
+        margin-left:10px;
+      }
+    }
+  }
+}
+.window-recipient-info {
+  margin-top: 50px;
+  margin-left: 50px;
+  width: 380px;
+  font-size: 16px;
+  p {
+    margin: 0;
+  }
+}
+.title-info {
+  margin-top: 0px;
+  margin-left:0px;
+  width: 340px;
+  p {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+  .title-line {
+    display: flex;
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      width: 120px;
+      height: 34px;
+      padding: 0 40px 5px;
+      text-align: justify;
+      vertical-align: middle;
+      font-weight: bold;
+      border: 1px solid #000;
+      background-color: #CCC
+    }
+    h1::after {
+      content: ""; /* 空の疑似要素 */
+      display: inline-block;
+      width: 100%; /* 行末にスペースを作る */
+    }
+  }
+}
+.company-info {
+  line-height: 16px;
+  font-size: 14px;
+  margin-top: 10px;
+  .company-name-with-logo {
+    display:flex;
+  }
+  .company-name-with-logo p.name {
+    font-weight: bold;
+    font-size: 18px;
+    height: 18px;
+    margin-top: 30px;
+  }
+  p {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+  p.name {
+    font-weight: bold;
+    font-size: 18px;
+  }
+  p.tel {
+    margin-top: 10px;
+  }
+  p.handler {
+    margin-top: 10px;
+  }
+  p.account {
+    margin-top: 10px;
+    font-size: 12px;
+  }
+}
+main {
+    position: absolute;
+    top: 280px;
+    left: 40px;
+    width: 730px;
+}
+.salutation {
+  line-height: 18px;
+  font-size: 14px;
+}
+.salutation p {
+  margin: 0;
+}
+.total-amount {
+  margin-top: 20px;
+  display: flex;
+  border: 2px solid #000;
+  width: 350px;
+  .title {
+    margin: 0px;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    width: 150px;
+    background-color: #CCC
+  }
+  .amount {
+    margin: 5px;
+    text-align: right;
+    font-weight: bold;
+    font-size: 18px;
+    width: 100%;
+  }
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 15mm;
+  th,
+  td {
+    border: 2px solid #000;
+    text-align: center;
+  }
+  th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+    padding: 0;
+  }
+  td {
+    padding: 2px 8px;
+    font-size: 14px;
+  }
+  td.description,
+  td.item {
+    text-align: left;
+    line-height: 16px;
+  }
+  td.sums {
+    background-color: #f1f1f1;
+    text-align: center;
+  }
+  td.number {
+    text-align: right;
+  }
+}
+@media print{
+}
