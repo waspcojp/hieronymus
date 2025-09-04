@@ -11,6 +11,14 @@ Hieronymusは零細企業用のERPシステムです。
 
 が実装されています。
 
+# ⚠️ このリポジトリは旧バージョンです
+
+Hieronymus は **Version 2 以降、新しいリポジトリで開発・メンテナンスを続けています**。  
+このリポジトリはアーカイブ状態となり、今後更新されません。  
+
+👉 最新版はこちらをご利用ください：  
+[Hieronymus v2 Repository](https://github.com/BeesNestInc/hieronymus)
+
 ## インストール方法
 
 Hieronymusは2つのインストール方法を提供しています。
